@@ -1080,12 +1080,13 @@ class ApiService{
           login= DATA;
         }
       }else{
+        print(response.statusCode.toString());
         // pr.hide();
       }
     }catch (e)
     {
       print('Eeror is Herer'+e.toString());
-
+      print(e.toString());
       login= null;
       // pr.hide();
 

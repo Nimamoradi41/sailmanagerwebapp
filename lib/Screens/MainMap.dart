@@ -1,14 +1,19 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map/plugin_api.dart';
+
+
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:latlong2/latlong.dart';
+// import 'package:mapbox_gl/mapbox_gl.dart';
+
+
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sailmanagerwebapp/ApiService.dart';
 import 'package:sailmanagerwebapp/Constants.dart';
@@ -415,14 +420,16 @@ class _MainMapState extends State<MainMap> {
 
 
 
-  //   Set<Marker> _Markers={};
+
+
+  List<Marker>_Markers=[];
   //
   // late GoogleMapController controller2;
   //
   // Set<Polyline> _poly=Set<Polyline>();
   //
   // List<LatLng> _cordinate=[];
-  // List<Polygon> Polygons=[];
+  List<LatLng> Polygons=[];
 
 
 
@@ -475,13 +482,13 @@ class _MainMapState extends State<MainMap> {
   }
   late Timer _timer;
   updateMarkers() {
-    // _timer = Timer.periodic(Duration(seconds: 30), (timer) {
-    //   if(TypeSwitch_Now)
-    //   {
-    //     GetAll();
-    //   }
-    //
-    // });
+    _timer = Timer.periodic(Duration(seconds: 15), (timer) {
+      if(TypeSwitch_Now)
+      {
+        GetAll();
+      }
+
+    });
   }
 
   // late BitmapDescriptor markerbitmap;
@@ -504,7 +511,9 @@ class _MainMapState extends State<MainMap> {
     var UserName =prefs.getString('UserName');
     var Password =prefs.getString('Password');
     var data=    await   ApiService.GetPerson( base.toString(), UserName!, Password!);
+    // var data=    await   ApiService.GetPerson( 'http://91.108.148.38:9595/manager', 'نیما', '1');
 
+    print(data.toString());
     if(data.code==200)
       {
         if(data.res.length>0)
@@ -516,25 +525,25 @@ class _MainMapState extends State<MainMap> {
            data.res.forEach((element) {
              if(element.lat!=null&&element.lat!=0)
                {
-                 // _Markers.add(
-                 //     Marker(
-                 //         markerId:MarkerId('MarkId'+element.lat.toString()+element.lng.toString()),
-                 //         // icon: markerbitmap,
-                 //         position: LatLng(element.lat,element.lng),
-                 //         infoWindow: InfoWindow(
-                 //             title: element.name,
-                 //             snippet: element.datetime
-                 //         )
-                 //     ));
+                 _Markers.add(
+                     Marker(
+                       width: 40.0,
+                       height: 40.0,
+                       point: LatLng(element.lat, element.lng),
+                       builder: (ctx) =>
+                           InkWell(
+                             onTap: (){
+                               ApiService.ShowSnackbar(element.lat.toString()+"/"+element.lng.toString());
+                             },
+                             child: Container(
+                               child: Image.asset('images/locloc2.png',width: 30,height: 30,),
+                             ),
+                           ),
+                     ));
                }
             });
 
-
-
-
-           setState(() {
-
-           });
+           setState((){});
           }
       }
 
@@ -575,6 +584,7 @@ class _MainMapState extends State<MainMap> {
     }
 
   }
+  MapController mycontroler=MapController();
   @override
   void initState() {
     super.initState();
@@ -582,7 +592,10 @@ class _MainMapState extends State<MainMap> {
       lng: 0, lat: 0, tell1: '', tell2: '', datetime: '',
       visRdf: -9, name: '', cell: '',);
     polylinePoints=PolylinePoints();
-    // GetAll();
+    GetAll();
+
+
+
 
 
 
@@ -600,29 +613,35 @@ class _MainMapState extends State<MainMap> {
 
 
 
-  void _Oncreatmap(MapboxMapController s) async
-  {
-    Mcontrol=s;
-    var markerImage = await loadMarkerImage();
-
-    Mcontrol.addImage('marker', markerImage);
-
-
-
-    await Mcontrol.addSymbol(SymbolOptions(
-        iconSize: 2,
-
-        geometry: LatLng(31.330587,48.684865),
-         ));
-  }
-
-  late MapboxMapController Mcontrol;
+  // void _Oncreatmap(MapboxMapController s) async
+  // {
+  //   Mcontrol=s;
+  //   var markerImage = await loadMarkerImage();
+  //
+  //   // Mcontrol.addImage('marker', markerImage);
+  //   // await Mcontrol.addSymbolLayer('sourceId', 'layerId', const SymbolLayerProperties());
+  //
+  //   s.addSymbol(SymbolOptions(
+  //     geometry: LatLng(31.319743, 48.677719),
+  //     iconImage: 'images/locloc2.png',
+  //     iconSize: 0.5,
+  //   ));
+  //
+  //
+  //   setState(() {
+  //
+  //   });
+  //
+  //
+  // }
+  //
+  // late MapboxMapController Mcontrol;
 
   // This widget is the root of your application.
 
   @override
   void dispose() {
-    Mcontrol.dispose();
+    // Mcontrol.dispose();
     super.dispose();
 
   }
@@ -644,245 +663,249 @@ class _MainMapState extends State<MainMap> {
       child: Scaffold(
         body: Stack(
           children: [
-            MapboxMap(
-              accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
-              onMapCreated: _Oncreatmap,
-              initialCameraPosition: CameraPosition(
-                  target: LatLng(31.330587,48.684865),
-                  zoom: 12
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              child:FlutterMap(
+                options: MapOptions(
+                  center:LatLng(31.316958, 48.676185),
+                  zoom: 13.0,
+                ),
+                layers: [
+                  TileLayerOptions(
+                    urlTemplate: "https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA",
+                    additionalOptions: {
+                      'accessToken':'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
+                      'id':'mapbox.satellite'
+                    },
+                    attributionBuilder: (_) {
+                      return Text("© OpenStreetMap contributors");
+                    },
+                  ),
+                  MarkerLayerOptions(
+                      markers:_Markers,
+                  ),
+                  PolylineLayerOptions(
+                    polylines: [
+                      new Polyline(
+                        points: Polygons,
+                        strokeWidth: 2,
+                        color: Colors.red,
+                      )
+                    ]
+                  )
+                ],
               ),
             ),
-        //     Positioned(
-        //         top: 0,
-        //         left: 0,
-        //         right: 0,
-        //         child: Padding(
-        //           padding: const EdgeInsets.symmetric(vertical: 32,horizontal: 6),
-        //           child: Row(
-        //       children: [
-        //           InkWell(
-        //               onTap: (){
-        //                 // ShowModall_setting();
-        //                 print('object');
-        //                 Mcontrol.addSymbol(SymbolOptions(
-        //                     geometry:LatLng(31.319743, 48.677719), // location is 0.0 on purpose for this example
-        //                     iconImage: 'images/loc_1.png'
-        //                 ));
-        //               },
-        //               child: BtnSmall('images/seti.svg',18)),
-        //           Expanded(
-        //             child: Container(
-        //               child: Row(
-        //                 mainAxisAlignment: Sizewid>796?MainAxisAlignment.end:MainAxisAlignment.center,
-        //                 children: [
-        //                   buildContainer(Sizewid),
-        //                 ],
-        //               ),
-        //             ),
-        //           )
-        //       ],
-        //     ),
-        //         )),
-        //     Positioned(
-        //    bottom: 0,
-        //    left: 0,
-        //    right: 0,
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(6.0),
-        //     child: Row(
-        //       children: [
-        //         GestureDetector(
-        //             onTap: (){
-        //               ShowModall_MainMenu();
-        //             },
-        //             child: BtnSmall('images/cate23.svg',18)),
-        //         GestureDetector(
-        //           onTap: (){
-        //             // ShowModall_();
-        //             Navigator.of(context).push(
-        //                 MaterialPageRoute(
-        //                     builder: (context)
-        //                     => PishFactorNotAccept()));
-        //           },
-        //           child: Padding(
-        //             padding: const EdgeInsets.only(left: 6.0),
-        //             child:  BtnSmall('images/pish.svg',18),
-        //           ),
-        //         ),
-        //         Expanded(
-        //           child: Row(
-        //             mainAxisAlignment: MainAxisAlignment.end,
-        //             children: [
-        //               Container(
-        //                 width: Sizewid>796?Sizewid/3:Sizewid<=450?Sizewid/3:Sizewid/2,
-        //
-        //                 margin: EdgeInsets.only(left: 6),
-        //                 decoration: BoxDecoration(
-        //                     color: Colors.white,
-        //                     // color: Colors.red,
-        //                     boxShadow: [
-        //                       BoxShadow(
-        //                           color: Colors.black12,
-        //                           blurRadius: 3,
-        //                           spreadRadius: 1
-        //                       )
-        //                     ],
-        //                     borderRadius: BorderRadius.circular(8)
-        //                 ),
-        //                 child: Row(
-        //                   crossAxisAlignment: CrossAxisAlignment.center,
-        //                   children: [
-        //                     Expanded(child: Container(
-        //                       child: InkWell(
-        //                         onTap: () async{
-        //                           var resuilt=await    Navigator.of(context).push(
-        //                               MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
-        //                           if(TypeSwitch_Now)
-        //                             {
-        //                               print('TypeSwitch_Now'+ 'Is True');
-        //                               if(resuilt!=null)
-        //                               {
-        //                                 print('2302020202020200');
-        //                                 if(myperson.visRdf!=-9)
-        //                                   {
-        //                                     // _Markers.remove(myperson_Markre);
-        //                                   }
-        //                                 // _Markers.clear();
-        //                                 myperson=resuilt;
-        //                                 print(myperson.lat.toString());
-        //                                 // _poly.clear();
-        //                                 // _cordinate.clear();
-        //
-        //                                 if(myperson.lat>0)
-        //                                   {
-        //                                     // var newPosition = CameraPosition(
-        //                                     //     target: LatLng(myperson.lat,myperson.lng),
-        //                                     //     zoom: 16);
-        //                                     // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
-        //                                     // controller2.moveCamera(update);
-        //                                     // myperson_Markre=Marker(
-        //                                     //     markerId:MarkerId(myperson.lat.toString()),
-        //                                     //     icon: markerbitmap2,
-        //                                     //     position: LatLng(myperson.lat,myperson.lng),
-        //                                     //     infoWindow: InfoWindow(
-        //                                     //         title: myperson.name,
-        //                                     //         snippet: myperson.datetime
-        //                                     //     )
-        //                                     // );
-        //                                     // _Markers.add(myperson_Markre);
-        //                                     setState(() {
-        //                                     });
-        //                                   }
-        //
-        //
-        //                               }
-        //                             }else{
-        //                             print('TypeSwitch_Now'+ 'Is False');
-        //                              print('HI');
-        //                              if(resuilt!=null)
-        //                              {
-        //                                print('565656565655');
-        //                                print(resuilt.toString());
-        //                                // _Markers.clear();
-        //                                // _poly.clear();
-        //                                // _cordinate.clear();
-        //                                setState(() {
-        //
-        //                                });
-        //                                List<Latlng> d=resuilt ;
-        //
-        //                                if(d!=null)
-        //                                {
-        //                                  if(d.length>0)
-        //                                    {
-        //                                      // var newPosition = CameraPosition(
-        //                                      //     target: LatLng(d[0].lat,d[0].lng),
-        //                                      //     zoom: 16);
-        //                                      // d.forEach((element) {
-        //                                      //   print(element.toString());
-        //                                      //   print('element.toString()');
-        //                                      //   _cordinate.add(LatLng(element.lat,element.lng));
-        //                                      // });
-        //                                      // var uuid = Uuid();
-        //                                      // _poly.add(
-        //                                      //     Polyline(
-        //                                      //       polylineId: PolylineId("route1"+uuid.v1().toString()),
-        //                                      //       patterns: [
-        //                                      //         PatternItem.dash(20.0),
-        //                                      //         PatternItem.gap(10)
-        //                                      //       ],
-        //                                      //       width: 4,
-        //                                      //       color: Colors.blue,
-        //                                      //       points: _cordinate,
-        //                                      //     )
-        //                                      // );
-        //
-        //                                      d.forEach((element)
-        //                                      {
-        //                                        // print('MarkId'+uuid.v1().toString());
-        //
-        //
-        //                                        // _Markers.add(
-        //                                        //     Marker(
-        //                                        //         // icon: pinLocationIcon,
-        //                                        //         markerId:MarkerId('MarkId'+element.lat.toString()+element.lng.toString()),
-        //                                        //         // markerId:MarkerId('MarkId'+uuid.v1().toString()),
-        //                                        //         position: LatLng(element.lat,element.lng),
-        //                                        //         // icon: markerbitmap,
-        //                                        //         // visible: true,
-        //                                        //         // onTap: (){
-        //                                        //         //    controller2.showMarkerInfoWindow(scsc22);
-        //                                        //         //
-        //                                        //         // },
-        //                                        //         infoWindow: InfoWindow(
-        //                                        //             title:d[0].name,
-        //                                        //             snippet: element.datetime,
-        //                                        //
-        //                                        //         )
-        //                                        //     ));
-        //                                      });
-        //
-        //                                      // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
-        //                                      // controller2.moveCamera(update);
-        //                                      // setState(() {
-        //                                      //
-        //                                      // });
-        //
-        //                                    }
-        //                                }
-        //                              }
-        //                           }
-        //                         },
-        //                         child: TextField(
-        //                           enabled: false,
-        //                           autofocus: false,
-        //                           textAlign: TextAlign.end,
-        //                           decoration: InputDecoration(
-        //                               border: InputBorder.none,
-        //                               hintStyle: TextStyle(
-        //                                   fontWeight: FontWeight.bold,
-        //                                   color: Color(0xffBEBEBE),
-        //                                   fontSize: 14
-        //                               ),
-        //                               hintText: 'پرسنل خود را جستجو کنید'
-        //                           ),
-        //                         ),
-        //                       ),
-        //                     )),
-        //                     Padding(
-        //                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        //                       child: Icon(Icons.search,color: Color(0xffCACACA),size: 24,),
-        //                     )
-        //                   ],
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         )
-        //       ],
-        //     ),
-        //   ),
-        // )
+            Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32,horizontal: 6),
+                  child: Row(
+              children: [
+                  InkWell(
+                      onTap: (){
+                        // ShowModall_setting();
+                        print('object');
+
+                      },
+                      child: BtnSmall('images/seti.svg',18)),
+                  Expanded(
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: Sizewid>796?MainAxisAlignment.end:MainAxisAlignment.center,
+                        children: [
+                          buildContainer(Sizewid),
+                        ],
+                      ),
+                    ),
+                  )
+              ],
+            ),
+                )),
+            Positioned(
+           bottom: 0,
+           left: 0,
+           right: 0,
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Row(
+              children: [
+                GestureDetector(
+                    onTap: (){
+                      ShowModall_MainMenu();
+                    },
+                    child: BtnSmall('images/cate23.svg',18)),
+                GestureDetector(
+                  onTap: (){
+                    // ShowModall_();
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context)
+                            => PishFactorNotAccept()));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 6.0),
+                    child:  BtnSmall('images/pish.svg',18),
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        width: Sizewid>796?Sizewid/3:Sizewid<=450?Sizewid/3:Sizewid/2,
+                        margin: EdgeInsets.only(left: 6),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            // color: Colors.red,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 3,
+                                  spreadRadius: 1
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(child: Container(
+                              child: InkWell(
+                                onTap: () async{
+                                  var resuilt=await    Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
+                                  if(TypeSwitch_Now)
+                                    {
+                                      print('TypeSwitch_Now'+ 'Is True');
+                                      if(resuilt!=null)
+                                      {
+                                        print('2302020202020200');
+                                        if(myperson.visRdf!=-9)
+                                          {
+                                            // _Markers.remove(myperson_Markre);
+                                          }
+                                        // _Markers.clear();
+                                        myperson=resuilt;
+                                        print(myperson.lat.toString());
+                                        // _poly.clear();
+                                        // _cordinate.clear();
+
+                                        if(myperson.lat>0)
+                                          {
+                                            // var newPosition = CameraPosition(
+                                            //     target: LatLng(myperson.lat,myperson.lng),
+                                            //     zoom: 16);
+                                            // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
+                                            // controller2.moveCamera(update);
+                                            // myperson_Markre=Marker(
+                                            //     markerId:MarkerId(myperson.lat.toString()),
+                                            //     icon: markerbitmap2,
+                                            //     position: LatLng(myperson.lat,myperson.lng),
+                                            //     infoWindow: InfoWindow(
+                                            //         title: myperson.name,
+                                            //         snippet: myperson.datetime
+                                            //     )
+                                            // );
+                                            // _Markers.add(myperson_Markre);
+                                            setState(() {
+                                            });
+                                          }
+
+
+                                      }
+                                    }else{
+                                    print('TypeSwitch_Now'+ 'Is False');
+                                     print('HI');
+                                     if(resuilt!=null)
+                                     {
+                                       print('565656565655');
+                                       print(resuilt.toString());
+                                       // _Markers.clear();
+                                       // _poly.clear();
+                                       // _cordinate.clear();
+                                       setState(() {
+
+                                       });
+                                       List<Latlng1> d=resuilt ;
+
+                                       if(d!=null)
+                                       {
+                                         if(d.length>0)
+                                           {
+                                             print('Size Is '+d.length.toString());
+                                             Polygons.clear();
+                                             _Markers.clear();
+
+                                             d.forEach((element) {
+                                               print(element.toString());
+                                               print(element.lat.toString()+','+element.lng.toString());
+                                               Polygons.add(LatLng(element.lat,element.lng));
+                                             });
+
+
+                                             d.forEach((element)
+                                             {
+                                               _Markers.add(Marker(
+                                                 width: 25.0,
+                                                 height: 25.0,
+                                                 point: LatLng(element.lat, element.lng),
+                                                 builder: (ctx) =>
+                                                     InkWell(
+                                                       onTap: (){
+                                                         ApiService.ShowSnackbar(element.lat.toString()+"/"+element.lng.toString());
+                                                       },
+                                                       child: Container(
+                                                         child: Image.asset('images/locloc2.png',width: 30,height: 30,),
+                                                       ),
+                                                     ),
+                                               ));
+                                             });
+
+                                             // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
+                                             // controller2.moveCamera(update);
+                                             setState(() {
+
+                                             });
+
+                                           }
+                                       }
+                                     }
+                                  }
+                                },
+                                child: TextField(
+                                  enabled: false,
+                                  autofocus: false,
+                                  textAlign: TextAlign.end,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xffBEBEBE),
+                                          fontSize: 14
+                                      ),
+                                      hintText: 'پرسنل خود را جستجو کنید'
+                                  ),
+                                ),
+                              ),
+                            )),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(Icons.search,color: Color(0xffCACACA),size: 24,),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
           ],
         ),
       ),
@@ -912,7 +935,8 @@ class _MainMapState extends State<MainMap> {
                             setState(() {
                               TypeSwitch_Now=false;
                               TypeSwitch_After=true;
-                              // _Markers.clear();
+                              _Markers.clear();
+                              Polygons.clear();
                               myperson.visRdf=-9;
                             });
                           }
@@ -929,7 +953,8 @@ class _MainMapState extends State<MainMap> {
                                 setState(() {
                                   TypeSwitch_Now=true;
                                   TypeSwitch_After=false;
-                                  // _Markers.clear();
+                                  _Markers.clear();
+                                  Polygons.clear();
                                   // _poly.clear();
                                   // _cordinate.clear();
                                 });

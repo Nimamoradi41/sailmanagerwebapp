@@ -45,8 +45,16 @@ dependencies:
   uuid: ^3.0.6
   url_launcher: ^6.0.9
   cached_network_image: ^3.2.0
-  geolocator: any
-  mapbox_gl: any
+  flutter_map: ^0.14.0
+  latlong2: any
+#  geolocator: any
+#  mapbox_gl: any
+#  mapbox_gl_web: any
+#  flutter_map: any
+#  latlng: any
+#  user_location: any
+#  flutter_map:  any
+
 
 
 

@@ -102,12 +102,13 @@ class _PersonelsState extends State<Personels> {
 
 
 
-  List<Latlng> datatransfe=[];
+  List<Latlng1> datatransfe=[];
 
   int pageCounter1=0;
   Future Run77(ProgressDialog pr,String Baseurl,String UserName,String Password,String visRdf,
       String creationDateStart,String creationDateEnd,String creationDateStart_En,String creationDateEnd_En,String PageCounter)async{
     var data= await ApiService.OfflinePeson(pr, Baseurl, UserName, Password,
+    // var data= await ApiService.OfflinePeson(pr,'http://91.108.148.38:9595/manager', 'نیما', '1',
         visRdf,creationDateStart,
         creationDateEnd,
         creationDateStart_En,

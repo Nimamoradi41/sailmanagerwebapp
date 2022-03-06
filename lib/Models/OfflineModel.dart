@@ -48,13 +48,13 @@ class Res_Offline {
     required this.page,
   });
 
-  List<Latlng> latlng;
+  List<Latlng1> latlng;
   int count;
   int page;
 
 
   factory Res_Offline.fromJson(Map<String, dynamic> json) => Res_Offline(
-    latlng: List<Latlng>.from(json["latlng"].map((x) => Latlng.fromJson(x))),
+    latlng: List<Latlng1>.from(json["latlng"].map((x) => Latlng1.fromJson(x))),
     count: json["count"],
     page: json["page"],
   );
@@ -66,8 +66,8 @@ class Res_Offline {
   };
 }
 
-class Latlng {
-  Latlng({
+class Latlng1 {
+  Latlng1({
     required this.lat,
     required  this.lng,
     required  this.datetime,
@@ -79,7 +79,7 @@ class Latlng {
   String datetime;
   String name;
 
-  factory Latlng.fromJson(Map<String, dynamic> json) => Latlng(
+  factory Latlng1.fromJson(Map<String, dynamic> json) => Latlng1(
     lat: json["lat"].toDouble(),
     lng: json["lng"].toDouble(),
     datetime: json["datetime"],
