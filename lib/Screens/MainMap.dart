@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:html';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:map/map.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sailmanagerwebapp/ApiService.dart';
 import 'package:sailmanagerwebapp/Constants.dart';
@@ -23,7 +25,6 @@ import 'package:uuid/uuid.dart';
 
 
 import 'Customers.dart';
-import 'package:latlng/latlng.dart';
 
 
 
@@ -51,6 +52,7 @@ class _MainMapState extends State<MainMap> {
   //   target: LatLng(31.319743, 48.677719),
   //   zoom: 13.4746,
   // );
+
 
 
 
@@ -581,9 +583,9 @@ class _MainMapState extends State<MainMap> {
       visRdf: -9, name: '', cell: '',);
     polylinePoints=PolylinePoints();
     // GetAll();
-    MyLoc=Offset(0, 0);
-    MyLoc_2=LatLng(31.318546, 48.684825);
-    controller.zoom=2;
+
+
+
 
 
 
@@ -592,121 +594,44 @@ class _MainMapState extends State<MainMap> {
     // Setm();
   }
 
-  final controller = MapController(
-    location: LatLng(31.333365, 48.691375),
-  );
 
-  bool _darkMode = false;
-  // void _gotoDefault() {
-  //   controller.center = LatLng(35.68, 51.41);
-  //   setState(() {});
-  // }
 
-  void _onDoubleTap() {
-    controller.zoom += 0.5;
-    setState(() {});
+
+
+
+
+  void _Oncreatmap(MapboxMapController s) async
+  {
+    Mcontrol=s;
+    var markerImage = await loadMarkerImage();
+
+    Mcontrol.addImage('marker', markerImage);
+
+
+
+    await Mcontrol.addSymbol(SymbolOptions(
+        iconSize: 2,
+
+        geometry: LatLng(31.330587,48.684865),
+         ));
   }
 
-  Offset? _dragStart;
-  double _scaleStart = 1.0;
-  void _onScaleStart(ScaleStartDetails details) {
-    _dragStart = details.focalPoint;
-    _scaleStart = 1.0;
-  }
-  final markers = [
-    LatLng(35.674, 51.41),
-    LatLng(35.676, 51.41),
-    LatLng(35.678, 51.41),
-    LatLng(35.68, 51.41),
-    LatLng(35.682, 51.41),
-    LatLng(35.684, 51.41),
-    LatLng(35.686, 51.41),
-  ];
+  late MapboxMapController Mcontrol;
 
-  void _onScaleUpdate(ScaleUpdateDetails details) {
-    final scaleDiff = details.scale - _scaleStart;
-    _scaleStart = details.scale;
+  // This widget is the root of your application.
 
-    if (scaleDiff > 0) {
-      controller.zoom += 0.02;
-      setState(() {});
-    } else if (scaleDiff < 0) {
-      controller.zoom -= 0.02;
-      setState(() {});
-    } else {
-      final now = details.focalPoint;
-      final diff = now - _dragStart!;
-      _dragStart = now;
-      controller.drag(diff.dx, diff.dy);
-      setState(() {});
-    }
-  }
-  Widget _buildMarkerWidget(Offset pos, Color color) {
-    return Positioned(
-      left: pos.dx - 16,
-      top: pos.dy - 16,
-      width: 24,
-      height: 24,
-      child: Icon(Icons.location_on, color: color),
-    );
+  @override
+  void dispose() {
+    Mcontrol.dispose();
+    super.dispose();
+
   }
 
 
-
-  late Offset MyLoc;
-  late LatLng MyLoc_2;
-  Widget MYlocation(Offset pos, Color color) {
-    return
-        Positioned(
-      left: pos.dx - 16,
-      top: pos.dy - 16,
-      width: 64,
-      height: 64,
-      child: Icon(Icons.location_on, color: color),
-    );
+  Future<Uint8List> loadMarkerImage() async {
+    var byteData = await rootBundle.load("images/loc_1.png");
+    return byteData.buffer.asUint8List();
   }
-
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
-  }
-
-
-
-
 
 
 
@@ -719,319 +644,245 @@ class _MainMapState extends State<MainMap> {
       child: Scaffold(
         body: Stack(
           children: [
-            Map(
-              controller: controller, builder: (BuildContext context, int x, int y, int z) {
-                return Container();
-            },
-
+            MapboxMap(
+              accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
+              onMapCreated: _Oncreatmap,
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(31.330587,48.684865),
+                  zoom: 12
+              ),
             ),
-            MapLayoutBuilder(
-              controller: controller,
-              builder: (context, transformer) {
-                final markerPositions =
-                markers.map(transformer.fromLatLngToXYCoords).toList();
-                MyLoc= transformer.fromLatLngToXYCoords(MyLoc_2);
-
-                print('MyLoc'+MyLoc.toString());
-                final markerWidgets = markerPositions.map(
-                      (pos) => _buildMarkerWidget(pos, Colors.red),
-                );
-
-
-                final homeLocation =
-                transformer.fromLatLngToXYCoords(LatLng(35.68, 51.412));
-
-                final homeMarkerWidget =
-                _buildMarkerWidget(homeLocation, Colors.black);
-
-                final centerLocation = Offset(
-                    transformer.constraints.biggest.width / 2,
-                    transformer.constraints.biggest.height / 2);
-
-                // final centerMarkerWidget =
-                // _buildMarkerWidget(centerLocation, Colors.purple);
-
-                return GestureDetector(
-                  onDoubleTap: _onDoubleTap,
-                  onScaleStart: _onScaleStart,
-                  onScaleUpdate: _onScaleUpdate,
-                  onTapUp: (details) {
-                    final location =
-                    transformer.fromXYCoordsToLatLng(details.localPosition);
-
-
-
-                    print('${location.longitude}, ${location.latitude}');
-                    print('${details.localPosition.dx}, ${details.localPosition.dy}');
-                  },
-                  child: Stack(
-                    children: [
-                      Map(
-                        controller: controller,
-                        builder: (context, x, y, z) {
-                          final url =
-                              'https://www.google.com/maps/vt/pb=!1m4!1m3!1i$z!2i$x!3i$y!2m3!1e0!2sm!3i420120488!3m7!2sen!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i4111425';
-
-                          return CachedNetworkImage(
-                            imageUrl: url,
-                            fit: BoxFit.cover,
-                          );
-                        },
-                      ),
-                      homeMarkerWidget,
-                      ...markerWidgets,
-                      MyLoc.dx!=null&&MyLoc.dx!=0?MYlocation(MyLoc, Colors.red):Container()
-                    ],
-                  ),
-                );
-              },
-            ),
-            Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32,horizontal: 6),
-                  child: Row(
-              children: [
-                  InkWell(
-                      onTap: (){
-                        ShowModall_setting();
-                      },
-                      child: BtnSmall('images/seti.svg',18)),
-                  Expanded(
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: Sizewid>796?MainAxisAlignment.end:MainAxisAlignment.center,
-                        children: [
-                          buildContainer(Sizewid),
-                        ],
-                      ),
-                    ),
-                  )
-              ],
-            ),
-                )),
-            Positioned(
-           bottom: 0,
-           left: 0,
-           right: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Row(
-              children: [
-                GestureDetector(
-                    onTap: (){
-                      ShowModall_MainMenu();
-                    },
-                    child: BtnSmall('images/cate23.svg',18)),
-                GestureDetector(
-                  onTap: (){
-                    // ShowModall_();
-                    Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context)
-                            => PishFactorNotAccept()));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 6.0),
-                    child:  BtnSmall('images/pish.svg',18),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () async{
-                    // ShowModall_();
-                    Position? position = await _determinePosition();
-                    if(position!=null)
-                      {
-                        print(position.longitude.toString());
-                        print(position.latitude.toString());
-                        MyLoc_2.latitude =position.latitude;
-                        MyLoc_2.longitude =position.longitude;
-                        setState(() {
-                        });
-                      }
-
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 6.0),
-                    child:  BtnSmall('images/mylolo.svg',20),
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        width: Sizewid>796?Sizewid/3:Sizewid<=450?Sizewid/3:Sizewid/2,
-
-                        margin: EdgeInsets.only(left: 6),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            // color: Colors.red,
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 3,
-                                  spreadRadius: 1
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(child: Container(
-                              child: InkWell(
-                                onTap: () async{
-                                  var resuilt=await    Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
-                                  if(TypeSwitch_Now)
-                                    {
-                                      print('TypeSwitch_Now'+ 'Is True');
-                                      if(resuilt!=null)
-                                      {
-                                        print('2302020202020200');
-                                        if(myperson.visRdf!=-9)
-                                          {
-                                            // _Markers.remove(myperson_Markre);
-                                          }
-                                        // _Markers.clear();
-                                        myperson=resuilt;
-                                        print(myperson.lat.toString());
-                                        // _poly.clear();
-                                        // _cordinate.clear();
-
-                                        if(myperson.lat>0)
-                                          {
-                                            // var newPosition = CameraPosition(
-                                            //     target: LatLng(myperson.lat,myperson.lng),
-                                            //     zoom: 16);
-                                            // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
-                                            // controller2.moveCamera(update);
-                                            // myperson_Markre=Marker(
-                                            //     markerId:MarkerId(myperson.lat.toString()),
-                                            //     icon: markerbitmap2,
-                                            //     position: LatLng(myperson.lat,myperson.lng),
-                                            //     infoWindow: InfoWindow(
-                                            //         title: myperson.name,
-                                            //         snippet: myperson.datetime
-                                            //     )
-                                            // );
-                                            // _Markers.add(myperson_Markre);
-                                            setState(() {
-                                            });
-                                          }
-
-
-                                      }
-                                    }else{
-                                    print('TypeSwitch_Now'+ 'Is False');
-                                     print('HI');
-                                     if(resuilt!=null)
-                                     {
-                                       print('565656565655');
-                                       print(resuilt.toString());
-                                       // _Markers.clear();
-                                       // _poly.clear();
-                                       // _cordinate.clear();
-                                       setState(() {
-
-                                       });
-                                       List<Latlng> d=resuilt ;
-
-                                       if(d!=null)
-                                       {
-                                         if(d.length>0)
-                                           {
-                                             // var newPosition = CameraPosition(
-                                             //     target: LatLng(d[0].lat,d[0].lng),
-                                             //     zoom: 16);
-                                             // d.forEach((element) {
-                                             //   print(element.toString());
-                                             //   print('element.toString()');
-                                             //   _cordinate.add(LatLng(element.lat,element.lng));
-                                             // });
-                                             // var uuid = Uuid();
-                                             // _poly.add(
-                                             //     Polyline(
-                                             //       polylineId: PolylineId("route1"+uuid.v1().toString()),
-                                             //       patterns: [
-                                             //         PatternItem.dash(20.0),
-                                             //         PatternItem.gap(10)
-                                             //       ],
-                                             //       width: 4,
-                                             //       color: Colors.blue,
-                                             //       points: _cordinate,
-                                             //     )
-                                             // );
-
-                                             d.forEach((element)
-                                             {
-                                               // print('MarkId'+uuid.v1().toString());
-
-
-                                               // _Markers.add(
-                                               //     Marker(
-                                               //         // icon: pinLocationIcon,
-                                               //         markerId:MarkerId('MarkId'+element.lat.toString()+element.lng.toString()),
-                                               //         // markerId:MarkerId('MarkId'+uuid.v1().toString()),
-                                               //         position: LatLng(element.lat,element.lng),
-                                               //         // icon: markerbitmap,
-                                               //         // visible: true,
-                                               //         // onTap: (){
-                                               //         //    controller2.showMarkerInfoWindow(scsc22);
-                                               //         //
-                                               //         // },
-                                               //         infoWindow: InfoWindow(
-                                               //             title:d[0].name,
-                                               //             snippet: element.datetime,
-                                               //
-                                               //         )
-                                               //     ));
-                                             });
-
-                                             // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
-                                             // controller2.moveCamera(update);
-                                             // setState(() {
-                                             //
-                                             // });
-
-                                           }
-                                       }
-                                     }
-                                  }
-                                },
-                                child: TextField(
-                                  enabled: false,
-                                  autofocus: false,
-                                  textAlign: TextAlign.end,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintStyle: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xffBEBEBE),
-                                          fontSize: 14
-                                      ),
-                                      hintText: 'پرسنل خود را جستجو کنید'
-                                  ),
-                                ),
-                              ),
-                            )),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(Icons.search,color: Color(0xffCACACA),size: 24,),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        )
+        //     Positioned(
+        //         top: 0,
+        //         left: 0,
+        //         right: 0,
+        //         child: Padding(
+        //           padding: const EdgeInsets.symmetric(vertical: 32,horizontal: 6),
+        //           child: Row(
+        //       children: [
+        //           InkWell(
+        //               onTap: (){
+        //                 // ShowModall_setting();
+        //                 print('object');
+        //                 Mcontrol.addSymbol(SymbolOptions(
+        //                     geometry:LatLng(31.319743, 48.677719), // location is 0.0 on purpose for this example
+        //                     iconImage: 'images/loc_1.png'
+        //                 ));
+        //               },
+        //               child: BtnSmall('images/seti.svg',18)),
+        //           Expanded(
+        //             child: Container(
+        //               child: Row(
+        //                 mainAxisAlignment: Sizewid>796?MainAxisAlignment.end:MainAxisAlignment.center,
+        //                 children: [
+        //                   buildContainer(Sizewid),
+        //                 ],
+        //               ),
+        //             ),
+        //           )
+        //       ],
+        //     ),
+        //         )),
+        //     Positioned(
+        //    bottom: 0,
+        //    left: 0,
+        //    right: 0,
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(6.0),
+        //     child: Row(
+        //       children: [
+        //         GestureDetector(
+        //             onTap: (){
+        //               ShowModall_MainMenu();
+        //             },
+        //             child: BtnSmall('images/cate23.svg',18)),
+        //         GestureDetector(
+        //           onTap: (){
+        //             // ShowModall_();
+        //             Navigator.of(context).push(
+        //                 MaterialPageRoute(
+        //                     builder: (context)
+        //                     => PishFactorNotAccept()));
+        //           },
+        //           child: Padding(
+        //             padding: const EdgeInsets.only(left: 6.0),
+        //             child:  BtnSmall('images/pish.svg',18),
+        //           ),
+        //         ),
+        //         Expanded(
+        //           child: Row(
+        //             mainAxisAlignment: MainAxisAlignment.end,
+        //             children: [
+        //               Container(
+        //                 width: Sizewid>796?Sizewid/3:Sizewid<=450?Sizewid/3:Sizewid/2,
+        //
+        //                 margin: EdgeInsets.only(left: 6),
+        //                 decoration: BoxDecoration(
+        //                     color: Colors.white,
+        //                     // color: Colors.red,
+        //                     boxShadow: [
+        //                       BoxShadow(
+        //                           color: Colors.black12,
+        //                           blurRadius: 3,
+        //                           spreadRadius: 1
+        //                       )
+        //                     ],
+        //                     borderRadius: BorderRadius.circular(8)
+        //                 ),
+        //                 child: Row(
+        //                   crossAxisAlignment: CrossAxisAlignment.center,
+        //                   children: [
+        //                     Expanded(child: Container(
+        //                       child: InkWell(
+        //                         onTap: () async{
+        //                           var resuilt=await    Navigator.of(context).push(
+        //                               MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
+        //                           if(TypeSwitch_Now)
+        //                             {
+        //                               print('TypeSwitch_Now'+ 'Is True');
+        //                               if(resuilt!=null)
+        //                               {
+        //                                 print('2302020202020200');
+        //                                 if(myperson.visRdf!=-9)
+        //                                   {
+        //                                     // _Markers.remove(myperson_Markre);
+        //                                   }
+        //                                 // _Markers.clear();
+        //                                 myperson=resuilt;
+        //                                 print(myperson.lat.toString());
+        //                                 // _poly.clear();
+        //                                 // _cordinate.clear();
+        //
+        //                                 if(myperson.lat>0)
+        //                                   {
+        //                                     // var newPosition = CameraPosition(
+        //                                     //     target: LatLng(myperson.lat,myperson.lng),
+        //                                     //     zoom: 16);
+        //                                     // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
+        //                                     // controller2.moveCamera(update);
+        //                                     // myperson_Markre=Marker(
+        //                                     //     markerId:MarkerId(myperson.lat.toString()),
+        //                                     //     icon: markerbitmap2,
+        //                                     //     position: LatLng(myperson.lat,myperson.lng),
+        //                                     //     infoWindow: InfoWindow(
+        //                                     //         title: myperson.name,
+        //                                     //         snippet: myperson.datetime
+        //                                     //     )
+        //                                     // );
+        //                                     // _Markers.add(myperson_Markre);
+        //                                     setState(() {
+        //                                     });
+        //                                   }
+        //
+        //
+        //                               }
+        //                             }else{
+        //                             print('TypeSwitch_Now'+ 'Is False');
+        //                              print('HI');
+        //                              if(resuilt!=null)
+        //                              {
+        //                                print('565656565655');
+        //                                print(resuilt.toString());
+        //                                // _Markers.clear();
+        //                                // _poly.clear();
+        //                                // _cordinate.clear();
+        //                                setState(() {
+        //
+        //                                });
+        //                                List<Latlng> d=resuilt ;
+        //
+        //                                if(d!=null)
+        //                                {
+        //                                  if(d.length>0)
+        //                                    {
+        //                                      // var newPosition = CameraPosition(
+        //                                      //     target: LatLng(d[0].lat,d[0].lng),
+        //                                      //     zoom: 16);
+        //                                      // d.forEach((element) {
+        //                                      //   print(element.toString());
+        //                                      //   print('element.toString()');
+        //                                      //   _cordinate.add(LatLng(element.lat,element.lng));
+        //                                      // });
+        //                                      // var uuid = Uuid();
+        //                                      // _poly.add(
+        //                                      //     Polyline(
+        //                                      //       polylineId: PolylineId("route1"+uuid.v1().toString()),
+        //                                      //       patterns: [
+        //                                      //         PatternItem.dash(20.0),
+        //                                      //         PatternItem.gap(10)
+        //                                      //       ],
+        //                                      //       width: 4,
+        //                                      //       color: Colors.blue,
+        //                                      //       points: _cordinate,
+        //                                      //     )
+        //                                      // );
+        //
+        //                                      d.forEach((element)
+        //                                      {
+        //                                        // print('MarkId'+uuid.v1().toString());
+        //
+        //
+        //                                        // _Markers.add(
+        //                                        //     Marker(
+        //                                        //         // icon: pinLocationIcon,
+        //                                        //         markerId:MarkerId('MarkId'+element.lat.toString()+element.lng.toString()),
+        //                                        //         // markerId:MarkerId('MarkId'+uuid.v1().toString()),
+        //                                        //         position: LatLng(element.lat,element.lng),
+        //                                        //         // icon: markerbitmap,
+        //                                        //         // visible: true,
+        //                                        //         // onTap: (){
+        //                                        //         //    controller2.showMarkerInfoWindow(scsc22);
+        //                                        //         //
+        //                                        //         // },
+        //                                        //         infoWindow: InfoWindow(
+        //                                        //             title:d[0].name,
+        //                                        //             snippet: element.datetime,
+        //                                        //
+        //                                        //         )
+        //                                        //     ));
+        //                                      });
+        //
+        //                                      // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
+        //                                      // controller2.moveCamera(update);
+        //                                      // setState(() {
+        //                                      //
+        //                                      // });
+        //
+        //                                    }
+        //                                }
+        //                              }
+        //                           }
+        //                         },
+        //                         child: TextField(
+        //                           enabled: false,
+        //                           autofocus: false,
+        //                           textAlign: TextAlign.end,
+        //                           decoration: InputDecoration(
+        //                               border: InputBorder.none,
+        //                               hintStyle: TextStyle(
+        //                                   fontWeight: FontWeight.bold,
+        //                                   color: Color(0xffBEBEBE),
+        //                                   fontSize: 14
+        //                               ),
+        //                               hintText: 'پرسنل خود را جستجو کنید'
+        //                           ),
+        //                         ),
+        //                       ),
+        //                     )),
+        //                     Padding(
+        //                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        //                       child: Icon(Icons.search,color: Color(0xffCACACA),size: 24,),
+        //                     )
+        //                   ],
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //         )
+        //       ],
+        //     ),
+        //   ),
+        // )
           ],
         ),
       ),
