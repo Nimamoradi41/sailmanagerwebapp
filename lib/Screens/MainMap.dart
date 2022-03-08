@@ -4,13 +4,15 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map/plugin_api.dart';
+// import 'package:flutter_map/flutter_map.dart';
+// import 'package:flutter_map/plugin_api.dart';
+// import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
 
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:latlong2/latlong.dart';
+// import 'package:latlong2/latlong.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 // import 'package:mapbox_gl/mapbox_gl.dart';
 
 
@@ -27,7 +29,7 @@ import 'package:sailmanagerwebapp/Screens/PishFactorNotAccept.dart';
 import 'package:sailmanagerwebapp/Screens/PishFactorsAll.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-
+import 'dart:ui' as ui;
 
 import 'Customers.dart';
 
@@ -422,7 +424,7 @@ class _MainMapState extends State<MainMap> {
 
 
 
-  List<Marker>_Markers=[];
+  List<LatLng>_Markers=[];
   //
   // late GoogleMapController controller2;
   //
@@ -491,6 +493,7 @@ class _MainMapState extends State<MainMap> {
     });
   }
 
+
   // late BitmapDescriptor markerbitmap;
   // late BitmapDescriptor markerbitmap2;
   Future GetAll()async{
@@ -498,6 +501,11 @@ class _MainMapState extends State<MainMap> {
     //   ImageConfiguration(),
     //   "images/loc_1.png",
     // );
+
+
+
+    var markerImage = await loadMarkerImage();
+    Mcontrol.addImage('marker', markerImage);
 
 
 
@@ -512,7 +520,6 @@ class _MainMapState extends State<MainMap> {
     var Password =prefs.getString('Password');
     var data=    await   ApiService.GetPerson( base.toString(), UserName!, Password!);
     // var data=    await   ApiService.GetPerson( 'http://91.108.148.38:9595/manager', 'نیما', '1');
-
     print(data.toString());
     if(data.code==200)
       {
@@ -521,25 +528,22 @@ class _MainMapState extends State<MainMap> {
             Customer_temps2=data.res;
             // _Markers.clear();
             // _poly.clear();
+
+            _Markers.clear();
+            Mcontrol.clearSymbols();
+            Mcontrol.clearLines();
+
             // _cordinate.clear();
            data.res.forEach((element) {
              if(element.lat!=null&&element.lat!=0)
                {
-                 _Markers.add(
-                     Marker(
-                       width: 40.0,
-                       height: 40.0,
-                       point: LatLng(element.lat, element.lng),
-                       builder: (ctx) =>
-                           InkWell(
-                             onTap: (){
-                               ApiService.ShowSnackbar(element.lat.toString()+"/"+element.lng.toString());
-                             },
-                             child: Container(
-                               child: Image.asset('images/locloc2.png',width: 30,height: 30,),
-                             ),
-                           ),
-                     ));
+                 _Markers.add(LatLng(element.lat,element.lng));
+                  Mcontrol.addSymbol(SymbolOptions(
+                     iconSize: 0.2,
+                     iconImage: "marker",
+                     // iconImage: "assets/locloc2.png",
+                     geometry: LatLng(element.lat,element.lng),
+                      ));
                }
             });
 
@@ -584,15 +588,34 @@ class _MainMapState extends State<MainMap> {
     }
 
   }
-  MapController mycontroler=MapController();
+  // MapController mycontroler=MapController();
+
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
+
+
   @override
-  void initState() {
+  void initState()   {
     super.initState();
     myperson=RePerson(
       lng: 0, lat: 0, tell1: '', tell2: '', datetime: '',
       visRdf: -9, name: '', cell: '',);
-    polylinePoints=PolylinePoints();
+    // polylinePoints=PolylinePoints();
+
+
     GetAll();
+
+    // final Uint8List markerIcon = await getBytesFromAsset('images/locloc2.png', 100);
+
+
+
+
 
 
 
@@ -641,7 +664,7 @@ class _MainMapState extends State<MainMap> {
 
   @override
   void dispose() {
-    // Mcontrol.dispose();
+    Mcontrol.dispose();
     super.dispose();
 
   }
@@ -653,6 +676,33 @@ class _MainMapState extends State<MainMap> {
   }
 
 
+
+  // late MapController Mcontrol;
+  late MapboxMapController Mcontrol;
+
+  void _Oncreatmap(MapboxMapController s)
+  {
+    Mcontrol=s;
+  }
+
+
+  void addCirc(MapboxMapController sd)  async
+  {
+    // sd.addCircle(CircleOptions(
+    //   geometry: LatLng(31.331725, 48.686134),
+    //   circleColor: '#23d2aa',
+    //   circleRadius: 15
+    // ));
+    var markerImage = await loadMarkerImage();
+    sd.addImage('marker', markerImage);
+
+     Mcontrol=sd;
+
+
+
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -666,36 +716,74 @@ class _MainMapState extends State<MainMap> {
             Container(
               height: double.infinity,
               width: double.infinity,
-              child:FlutterMap(
-                options: MapOptions(
-                  center:LatLng(31.316958, 48.676185),
-                  zoom: 13.0,
-                ),
-                layers: [
-                  TileLayerOptions(
-                    urlTemplate: "https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA",
-                    additionalOptions: {
-                      'accessToken':'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
-                      'id':'mapbox.satellite'
-                    },
-                    attributionBuilder: (_) {
-                      return Text("© OpenStreetMap contributors");
-                    },
+              // color: Colors.red,
+              // child:FlutterMap(
+              //   options: MapOptions(
+              //     center:LatLng(31.316958, 48.676185),
+              //     zoom: 13.0,
+              //     controller:Mcontrol,
+              //     plugins: [
+              //       MarkerClusterPlugin()
+              //     ]
+              //   ),
+              //   mapController: Mcontrol,
+              //   layers: [
+              //     TileLayerOptions(
+              //       urlTemplate: "https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA",
+              //       additionalOptions: {
+              //         'accessToken':'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
+              //         'id':'mapbox.satellite'
+              //       },
+              //
+              //       attributionBuilder: (_) {
+              //         return Text("© OpenStreetMap contributors");
+              //       },
+              //     ),
+              //     PolylineLayerOptions(
+              //         polylines: [
+              //           new Polyline(
+              //             points: Polygons,
+              //             strokeWidth: 2,
+              //             color: Colors.red,
+              //           )
+              //         ]
+              //     ),
+              //     MarkerLayerOptions(
+              //         markers:_Markers,
+              //     ),
+              //
+              //
+              //
+              //
+              //     // MarkerLayerWidget(options:
+              //     // MarkerLayerOptions(
+              //     //   markers: [
+              //     //     Marker(
+              //     //       width: 80.0,
+              //     //       height: 80.0,
+              //     //       point: LatLng(51.5, -0.09),
+              //     //       builder: (ctx) =>
+              //     //           Container(
+              //     //             child: FlutterLogo(),
+              //     //           ),
+              //     //     ),
+              //     //   ],
+              //     // )),
+              //
+              //   ],
+              // ),
+                child:MapboxMap(
+                  accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
+                  // accessToken: 'https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
+                  onMapCreated: _Oncreatmap,
+                  styleString: "*****",
+                  // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
+                  onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
+                  initialCameraPosition: CameraPosition(
+                      target: LatLng(31.330587,48.684865),
+                      zoom: 12
                   ),
-                  MarkerLayerOptions(
-                      markers:_Markers,
-                  ),
-                  PolylineLayerOptions(
-                    polylines: [
-                      new Polyline(
-                        points: Polygons,
-                        strokeWidth: 2,
-                        color: Colors.red,
-                      )
-                    ]
-                  )
-                ],
-              ),
+                )
             ),
             Positioned(
                 top: 0,
@@ -706,9 +794,14 @@ class _MainMapState extends State<MainMap> {
                   child: Row(
               children: [
                   InkWell(
-                      onTap: (){
+                      onTap: () async{
                         // ShowModall_setting();
                         print('object');
+
+
+
+
+
 
                       },
                       child: BtnSmall('images/seti.svg',18)),
@@ -789,13 +882,24 @@ class _MainMapState extends State<MainMap> {
                                             // _Markers.remove(myperson_Markre);
                                           }
                                         // _Markers.clear();
+                                        var markerImage = await loadMarkerImage();
+                                        Mcontrol.addImage('marker', markerImage);
                                         myperson=resuilt;
                                         print(myperson.lat.toString());
                                         // _poly.clear();
                                         // _cordinate.clear();
-
+                                        Polygons.clear();
+                                        _Markers.clear();
+                                        Mcontrol.clearSymbols();
+                                        Mcontrol.clearLines();
                                         if(myperson.lat>0)
                                           {
+                                            Mcontrol.addSymbol(SymbolOptions(
+                                              iconSize: 0.2,
+                                              iconImage: "marker",
+                                              // iconImage: "assets/locloc2.png",
+                                              geometry: LatLng(myperson.lat,myperson.lng),
+                                            ));
                                             // var newPosition = CameraPosition(
                                             //     target: LatLng(myperson.lat,myperson.lng),
                                             //     zoom: 16);
@@ -836,32 +940,33 @@ class _MainMapState extends State<MainMap> {
                                        {
                                          if(d.length>0)
                                            {
+                                             var markerImage = await loadMarkerImage();
+                                             Mcontrol.addImage('marker', markerImage);
                                              print('Size Is '+d.length.toString());
                                              Polygons.clear();
                                              _Markers.clear();
+                                             Mcontrol.clearSymbols();
+                                             Mcontrol.clearLines();
 
                                              d.forEach((element) {
-                                               print(element.toString());
-                                               print(element.lat.toString()+','+element.lng.toString());
-                                               Polygons.add(LatLng(element.lat,element.lng));
+                                              _Markers.add(LatLng(element.lat, element.lng));
                                              });
 
 
+                                             Mcontrol.addLine(
+                                               LineOptions(
+                                                   geometry: _Markers,
+                                                   lineColor: "#FF1818",
+                                                   lineWidth: 2.0,
+                                                   draggable: true),
+                                             );
                                              d.forEach((element)
                                              {
-                                               _Markers.add(Marker(
-                                                 width: 25.0,
-                                                 height: 25.0,
-                                                 point: LatLng(element.lat, element.lng),
-                                                 builder: (ctx) =>
-                                                     InkWell(
-                                                       onTap: (){
-                                                         ApiService.ShowSnackbar(element.lat.toString()+"/"+element.lng.toString());
-                                                       },
-                                                       child: Container(
-                                                         child: Image.asset('images/locloc2.png',width: 30,height: 30,),
-                                                       ),
-                                                     ),
+                                               Mcontrol.addSymbol(SymbolOptions(
+                                                 iconSize: 0.2,
+                                                 iconImage: "marker",
+                                                 // iconImage: "assets/locloc2.png",
+                                                 geometry: LatLng(element.lat,element.lng),
                                                ));
                                              });
 
@@ -913,7 +1018,7 @@ class _MainMapState extends State<MainMap> {
   }
   Container buildContainer(double Siz) {
     return Container(
-                  width: Siz>796?Siz/3:Siz/2,
+                  width: Siz>796?Siz/3:Siz/1.5,
                   margin: EdgeInsets.symmetric(horizontal: 32),
                   decoration: BoxDecoration(
                       color: Colors.white,
