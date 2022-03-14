@@ -45,6 +45,7 @@ dependencies:
   uuid: ^3.0.6
   url_launcher: ^6.0.9
   cached_network_image: ^3.2.0
+  flutter_html:
 #  flutter_map: ^0.14.0
 #  latlong2: any
 #  flutter_map_marker_cluster:  any

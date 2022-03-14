@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
 // import 'package:flutter_map/flutter_map.dart';
 // import 'package:flutter_map/plugin_api.dart';
 // import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -761,25 +763,33 @@ class _MainMapState extends State<MainMap> {
         body: Stack(
           children: [
             Container(
+              key: Key('MyRoot'),
               height: double.infinity,
               width: double.infinity,
-                child:MapboxMap(
-                  accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
-                  // accessToken: 'https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
-                  onMapCreated: _Oncreatmap,
-                  // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
-                  onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
-                  onMapClick:(a,b) async {
-                    print(b.toString());
-                  },
-
-                  initialCameraPosition: CameraPosition(
-                      target: LatLng(31.330587,48.684865),
-                      zoom: 12
-                  ),
-                )
+                child: Container(
+                  height: 250,
+                  width: 250,
+                  // color: Colors.red,
+                  key: Key("Map"),
+                ),
+                // child:MapboxMap(
+                //   accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
+                //   // accessToken: 'https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
+                //   onMapCreated: _Oncreatmap,
+                //   // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
+                //   onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
+                //   onMapClick:(a,b) async {
+                //     print(b.toString());
+                //   },
+                //
+                //   initialCameraPosition: CameraPosition(
+                //       target: LatLng(31.330587,48.684865),
+                //       zoom: 12
+                //   ),
+                // )
             ),
             Positioned(
+                key: Key('MyRoot2'),
                 top: 0,
                 left: 0,
                 right: 0,
@@ -812,7 +822,16 @@ class _MainMapState extends State<MainMap> {
               ],
             ),
                 )),
+            Container(
+              height: 250,
+              width: 250,
+              color: Colors.red,
+              child: Html(
+                data: "<h1>nimaaaaa</h1>",
+              ),
+            ),
             Positioned(
+              key: Key('MyRoot3'),
            bottom: 0,
            left: 0,
            right: 0,
