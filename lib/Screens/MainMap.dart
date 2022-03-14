@@ -609,7 +609,7 @@ class _MainMapState extends State<MainMap> {
     // polylinePoints=PolylinePoints();
 
 
-    GetAll();
+    // GetAll();
 
     // final Uint8List markerIcon = await getBytesFromAsset('images/locloc2.png', 100);
 
@@ -626,7 +626,7 @@ class _MainMapState extends State<MainMap> {
 
 
 
-    updateMarkers();
+    // updateMarkers();
     // Setm();
   }
 
@@ -670,6 +670,9 @@ class _MainMapState extends State<MainMap> {
   }
 
 
+  late MapboxMap _map;
+
+
   Future<Uint8List> loadMarkerImage() async {
     var byteData = await rootBundle.load("images/loc_1.png");
     return byteData.buffer.asUint8List();
@@ -696,7 +699,51 @@ class _MainMapState extends State<MainMap> {
     var markerImage = await loadMarkerImage();
     sd.addImage('marker', markerImage);
 
-     Mcontrol=sd;
+     // Mcontrol=sd;
+
+    sd.addImage('marker', markerImage);
+    sd.addSymbol(SymbolOptions(
+      iconSize: 0.2,
+      iconImage: "marker",
+      // iconImage: "assets/locloc2.png",
+      geometry: LatLng(31.344681, 48.692898),
+    ));
+    sd.addSymbol(SymbolOptions(
+      iconSize: 0.2,
+      iconImage: "marker",
+      textAnchor: "top",
+      textColor: '#000000',
+      textSize: 16,
+      textHaloColor: 'ytytytyttyytyt',
+      textField: 'Nima',
+      // iconImage: "assets/locloc2.png",
+      geometry: LatLng(31.346669, 48.689347),
+    ));
+    sd.addSymbol(SymbolOptions(
+      iconSize: 0.2,
+      iconImage: "marker",
+      // iconImage: "assets/locloc2.png",
+      geometry: LatLng(31.348373, 48.692570),
+    ));
+    sd.addSymbol(SymbolOptions(
+      iconSize: 0.2,
+      iconImage: "marker",
+      // iconImage: "assets/locloc2.png",
+      geometry: LatLng(31.348356, 48.692582),
+    ));
+
+    _Markers.add(LatLng(31.344681, 48.692898));
+    _Markers.add(LatLng(31.346669, 48.689347));
+    _Markers.add(LatLng(31.348373, 48.692570));
+    _Markers.add(LatLng(31.348356, 48.692582));
+
+
+
+
+    setState(() {
+
+    });
+
 
 
 
@@ -716,69 +763,16 @@ class _MainMapState extends State<MainMap> {
             Container(
               height: double.infinity,
               width: double.infinity,
-              // color: Colors.red,
-              // child:FlutterMap(
-              //   options: MapOptions(
-              //     center:LatLng(31.316958, 48.676185),
-              //     zoom: 13.0,
-              //     controller:Mcontrol,
-              //     plugins: [
-              //       MarkerClusterPlugin()
-              //     ]
-              //   ),
-              //   mapController: Mcontrol,
-              //   layers: [
-              //     TileLayerOptions(
-              //       urlTemplate: "https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA",
-              //       additionalOptions: {
-              //         'accessToken':'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
-              //         'id':'mapbox.satellite'
-              //       },
-              //
-              //       attributionBuilder: (_) {
-              //         return Text("© OpenStreetMap contributors");
-              //       },
-              //     ),
-              //     PolylineLayerOptions(
-              //         polylines: [
-              //           new Polyline(
-              //             points: Polygons,
-              //             strokeWidth: 2,
-              //             color: Colors.red,
-              //           )
-              //         ]
-              //     ),
-              //     MarkerLayerOptions(
-              //         markers:_Markers,
-              //     ),
-              //
-              //
-              //
-              //
-              //     // MarkerLayerWidget(options:
-              //     // MarkerLayerOptions(
-              //     //   markers: [
-              //     //     Marker(
-              //     //       width: 80.0,
-              //     //       height: 80.0,
-              //     //       point: LatLng(51.5, -0.09),
-              //     //       builder: (ctx) =>
-              //     //           Container(
-              //     //             child: FlutterLogo(),
-              //     //           ),
-              //     //     ),
-              //     //   ],
-              //     // )),
-              //
-              //   ],
-              // ),
                 child:MapboxMap(
                   accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
                   // accessToken: 'https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
                   onMapCreated: _Oncreatmap,
-                  styleString: "*****",
                   // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
                   onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
+                  onMapClick:(a,b) async {
+                    print(b.toString());
+                  },
+
                   initialCameraPosition: CameraPosition(
                       target: LatLng(31.330587,48.684865),
                       zoom: 12
@@ -1016,6 +1010,27 @@ class _MainMapState extends State<MainMap> {
       ),
     );
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   Container buildContainer(double Siz) {
     return Container(
                   width: Siz>796?Siz/3:Siz/1.5,
