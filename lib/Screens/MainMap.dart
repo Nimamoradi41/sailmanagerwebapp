@@ -121,6 +121,7 @@ class _MainMapState extends State<MainMap> {
                             contentPadding: EdgeInsets.all(8),
                             border: InputBorder.none,
                             hintStyle: TextStyle(
+
                                 color: Color(0xff1F3C84).withOpacity(0.80)
                             ),
                             hintText: 'پرسنل خود را جستجو کنید...'
@@ -193,27 +194,27 @@ class _MainMapState extends State<MainMap> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Row(
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     Expanded(child:
-              //     Container(
-              //     child:  Text('تنظیمات',
-              //       textAlign: TextAlign.end,
-              //       style: TextStyle(color:
-              //       BaseColor,
-              //           fontSize: 14,
-              //           fontWeight: FontWeight.w100),),
-              //     )),
-              //     Padding(
-              //       padding: const EdgeInsets.all(8.0),
-              //       child: Icon(Icons.settings_rounded,size: 25,color: Color(0xff1F3C84),),
-              //     ),
-              //
-              //   ],
-              // ),
-              // Divider(height: 10,color: ColorLine,),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child:
+                  Container(
+                  child:  Text('تنظیمات',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(color:
+                    BaseColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w100),),
+                  )),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.settings_rounded,size: 25,color: Color(0xff1F3C84),),
+                  ),
+
+                ],
+              ),
+              Divider(height: 10,color: ColorLine,),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -332,6 +333,42 @@ class _MainMapState extends State<MainMap> {
                   ),
                 ],
               )
+            ],
+          ),
+        ),
+      ) ;
+    });
+  }
+
+
+  ShowModall_Date(String Da)
+  {
+    print(Da);
+    showModalBottomSheet(context: context, builder: (ctx){
+      return  Container(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(Da==null?'نامشخص':Da,
+                    textAlign: TextAlign.end,
+                    style: TextStyle(color:
+                    BaseColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w100),),
+                  Text(': زمان و تاریخ موقعیت ',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(color:
+                    BaseColor,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w100),),
+                ],
+              ),
             ],
           ),
         ),
@@ -691,6 +728,15 @@ class _MainMapState extends State<MainMap> {
   }
 
 
+  aFunction(Symbol symbol){
+    print(symbol.data);
+    print(symbol.options.geometry);
+    print(symbol.options.textHaloColor);
+    print(symbol.id);
+    ShowModall_Date(symbol.options.textHaloColor.toString().trim());
+    // code goes here
+  }
+
   void addCirc(MapboxMapController sd)  async
   {
     // sd.addCircle(CircleOptions(
@@ -716,8 +762,7 @@ class _MainMapState extends State<MainMap> {
       textAnchor: "top",
       textColor: '#000000',
       textSize: 16,
-      textHaloColor: 'ytytytyttyytyt',
-      textField: 'Nima',
+      textHaloColor: '1400/05/12 14:30:30',
       // iconImage: "assets/locloc2.png",
       geometry: LatLng(31.346669, 48.689347),
     ));
@@ -734,6 +779,7 @@ class _MainMapState extends State<MainMap> {
       geometry: LatLng(31.348356, 48.692582),
     ));
 
+     Mcontrol.onSymbolTapped.add(aFunction);
     _Markers.add(LatLng(31.344681, 48.692898));
     _Markers.add(LatLng(31.346669, 48.689347));
     _Markers.add(LatLng(31.348373, 48.692570));
@@ -753,6 +799,7 @@ class _MainMapState extends State<MainMap> {
 
   }
 
+
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
@@ -766,27 +813,20 @@ class _MainMapState extends State<MainMap> {
               key: Key('MyRoot'),
               height: double.infinity,
               width: double.infinity,
-                child: Container(
-                  height: 250,
-                  width: 250,
-                  // color: Colors.red,
-                  key: Key("Map"),
-                ),
-                // child:MapboxMap(
-                //   accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
-                //   // accessToken: 'https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
-                //   onMapCreated: _Oncreatmap,
-                //   // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
-                //   onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
-                //   onMapClick:(a,b) async {
-                //     print(b.toString());
-                //   },
-                //
-                //   initialCameraPosition: CameraPosition(
-                //       target: LatLng(31.330587,48.684865),
-                //       zoom: 12
-                //   ),
-                // )
+                child:MapboxMap(
+                  accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
+                  // accessToken: 'https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
+                  onMapCreated: _Oncreatmap,
+                  // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
+                  onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
+                  onMapClick:(a,b) async {
+                    print(b.toString());
+                  },
+                  initialCameraPosition: CameraPosition(
+                      target: LatLng(31.330587,48.684865),
+                      zoom: 12
+                  ),
+                )
             ),
             Positioned(
                 key: Key('MyRoot2'),
@@ -797,18 +837,18 @@ class _MainMapState extends State<MainMap> {
                   padding: const EdgeInsets.symmetric(vertical: 32,horizontal: 6),
                   child: Row(
               children: [
-                  InkWell(
-                      onTap: () async{
-                        // ShowModall_setting();
-                        print('object');
-
-
-
-
-
-
-                      },
-                      child: BtnSmall('images/seti.svg',18)),
+                  // InkWell(
+                  //     onTap: () async{
+                  //       ShowModall_setting();
+                  //       print('object');
+                  //
+                  //
+                  //
+                  //
+                  //
+                  //
+                  //     },
+                  //     child: BtnSmall('images/seti.svg',18)),
                   Expanded(
                     child: Container(
                       child: Row(
@@ -822,14 +862,7 @@ class _MainMapState extends State<MainMap> {
               ],
             ),
                 )),
-            Container(
-              height: 250,
-              width: 250,
-              color: Colors.red,
-              child: Html(
-                data: "<h1>nimaaaaa</h1>",
-              ),
-            ),
+
             Positioned(
               key: Key('MyRoot3'),
            bottom: 0,
@@ -862,7 +895,7 @@ class _MainMapState extends State<MainMap> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
-                        width: Sizewid>796?Sizewid/3:Sizewid<=450?Sizewid/3:Sizewid/2,
+                        width: Sizewid>796?Sizewid/4:Sizewid<=450?Sizewid/2:Sizewid/2,
                         margin: EdgeInsets.only(left: 6),
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -1003,7 +1036,7 @@ class _MainMapState extends State<MainMap> {
                                       hintStyle: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xffBEBEBE),
-                                          fontSize: 14
+                                        fontSize:Sizewid<=409?10: 12,
                                       ),
                                       hintText: 'پرسنل خود را جستجو کنید'
                                   ),
@@ -1075,6 +1108,8 @@ class _MainMapState extends State<MainMap> {
                               TypeSwitch_Now=false;
                               TypeSwitch_After=true;
                               _Markers.clear();
+                              Mcontrol.clearLines();
+                              Mcontrol.clearSymbols();
                               Polygons.clear();
                               myperson.visRdf=-9;
                             });
@@ -1082,7 +1117,7 @@ class _MainMapState extends State<MainMap> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
-                          child: BoxSwitch('تاریخچه موقعیت ها',TypeSwitch_After),
+                          child: BoxSwitch('تاریخچه موقعیت ها',TypeSwitch_After,Siz),
                         ),
                       )),
                       Expanded(child: InkWell(
@@ -1094,6 +1129,8 @@ class _MainMapState extends State<MainMap> {
                                   TypeSwitch_After=false;
                                   _Markers.clear();
                                   Polygons.clear();
+                                  Mcontrol.clearLines();
+                                  Mcontrol.clearSymbols();
                                   // _poly.clear();
                                   // _cordinate.clear();
                                 });
@@ -1102,7 +1139,7 @@ class _MainMapState extends State<MainMap> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
-                          child: BoxSwitch('موقعیت فعلی',TypeSwitch_Now),
+                          child: BoxSwitch('موقعیت فعلی',TypeSwitch_Now,Siz),
                         ),
                       )),
                     ],
@@ -1179,7 +1216,8 @@ class _MainMapState extends State<MainMap> {
  class BoxSwitch extends StatelessWidget {
    String  Lable;
    bool Active;
-   BoxSwitch(this.Lable,this.Active);
+   double wid;
+   BoxSwitch(this.Lable,this.Active,this.wid);
 
 
   @override
@@ -1202,7 +1240,7 @@ class _MainMapState extends State<MainMap> {
           child: Text(Lable,
             style: TextStyle(color:Active?Colors.white:
             BaseColor,
-                fontSize: 12,
+                fontSize:wid<=409?10: 12,
                 fontWeight: FontWeight.w100),),
         ),
       ),
@@ -1227,25 +1265,18 @@ class BtnSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: null,
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(BaseColor),
-
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                )
-            )
-        ),
-        child:Padding(
-          padding: const EdgeInsets.only(bottom: 16.0,top: 16.0),
-
-          child:
-
-          SvgPicture.asset(Icon, color: Colors.white,
-            width: Size,height: Size,),
-        ) );
+    return Container(
+      decoration: BoxDecoration(
+        color: BaseColor,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(8)
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: SvgPicture.asset(Icon, color: Colors.white,
+          width: Size,height: Size,),
+      ),
+    );
   }
 }
 

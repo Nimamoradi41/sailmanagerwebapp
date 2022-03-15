@@ -637,6 +637,15 @@ class _CustomersState extends State<Customers> {
     GetData();
     get2();
        pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+
+
+    Re_Customer ss=Re_Customer(id: 'id', name: 'name', tell1: 'tell1',
+        tell2: 'tell2', groupId: 'groupId', address: 'address', provinceId:
+        'provinceId', cityId: 'cityId', masirId: 'masirId', reginId: 'reginId',
+        mande: 'mande', lat: 2967, lng: 757575);
+
+    MyDataSourch.add(ss);
+
   }
 
 
@@ -745,6 +754,7 @@ class _CustomersState extends State<Customers> {
                                     contentPadding: EdgeInsets.all(8),
                                     border: InputBorder.none,
                                     hintStyle: TextStyle(
+                                      fontSize: 12,
                                         color: Color(0xff1F3C84).withOpacity(0.80)
                                     ),
                                     hintText: 'مشتری خود را جستجو کنید...'
@@ -800,7 +810,7 @@ class _CustomersState extends State<Customers> {
                       ),
                     ) ,
                     Padding(
-                      padding: const EdgeInsets.only(right: 8,left: 8,top: 8),
+                      padding: const EdgeInsets.only(right: 8,left: 8,top: 2),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -892,7 +902,10 @@ class _CustomersState extends State<Customers> {
                             ),
                           ),
                           Container(
-                            height: Sizewid*1/SizeResponsive,
+                            // height: Sizewid*1/SizeResponsive,
+                            height:Sizewid>=470?
+                            30:
+                            Sizewid*1/SizeResponsive,
                             width: 2,
                             color: ColorLine,
                           ),
@@ -938,8 +951,6 @@ class _CustomersState extends State<Customers> {
 }
 
 class BoxInfo78 extends StatelessWidget {
-
-
   final double Sizewid;
   final String NameMoshtari;
   final String Mobile;
@@ -1024,7 +1035,8 @@ class BoxInfo78 extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       color: ColorLine
                       ,width: 2,
-                      height: Sizewid*1/10),
+                      height:Sizewid>=470?
+                      50:Sizewid*1/10),
                   Expanded(
                       flex: 8,
                       child: Column(
@@ -1101,7 +1113,8 @@ class BoxInfo78 extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       color: ColorLine
                       ,width: 2,
-                      height: Sizewid*1/10),
+                      height:Sizewid>=470?
+                      50: Sizewid*1/10),
                   Expanded(
                     child: Column(
                       children: [
@@ -1139,7 +1152,8 @@ class BoxInfo78 extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       color: ColorLine
                       ,width: 2,
-                      height: Sizewid*1/10),
+                      height:Sizewid>=470?
+                      50:Sizewid*1/10),
                   Expanded(
                     child: Column(
                       children: [
@@ -1194,7 +1208,8 @@ class BoxInfo78 extends StatelessWidget {
                     margin: EdgeInsets.symmetric(horizontal: 4,vertical: 4),
                     color: ColorLine
                     ,width: 2,
-                    height:  Sizewid*1/10),
+                    height:Sizewid>=470?
+                    50: Sizewid*1/10),
                 lat!=null && lat>0?
                 GestureDetector(
                   onTap: Location,

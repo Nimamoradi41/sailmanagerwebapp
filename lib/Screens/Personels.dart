@@ -143,11 +143,14 @@ class _PersonelsState extends State<Personels> {
 
   @override
   Widget build(BuildContext context) {
+    var wid=deviceWidth(context);
     print(widget.Customer_temps2.length.toString());
     return Scaffold(
       backgroundColor: Color(0xffF1F7FE),
       body: Padding(
-        padding: const EdgeInsets.only(top: 32),
+        padding:   EdgeInsets.only(top:
+        wid>=760?wid*0.02:
+        wid*0.05),
         child: Stack(
           children: [
             Column(
@@ -255,7 +258,7 @@ class _PersonelsState extends State<Personels> {
                                           'نام پرسنل:  '+
                                               widget.Customer_temps2[item].name.toString(),
                                           style: TextStyle(color: BaseColor,
-                                              fontSize: 14,
+                                              fontSize:wid<=406?13:14 ,
                                               fontWeight: FontWeight.bold),),
                                         Padding(
                                           padding: const EdgeInsets.all(2.0),
@@ -265,15 +268,15 @@ class _PersonelsState extends State<Personels> {
                                           children: [
                                             Expanded(
                                                 child:
-                                                rowInfo_2( 'موبایل',  widget.Customer_temps2[item].cell)),
+                                                rowInfo_2( 'موبایل',  widget.Customer_temps2[item].cell,wid)),
                                             Container(width: 2, color: ColorLine,),
                                             Expanded(
                                                 child:
-                                                rowInfo_2( 'تلفن 2',  widget.Customer_temps2[item].tell2)),
+                                                rowInfo_2( 'تلفن 2',  widget.Customer_temps2[item].tell2,wid)),
                                             Container(width: 2, color: ColorLine,),
                                             Expanded(
                                                 child:
-                                                rowInfo_2( 'تلفن ۱',  widget.Customer_temps2[item].tell1)),
+                                                rowInfo_2( 'تلفن ۱',  widget.Customer_temps2[item].tell1,wid)),
                                           ],
                                         )
 
@@ -313,7 +316,7 @@ class _PersonelsState extends State<Personels> {
 
 
 
-  Container rowInfo_2(String Title,String Vale) {
+  Container rowInfo_2(String Title,String Vale,double wid) {
     return Container(
                                             child: Column(
                                               children: [
@@ -322,7 +325,7 @@ class _PersonelsState extends State<Personels> {
                                                   child: Text(
                                                    'تلفن ۱',
                                                     style: TextStyle(color: BaseColor,
-                                                        fontSize: 13,
+                                                        fontSize:wid<=406?12:13 ,
                                                         fontWeight: FontWeight.bold),),
                                                 ),
                                                 Padding(
@@ -333,7 +336,7 @@ class _PersonelsState extends State<Personels> {
                                                             ?'نامشخص':
                                                     Vale.toString(),
                                                     style: TextStyle(color: BaseColor,
-                                                        fontSize: 14,
+                                                        fontSize:wid<=406?13:14 ,
                                                         fontWeight: FontWeight.bold),),
                                                 ),
                                               ],

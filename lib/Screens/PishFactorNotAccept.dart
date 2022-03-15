@@ -118,7 +118,33 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
   void initState() {
     // TODO: implement initState
     super.initState();
-     GetData();
+     // GetData();
+
+    var ede=  Re_NotAccept(tedJoz: 'tedJoz', tedVah: 'tedVah',
+        tedKol: 'tedKol', payment: 'payment',
+        date: 'date', flag: 0, customerName:
+        'customerName', id: 22);
+
+
+    var ede1=  Re_NotAccept(tedJoz: 'tedJoz', tedVah: 'tedVah',
+        tedKol: 'tedKol', payment: 'payment',
+        date: 'date', flag: 1, customerName:
+        'customerName', id: 22);
+
+
+    var ede2=  Re_NotAccept(tedJoz: 'tedJoz', tedVah: 'tedVah',
+        tedKol: 'tedKol', payment: 'payment',
+        date: 'date', flag: 2, customerName:
+        'customerName', id: 22);
+    MyData.add(ede);
+    MyData.add(ede1);
+    MyData.add(ede2);
+
+    setState(() {
+
+    });
+
+
   }
   Updata_creationDateStart(String s,String s2){
     setState(() {

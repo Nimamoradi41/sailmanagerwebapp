@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
     final double SizeFirst=  11;
     final double SizeSecond=  13;
     final double SizeResponsive=  9;
-
+    double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
 String    Convert_DATE(String day,String month,String year)
 {
     var temp_day="";
