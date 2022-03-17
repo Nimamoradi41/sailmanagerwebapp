@@ -201,7 +201,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                                 child: BoxInfo_3('تخفیف',Takhfif)),
                             Container(
                               width: 2,
-                              height: Sizewid*1/SizeResponsive,
+                              height:Sizewid>=470?
+                              50:Sizewid*1/10,
                               color: ColorLine,
                             ),
                             Expanded(
@@ -223,19 +224,22 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                           Expanded(child: BoxInfo_3('مبلغ',widget.MyData.payment)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/SizeResponsive,
+                            height:Sizewid>=470?
+                            50:Sizewid*1/10,
                             color: ColorLine,
                           ),
                           Expanded(child: BoxInfo_3('کل',widget.MyData.tedJoz)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/SizeResponsive,
+                            height:Sizewid>=470?
+                            50:Sizewid*1/10,
                             color: ColorLine,
                           ),
                           Expanded(child: BoxInfo_3('جز',widget.MyData.tedJoz)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/SizeResponsive,
+                            height:Sizewid>=470?
+                            50:Sizewid*1/10,
                             color: ColorLine,
                           ),
                           Expanded(child: BoxInfo_3('واحد',widget.MyData.tedVah)),
@@ -271,7 +275,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               child: BoxInfo_3('مبلغ',priceChkInWay)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/SizeResponsive,
+                            height:Sizewid>=470?
+                            50:Sizewid*1/10,
                             color: ColorLine,
                           ),
                           Expanded(
@@ -279,7 +284,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               child: BoxInfo_3('تعداد',countChkInWay)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/SizeResponsive,
+                            height:Sizewid>=470?
+                            50:Sizewid*1/10,
                             color: ColorLine,
                           ),
                           Expanded(
@@ -310,7 +316,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               child: BoxInfo_3('مبلغ',priceChkReturn)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/SizeResponsive,
+                            height:Sizewid>=470?
+                            50:Sizewid*1/10,
                             color: ColorLine,
                           ),
                           Expanded(
@@ -318,7 +325,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               child: BoxInfo_3('تعداد',countChkReturn)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/SizeResponsive,
+                            height:Sizewid>=470?
+                            50:Sizewid*1/10,
                             color: ColorLine,
                           ),
                           Expanded(
@@ -373,7 +381,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                     ),
                     Container(
                       width: 2,
-                      height: Sizewid*1/SizeResponsive,
+                      height:Sizewid>=470?
+                      50:Sizewid*1/10,
                       color: ColorLine,
                     ),
                     Expanded(
@@ -406,7 +415,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                     ),
                     Container(
                       width: 2,
-                      height: Sizewid*1/SizeResponsive,
+                      height:Sizewid>=470?
+                      50:Sizewid*1/10,
                       color: ColorLine,
                     ),
                     Expanded(
@@ -487,7 +497,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                                     child: BoxInfo_3('محتوایی',MyData[item].moh)),
                                 Container(
                                   width: 2,
-                                  height: Sizewid*1/SizeResponsive,
+                                  height:Sizewid>=470?
+                                  50:Sizewid*1/10,
                                   color: ColorLine,
                                 ),
                                 Expanded(
@@ -509,13 +520,15 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               Expanded(child: BoxInfo_3('کل',MyData[item].kol)),
                               Container(
                                 width: 2,
-                                height: Sizewid*1/SizeResponsive,
+                                height:Sizewid>=470?
+                                50:Sizewid*1/10,
                                 color: ColorLine,
                               ),
                               Expanded(child: BoxInfo_3('جز',MyData[item].joz)),
                               Container(
                                 width: 2,
-                                height: Sizewid*1/SizeResponsive,
+                                height:Sizewid>=470?
+                                50:Sizewid*1/10,
                                 color: ColorLine,
                               ),
                               Expanded(child: BoxInfo_3('واحد',MyData[item].vah)),
@@ -533,13 +546,15 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               Expanded(child: BoxInfo_3('بهای کل',MyData[item].kol)),
                               Container(
                                 width: 2,
-                                height: Sizewid*1/SizeResponsive,
+                                height:Sizewid>=470?
+                                50:Sizewid*1/10,
                                 color: ColorLine,
                               ),
                               Expanded(child: BoxInfo_3('بهای جز',MyData[item].joz)),
                               Container(
                                 width: 2,
-                                height: Sizewid*1/SizeResponsive,
+                                height:Sizewid>=470?
+                                50:Sizewid*1/10,
                                 color: ColorLine,
                               ),
                               Expanded(child: BoxInfo_3('تخفیف',MyData[item].vah)),

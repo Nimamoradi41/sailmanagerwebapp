@@ -221,15 +221,15 @@ class _mainpageState extends State<mainpage> {
                      child: Column(
                        mainAxisAlignment: MainAxisAlignment.start,
                        children: [
-                         Image.asset('images/slma.png',   width: 100,
-                             height: 100),
+                         Image.asset('images/slma.png',   width: SizeApp.height>=600 ? 100:50,
+                             height: SizeApp.height>=600 ? 100:60),
                          Text('گروه نرم افزاری آتیران',
                            style: TextStyle(color: Color(0xff575757),
-                               fontSize: 16,
+                               fontSize: SizeApp.height>=600 ? 16:12 ,
                                fontWeight: FontWeight.bold),),
-                         BoxInput('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1),
-                         BoxInput('images/admin2.svg','نام کاربری خود را وارد کنید','نام کاربری',txt_2),
-                         BoxInput('images/ghofl.svg','کلمه عبور خود را وارد کنید','کلمه عبور',txt_3),
+                         BoxInput('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1,SizeApp.height),
+                         BoxInput('images/admin2.svg','نام کاربری خود را وارد کنید','نام کاربری',txt_2,SizeApp.height),
+                         BoxInput('images/ghofl.svg','کلمه عبور خود را وارد کنید','کلمه عبور',txt_3,SizeApp.height),
                          Container(
                            margin: EdgeInsets.symmetric(horizontal: 16),
                            width: double.infinity,
@@ -241,7 +241,7 @@ class _mainpageState extends State<mainpage> {
                                  textAlign: TextAlign.end,
                                  style: TextStyle(
                                      color: BaseColor,
-                                     fontSize: 16,
+                                     fontSize: SizeApp.height>=600 ? 16:12  ,
                                      fontWeight: FontWeight.bold
                                  ),
                                )),
@@ -259,7 +259,7 @@ class _mainpageState extends State<mainpage> {
                            ),
                          ),
                          Container(
-                           width: double.infinity,
+                           width:SizeApp.width>= 359? SizeApp.width/2:   double.infinity,
                            margin: EdgeInsets.only(right: 16,left: 16,top: 32),
                            child: ElevatedButton(onPressed: Run,
                                style: ButtonStyle(
@@ -288,7 +288,7 @@ class _mainpageState extends State<mainpage> {
                    style: TextStyle(
                      fontWeight: FontWeight.bold,
                      color: Colors.white,
-                     fontSize: 16
+                     fontSize: SizeApp.height>=600 ? 16:12
                    ),),
                  )
                ],
@@ -316,15 +316,16 @@ class BoxInput extends StatelessWidget {
 
 
    TextEditingController txtc;
+   double SizeApp;
 
 
-   BoxInput(this.Icone, this.Hint, this.Title,this.txtc);
+   BoxInput(this.Icone, this.Hint, this.Title,this.txtc,this.SizeApp);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 24,vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal:  SizeApp>=600 ? 24:8  ,vertical: SizeApp>=600 ? 8:8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -344,7 +345,7 @@ class BoxInput extends StatelessWidget {
           children: [
             Text(Title,
               style: TextStyle(color: BaseColor,
-                  fontSize: 14,
+                  fontSize: SizeApp>=600 ? 14:12  ,
                   fontWeight: FontWeight.bold),),
             Divider(height: 10,),
             Row(
@@ -357,6 +358,7 @@ class BoxInput extends StatelessWidget {
               border: InputBorder.none,
               hintText:Hint,
                     hintStyle: TextStyle(
+                        fontSize: SizeApp>=600 ? 12:10  ,
                       color: Color(0xffAEAEAE)
                     )
                   ),

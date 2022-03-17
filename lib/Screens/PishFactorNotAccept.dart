@@ -30,6 +30,7 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
 
 
 
+
   Future GetData()async{
        GetDataNow();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -60,6 +61,7 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
 
        pr.hide();
   }
+
 
 
 
@@ -118,31 +120,9 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
   void initState() {
     // TODO: implement initState
     super.initState();
-     // GetData();
-
-    var ede=  Re_NotAccept(tedJoz: 'tedJoz', tedVah: 'tedVah',
-        tedKol: 'tedKol', payment: 'payment',
-        date: 'date', flag: 0, customerName:
-        'customerName', id: 22);
+     GetData();
 
 
-    var ede1=  Re_NotAccept(tedJoz: 'tedJoz', tedVah: 'tedVah',
-        tedKol: 'tedKol', payment: 'payment',
-        date: 'date', flag: 1, customerName:
-        'customerName', id: 22);
-
-
-    var ede2=  Re_NotAccept(tedJoz: 'tedJoz', tedVah: 'tedVah',
-        tedKol: 'tedKol', payment: 'payment',
-        date: 'date', flag: 2, customerName:
-        'customerName', id: 22);
-    MyData.add(ede);
-    MyData.add(ede1);
-    MyData.add(ede2);
-
-    setState(() {
-
-    });
 
 
   }
@@ -218,7 +198,8 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                       Container(
                         width: 2,
                         color: ColorLine,
-                        height: Sizewid*1/SizeResponsive,
+                          height:Sizewid>=470?
+                          50:Sizewid*1/10
                       ),
                       Expanded(child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -298,7 +279,8 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                                                              child: BoxInfo_3('تاریخ',MyData[item].date)),
                                                          Container(
                                                            width: 2,
-                                                           height: Sizewid*1/SizeResponsive,
+                                                           height:Sizewid>=470?
+                                                           50:Sizewid*1/10,
                                                            color: ColorLine,
                                                          ),
                                                          Expanded(
@@ -320,19 +302,22 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                                                        Expanded(child: BoxInfo_3('مبلغ',MyData[item].payment)),
                                                        Container(
                                                          width: 2,
-                                                         height: Sizewid*1/SizeResponsive,
+                                                         height:Sizewid>=470?
+                                                         50:Sizewid*1/10,
                                                          color: ColorLine,
                                                        ),
                                                        Expanded(child: BoxInfo_3('کل',MyData[item].tedJoz)),
                                                        Container(
                                                          width: 2,
-                                                         height: Sizewid*1/SizeResponsive,
+                                                         height:Sizewid>=470?
+                                                         50:Sizewid*1/10,
                                                          color: ColorLine,
                                                        ),
                                                        Expanded(child: BoxInfo_3('جز',MyData[item].tedJoz)),
                                                        Container(
                                                          width: 2,
-                                                         height: Sizewid*1/SizeResponsive,
+                                                         height:Sizewid>=470?
+                                                         50:Sizewid*1/10,
                                                          color: ColorLine,
                                                        ),
                                                        Expanded(child: BoxInfo_3('واحد',MyData[item].tedVah)),
@@ -392,8 +377,10 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 8),
-                          height: 60,
-                          width: 60,
+                          height:Sizewid>=470?
+                          60:50,
+                          width: Sizewid>=470?
+                          60:50,
                           decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -405,7 +392,8 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                               color: BaseColor,
                               borderRadius: BorderRadius.circular(16)
                           ),
-                          child: Icon(Icons.refresh,color: Colors.white,size: 40,),
+                          child: Icon(Icons.refresh,color: Colors.white,size:   Sizewid>=470?
+                              40:30,),
                         ),
                       ),
                       GestureDetector(
@@ -414,8 +402,10 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 8),
-                          height: 60,
-                          width: 60,
+                          height:Sizewid>=470?
+                          60:50,
+                          width: Sizewid>=470?
+                          60:50,
                           decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -428,7 +418,9 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                               borderRadius: BorderRadius.circular(16)
                           ),
                           child: Center(
-                            child: SvgPicture.asset('images/datetosale.svg',width: 25,height: 25,color: Colors.white,),
+                            child: SvgPicture.asset('images/datetosale.svg',width:  Sizewid>=470?
+                            25:20,height:  Sizewid>=470?
+                            25:20,color: Colors.white,),
                           ),
                         ),
                       ),
@@ -438,8 +430,10 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 8),
-                          height: 60,
-                          width: 60,
+                          height:Sizewid>=470?
+                          60:50,
+                          width: Sizewid>=470?
+                          60:50,
                           decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -452,7 +446,9 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                               borderRadius: BorderRadius.circular(16)
                           ),
                           child: Center(
-                            child: SvgPicture.asset('images/datefromsale.svg',width: 25,height: 25,color: Colors.white,),
+                            child: SvgPicture.asset('images/datefromsale.svg',width:  Sizewid>=470?
+                            25:20,height:  Sizewid>=470?
+                            25:20,color: Colors.white,),
                           ),
                         ),
                       ),

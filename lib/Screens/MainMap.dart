@@ -580,6 +580,7 @@ class _MainMapState extends State<MainMap> {
                   Mcontrol.addSymbol(SymbolOptions(
                      iconSize: 0.2,
                      iconImage: "marker",
+                    textHaloColor: element.datetime,
                      // iconImage: "assets/locloc2.png",
                      geometry: LatLng(element.lat,element.lng),
                       ));
@@ -603,6 +604,19 @@ class _MainMapState extends State<MainMap> {
         if(myperson.visRdf!=-9)
         {
           print('Data iS herre2');
+          var markerImage = await loadMarkerImage2();
+          Mcontrol.addImage('marker', markerImage);
+
+          // Mcontrol=sd;
+
+          Mcontrol.addImage('marker', markerImage);
+          Mcontrol.addSymbol(SymbolOptions(
+            iconSize: 0.2,
+            iconImage: "marker",
+            textHaloColor:myperson.datetime ,
+            // iconImage: "assets/locloc2.png",
+            geometry: LatLng(myperson.lat,myperson.lng),
+          ));
           // myperson_Markre=Marker(
           //     markerId:MarkerId('MarkId'+myperson.lat.toString()+myperson.lng.toString()),
           //     icon: markerbitmap2,
@@ -612,11 +626,10 @@ class _MainMapState extends State<MainMap> {
           //         snippet: myperson.datetime,
           //     )
           // );
-          // _Markers.add(myperson_Markre);
+          _Markers.add(LatLng(myperson.lat,myperson.lng));
 
 
           setState(() {
-
           });
         }
       }else{
@@ -667,6 +680,7 @@ class _MainMapState extends State<MainMap> {
 
     // updateMarkers();
     // Setm();
+    // Setm();ad
   }
 
 
@@ -718,6 +732,12 @@ class _MainMapState extends State<MainMap> {
   }
 
 
+  Future<Uint8List> loadMarkerImage2() async {
+    var byteData = await rootBundle.load("images/niman.png");
+    return byteData.buffer.asUint8List();
+  }
+
+
 
   // late MapController Mcontrol;
   late MapboxMapController Mcontrol;
@@ -747,50 +767,21 @@ class _MainMapState extends State<MainMap> {
     var markerImage = await loadMarkerImage();
     sd.addImage('marker', markerImage);
 
-     // Mcontrol=sd;
+     Mcontrol=sd;
 
-    sd.addImage('marker', markerImage);
-    sd.addSymbol(SymbolOptions(
-      iconSize: 0.2,
-      iconImage: "marker",
-      // iconImage: "assets/locloc2.png",
-      geometry: LatLng(31.344681, 48.692898),
-    ));
-    sd.addSymbol(SymbolOptions(
-      iconSize: 0.2,
-      iconImage: "marker",
-      textAnchor: "top",
-      textColor: '#000000',
-      textSize: 16,
-      textHaloColor: '1400/05/12 14:30:30',
-      // iconImage: "assets/locloc2.png",
-      geometry: LatLng(31.346669, 48.689347),
-    ));
-    sd.addSymbol(SymbolOptions(
-      iconSize: 0.2,
-      iconImage: "marker",
-      // iconImage: "assets/locloc2.png",
-      geometry: LatLng(31.348373, 48.692570),
-    ));
-    sd.addSymbol(SymbolOptions(
-      iconSize: 0.2,
-      iconImage: "marker",
-      // iconImage: "assets/locloc2.png",
-      geometry: LatLng(31.348356, 48.692582),
-    ));
+
 
      Mcontrol.onSymbolTapped.add(aFunction);
-    _Markers.add(LatLng(31.344681, 48.692898));
-    _Markers.add(LatLng(31.346669, 48.689347));
-    _Markers.add(LatLng(31.348373, 48.692570));
-    _Markers.add(LatLng(31.348356, 48.692582));
 
 
+    // textHaloColor: '1400/05/12 14:30:30',
 
 
-    setState(() {
+    GetAll();
 
-    });
+    updateMarkers();
+
+
 
 
 
@@ -928,7 +919,7 @@ class _MainMapState extends State<MainMap> {
                                             // _Markers.remove(myperson_Markre);
                                           }
                                         // _Markers.clear();
-                                        var markerImage = await loadMarkerImage();
+                                        var markerImage = await loadMarkerImage2();
                                         Mcontrol.addImage('marker', markerImage);
                                         myperson=resuilt;
                                         print(myperson.lat.toString());
@@ -943,6 +934,7 @@ class _MainMapState extends State<MainMap> {
                                             Mcontrol.addSymbol(SymbolOptions(
                                               iconSize: 0.2,
                                               iconImage: "marker",
+                                              textHaloColor:myperson.datetime ,
                                               // iconImage: "assets/locloc2.png",
                                               geometry: LatLng(myperson.lat,myperson.lng),
                                             ));
@@ -1011,6 +1003,7 @@ class _MainMapState extends State<MainMap> {
                                                Mcontrol.addSymbol(SymbolOptions(
                                                  iconSize: 0.2,
                                                  iconImage: "marker",
+                                                 textHaloColor: element.datetime,
                                                  // iconImage: "assets/locloc2.png",
                                                  geometry: LatLng(element.lat,element.lng),
                                                ));

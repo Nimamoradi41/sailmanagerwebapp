@@ -295,7 +295,8 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                     Container(
                       width: 2,
                       color: ColorLine,
-                      height: Sizewid*1/SizeResponsive,
+                        height:Sizewid>=470?
+                        50:Sizewid*1/10
                     ),
                     Expanded(child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -403,8 +404,10 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                       },
                       child: Container(
                         margin: EdgeInsets.only(right: 8),
-                        height: 60,
-                        width: 60,
+                        height:Sizewid>=470?
+                        60:50,
+                        width: Sizewid>=470?
+                        60:50,
                         decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -416,7 +419,8 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                             color: BaseColor,
                             borderRadius: BorderRadius.circular(16)
                         ),
-                        child: Icon(Icons.refresh,color: Colors.white,size: 40,),
+                        child: Icon(Icons.refresh,color: Colors.white,size:    Sizewid>=470?
+                            40:30,),
                       ),
                     ),
                     GestureDetector(
@@ -425,8 +429,10 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 8),
-                        height: 60,
-                        width: 60,
+                        height:Sizewid>=470?
+                        60:50,
+                        width: Sizewid>=470?
+                        60:50,
                         decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -439,7 +445,10 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                             borderRadius: BorderRadius.circular(16)
                         ),
                         child: Center(
-                          child: SvgPicture.asset('images/datetosale.svg',width: 25,height: 25,color: Colors.white,),
+                          child: SvgPicture.asset('images/datetosale.svg',width:
+                          Sizewid>=470?
+                          25:20,height:   Sizewid>=470?
+                          25:20,color: Colors.white,),
                         ),
                       ),
                     ),
@@ -449,8 +458,10 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 8),
-                        height: 60,
-                        width: 60,
+                        height:Sizewid>=470?
+                        60:50,
+                        width: Sizewid>=470?
+                        60:50,
                         decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -463,7 +474,9 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                             borderRadius: BorderRadius.circular(16)
                         ),
                         child: Center(
-                          child: SvgPicture.asset('images/datefromsale.svg',width: 25,height: 25,color: Colors.white,),
+                          child: SvgPicture.asset('images/datefromsale.svg',width: Sizewid>=470?
+                          25:20,height: Sizewid>=470?
+                          25:20,color: Colors.white,),
                         ),
                       ),
                     ),
@@ -473,8 +486,10 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 8),
-                        height: 60,
-                        width: 60,
+                        height:Sizewid>=470?
+                        60:50,
+                        width: Sizewid>=470?
+                        60:50,
                         decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -488,7 +503,9 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                         ),
                         child: Center(
                           // child: Icon(Icons.category_outlined,color: Colors.white,size: 35,),
-                          child: Image.asset('images/menu.png',width: 30,height: 30,),
+                          child: Image.asset('images/menu.png',width: Sizewid>=470?
+                          25:20,height: Sizewid>=470?
+                          25:20,),
                         ),
                       ),
                     ),
@@ -708,7 +725,8 @@ class BoxInfo_77 extends StatelessWidget {
                               margin: EdgeInsets.symmetric(horizontal: 4),
                                 color: ColorLine
                               ,width: 2,
-                              height: Sizewid*1/SizeResponsive),
+                                height:Sizewid>=470?
+                                50:Sizewid*1/10),
                             Expanded(child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Column(
@@ -777,7 +795,8 @@ class BoxInfo_77 extends StatelessWidget {
                                 margin: EdgeInsets.symmetric(horizontal: 4),
                                 color: ColorLine
                                 ,width: 2,
-                                height: Sizewid*1/SizeResponsive),
+                                height:Sizewid>=470?
+                                50:Sizewid*1/10),
                             Expanded(
                               child: Column(
                                 children: [
@@ -802,7 +821,8 @@ class BoxInfo_77 extends StatelessWidget {
                                 margin: EdgeInsets.symmetric(horizontal: 4),
                                 color: ColorLine
                                 ,width: 2,
-                                height: Sizewid*1/SizeResponsive),
+                                height:Sizewid>=470?
+                                50:Sizewid*1/10),
                             Expanded(
                               child: Column(
                                 children: [
@@ -827,7 +847,8 @@ class BoxInfo_77 extends StatelessWidget {
                                 margin: EdgeInsets.symmetric(horizontal: 4),
                                 color: ColorLine
                                 ,width: 2,
-                                height: Sizewid*1/SizeResponsive),
+                                height:Sizewid>=470?
+                                50:Sizewid*1/10),
                             Expanded(
                               child: Column(
                                 children: [
@@ -849,8 +870,6 @@ class BoxInfo_77 extends StatelessWidget {
                                 ],
                               ),
                             ),
-
-
                           ],
                         ),
                       ],
@@ -863,6 +882,4 @@ class BoxInfo_77 extends StatelessWidget {
       ),
     );
   }
-
-
 }
