@@ -557,7 +557,8 @@ class _MainMapState extends State<MainMap> {
     var base =prefs.getString('Baseurl');
     var UserName =prefs.getString('UserName');
     var Password =prefs.getString('Password');
-    var data=    await   ApiService.GetPerson( base.toString(), UserName!, Password!);
+    var data=    await   ApiService.
+    GetPerson( base.toString(), UserName!, Password!);
     // var data=    await   ApiService.GetPerson( 'http://91.108.148.38:9595/manager', 'نیما', '1');
     print(data.toString());
     if(data.code==200)
@@ -681,6 +682,8 @@ class _MainMapState extends State<MainMap> {
     // updateMarkers();
     // Setm();
     // Setm();ad
+
+
   }
 
 
@@ -745,6 +748,7 @@ class _MainMapState extends State<MainMap> {
   void _Oncreatmap(MapboxMapController s)
   {
     Mcontrol=s;
+
   }
 
 
@@ -788,12 +792,19 @@ class _MainMapState extends State<MainMap> {
 
 
 
+
   }
 
 
+
+
+
+
+  var Flag_map=false;
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
+    var Sizewid2=MediaQuery.of(context).size;
     print(Sizewid.toString());
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -801,10 +812,9 @@ class _MainMapState extends State<MainMap> {
         body: Stack(
           children: [
             Container(
-              key: Key('MyRoot'),
-              height: double.infinity,
-              width: double.infinity,
-                child:MapboxMap(
+              height: Sizewid2.height,
+              width: Sizewid2.width,
+                child:  MapboxMap(
                   accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
                   // accessToken: 'https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
                   onMapCreated: _Oncreatmap,
@@ -855,7 +865,6 @@ class _MainMapState extends State<MainMap> {
                 )),
 
             Positioned(
-              key: Key('MyRoot3'),
            bottom: 0,
            left: 0,
            right: 0,

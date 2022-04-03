@@ -4,13 +4,10 @@
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
-
     The path provided below has to start and end with a slash "/" in order for
     it to work correctly.
-
     For more details:
     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
@@ -29,18 +26,18 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="slma.png"/>
-  <link href="https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css" rel="stylesheet"/>
   <script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
+<!--  <link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />-->
   <title>sailmanagerwebapp</title>
   <link rel="manifest" href="manifest.json">
 
 </head>
 <body>
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
+<!-- This script installs service_worker.js to provide PWA functionality to
+     application. For more information, see:
+     https://developers.google.com/web/fundamentals/primers/service-workers -->
 
-  <script>
+<script>
 
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
@@ -111,14 +108,18 @@
       loadMainDartJs();
     }
   </script>
-  <script>
-mapboxgl.accessToken = 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA';
+<!--<div id="map" style=" height: 100%;-->
+<!--      width: 100%;"></div>-->
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA';
 mapboxgl.setRTLTextPlugin(
 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
 null,
 true // Lazy load the plugin
 );
-;
+
+
 </script>
 </body>
 </html>
