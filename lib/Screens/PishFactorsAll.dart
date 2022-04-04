@@ -419,7 +419,10 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                             color: BaseColor,
                             borderRadius: BorderRadius.circular(16)
                         ),
-                        child: Icon(Icons.refresh,color: Colors.white,size:    Sizewid>=470?
+                        child:
+
+                        Icon(Icons.refresh,color: Colors.white,
+                          size:    Sizewid>=470?
                             40:30,),
                       ),
                     ),
@@ -445,10 +448,12 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                             borderRadius: BorderRadius.circular(16)
                         ),
                         child: Center(
-                          child: SvgPicture.asset('images/datetosale.svg',width:
-                          Sizewid>=470?
-                          25:20,height:   Sizewid>=470?
-                          25:20,color: Colors.white,),
+                          child:
+                          Image.network('images/datetosale.svg', color: Colors.white
+                              , width:   Sizewid>=470?
+                              25:20, height:   Sizewid>=470?
+                              25:20),
+
                         ),
                       ),
                     ),
@@ -474,9 +479,11 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                             borderRadius: BorderRadius.circular(16)
                         ),
                         child: Center(
-                          child: SvgPicture.asset('images/datefromsale.svg',width: Sizewid>=470?
-                          25:20,height: Sizewid>=470?
-                          25:20,color: Colors.white,),
+                          child:
+                          Image.network('images/datefromsale.svg', color: Colors.white
+                              , width:   Sizewid>=470?
+                              25:20, height:   Sizewid>=470?
+                              25:20),
                         ),
                       ),
                     ),
@@ -514,108 +521,6 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
               ),
             ],
           ),
-          // Positioned(
-          //   left: 10,
-          //   bottom: 10,
-          //   child: Row(
-          //     children: [
-          //       GestureDetector(
-          //         onTap: (){
-          //           GetDataRef();
-          //         },
-          //         child: Container(
-          //           margin: EdgeInsets.only(right: 8),
-          //           height: 60,
-          //           width: 60,
-          //           decoration: BoxDecoration(
-          //               boxShadow: [
-          //                 BoxShadow(
-          //                     color: BaseColor.withOpacity(0.25),
-          //                     spreadRadius: 2,
-          //                     blurRadius: 8
-          //                 )
-          //               ],
-          //               color: BaseColor,
-          //               borderRadius: BorderRadius.circular(16)
-          //           ),
-          //           child: Icon(Icons.refresh,color: Colors.white,size: 40,),
-          //         ),
-          //       ),
-          //       GestureDetector(
-          //         onTap: (){
-          //           _showDatePicker_End(context);
-          //         },
-          //         child: Container(
-          //           margin: EdgeInsets.symmetric(horizontal: 8),
-          //           height: 60,
-          //           width: 60,
-          //           decoration: BoxDecoration(
-          //               boxShadow: [
-          //                 BoxShadow(
-          //                     color: BaseColor.withOpacity(0.25),
-          //                     spreadRadius: 2,
-          //                     blurRadius: 8
-          //                 )
-          //               ],
-          //               color: BaseColor,
-          //               borderRadius: BorderRadius.circular(16)
-          //           ),
-          //           child: Center(
-          //             child: SvgPicture.asset('images/datetosale.svg',width: 25,height: 25,color: Colors.white,),
-          //           ),
-          //         ),
-          //       ),
-          //       GestureDetector(
-          //         onTap: (){
-          //           _showDatePicker_Start(context);
-          //         },
-          //         child: Container(
-          //           margin: EdgeInsets.symmetric(horizontal: 8),
-          //           height: 60,
-          //           width: 60,
-          //           decoration: BoxDecoration(
-          //               boxShadow: [
-          //                 BoxShadow(
-          //                     color: BaseColor.withOpacity(0.25),
-          //                     spreadRadius: 2,
-          //                     blurRadius: 8
-          //                 )
-          //               ],
-          //               color: BaseColor,
-          //               borderRadius: BorderRadius.circular(16)
-          //           ),
-          //           child: Center(
-          //             child: SvgPicture.asset('images/datefromsale.svg',width: 25,height: 25,color: Colors.white,),
-          //           ),
-          //         ),
-          //       ),
-          //       GestureDetector(
-          //         onTap: (){
-          //           ShowModall_Type();
-          //         },
-          //         child: Container(
-          //           margin: EdgeInsets.symmetric(horizontal: 8),
-          //           height: 60,
-          //           width: 60,
-          //           decoration: BoxDecoration(
-          //               boxShadow: [
-          //                 BoxShadow(
-          //                     color: BaseColor.withOpacity(0.25),
-          //                     spreadRadius: 2,
-          //                     blurRadius: 8
-          //                 )
-          //               ],
-          //               color: BaseColor,
-          //               borderRadius: BorderRadius.circular(16)
-          //           ),
-          //           child: Center(
-          //             child: Icon(Icons.category_outlined,color: Colors.white,size: 35,),
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // )
 
         ],
 

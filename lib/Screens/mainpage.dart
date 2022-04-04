@@ -10,7 +10,7 @@ import 'package:sailmanagerwebapp/ScreensArts/Art1.dart';
 import 'package:sailmanagerwebapp/teeeee.dart';
 import 'package:sailmanagerwebapp/tetstst.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter/services.dart' show rootBundle;
 import '../ScreensArts/Art2.dart';
 
 
@@ -34,15 +34,8 @@ class _mainpageState extends State<mainpage> {
 
 
   Future Run ()async{
-    if(txt_1.text.isEmpty)
-      {
-        ApiService.ShowSnackbar('آدرس سرور را وارد کنید');
-        return;
-      }
-
-
-    print(txt_1.text);
-    if(!txt_1.text.startsWith('https://')&&!txt_1.text.startsWith('http://'))
+    print(address);
+    if(!address.startsWith('https://')&&!address.startsWith('http://'))
     {
       ApiService.ShowSnackbar('آدرس سرور اشتباه وارد شده است');
       return;
@@ -69,7 +62,7 @@ class _mainpageState extends State<mainpage> {
 
 
 
-    var  Login= await ApiService.Login(pr,txt_1.text,txt_2.text,txt_3.text);
+    var  Login= await ApiService.Login(pr,address,txt_2.text,txt_3.text);
 
 
     if(Login!=null)
@@ -78,7 +71,8 @@ class _mainpageState extends State<mainpage> {
          {
 
 
-           prefs.setString("Baseurl", txt_1.text.toString());
+           // prefs.setString("Baseurl", txt_1.text.toString());
+           prefs.setString("Baseurl", address);
            prefs.setString("UserName", txt_2.text.toString());
            prefs.setString("Password", txt_3.text.toString());
            prefs.setBool("Login",true);
@@ -112,11 +106,11 @@ class _mainpageState extends State<mainpage> {
   bool Personels=false ;
   var pr;
 
-
+ String address='';
  Future  GetUser()async{
    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-   var base =prefs.getString('Baseurl');
+   address = await rootBundle.loadString('AddressFolder/address.txt');
+   address=address.trim();
    var UserName =prefs.getString('UserName');
    var login =prefs.getBool('Login');
    if(prefs.getBool('Personels')!=null)
@@ -126,10 +120,7 @@ class _mainpageState extends State<mainpage> {
 
 
 
-   if(base!=null)
-     {
-       txt_1.text=base;
-     }
+
    if(login!=null)
      {
        Remember=login;
@@ -190,6 +181,7 @@ class _mainpageState extends State<mainpage> {
     // TODO: implement initState
     super.initState();
     pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+
     GetUser();
   }
   @override
@@ -227,7 +219,7 @@ class _mainpageState extends State<mainpage> {
                            style: TextStyle(color: Color(0xff575757),
                                fontSize: SizeApp.height>=600 ? 16:12 ,
                                fontWeight: FontWeight.bold),),
-                         BoxInput('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1,SizeApp.height),
+                         // BoxInput('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1,SizeApp.height),
                          BoxInput('images/admin2.svg','نام کاربری خود را وارد کنید','نام کاربری',txt_2,SizeApp.height),
                          BoxInput('images/ghofl.svg','کلمه عبور خود را وارد کنید','کلمه عبور',txt_3,SizeApp.height),
                          Container(

@@ -418,9 +418,13 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                               borderRadius: BorderRadius.circular(16)
                           ),
                           child: Center(
-                            child: SvgPicture.asset('images/datetosale.svg',width:  Sizewid>=470?
-                            25:20,height:  Sizewid>=470?
-                            25:20,color: Colors.white,),
+                            child:  Image.network('images/datetosale.svg', color: Colors.white
+                                , width:   Sizewid>=470?
+                                25:20, height:   Sizewid>=470?
+                                25:20),
+                            // SvgPicture.asset('images/datetosale.svg',width:  Sizewid>=470?
+                            // 25:20,height:  Sizewid>=470?
+                            // 25:20,color: Colors.white,),
                           ),
                         ),
                       ),
@@ -446,9 +450,12 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                               borderRadius: BorderRadius.circular(16)
                           ),
                           child: Center(
-                            child: SvgPicture.asset('images/datefromsale.svg',width:  Sizewid>=470?
-                            25:20,height:  Sizewid>=470?
-                            25:20,color: Colors.white,),
+                            child:
+                            Image.network('images/datefromsale.svg', color: Colors.white
+                                , width:   Sizewid>=470?
+                                25:20, height:   Sizewid>=470?
+                                25:20),
+
                           ),
                         ),
                       ),

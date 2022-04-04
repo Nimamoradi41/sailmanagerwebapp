@@ -394,7 +394,12 @@ class BoxInfo_48 extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8)
               ),
               child: Center(
-                child: SvgPicture.asset(Icone,width: 20,height: 20,color: Colors.white,),
+                child:
+
+                Image.network(Icone, color: Colors.white
+                    , width:   20
+                    , height:  20
+                    )
               ),
             ),
           ),

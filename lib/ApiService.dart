@@ -74,10 +74,12 @@ class ApiService{
 
 
 
+    print('BAseUrl is '+Baseurl);
     // final url = Uri.parse('http://172.10.10.3:9595/king/Sales');
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
-    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/login/login');
+    final url = Uri.parse(Baseurl.trim().toString()+"/"+"Api/Atiran/login/login");
+    print(url.toString());
     print(map.toString());
     try{
       Response response = await http.post(url,  body:map,

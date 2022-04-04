@@ -29,9 +29,10 @@ import 'package:sailmanagerwebapp/Models/OnlineModel.dart';
 import 'package:sailmanagerwebapp/Screens/Personels.dart';
 import 'package:sailmanagerwebapp/Screens/PishFactorNotAccept.dart';
 import 'package:sailmanagerwebapp/Screens/PishFactorsAll.dart';
+import 'package:sailmanagerwebapp/Screens/mainpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-import 'dart:ui' as ui;
+
 
 import 'Customers.dart';
 
@@ -48,7 +49,7 @@ class MainMap extends StatefulWidget {
 }
 
 enum TypeMap { normal, hybrid, terrain ,satellite}
-class _MainMapState extends State<MainMap> {
+class _MainMapState extends State<MainMap>     {
 
   TypeMap _site = TypeMap.normal;
 
@@ -521,6 +522,49 @@ class _MainMapState extends State<MainMap> {
       ),
     )) ?? false;
   }
+
+  Future<bool> _onWillPop_exit() async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: Align(
+            alignment: Alignment.topRight,
+            child: Text('مجوز',textAlign: TextAlign.right,)),
+        content:
+        SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const <Widget>[
+                Text('آیا می خواهید از حساب کاربری خود خارج شوید؟',textAlign: TextAlign.end,),
+              ],
+            ),
+          ),
+        )
+        ,
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child:  Text('نه',style: TextStyle(fontSize: 16)),
+          ),
+          TextButton(
+            onPressed: () async{
+              SharedPreferences prefs2 = await SharedPreferences.getInstance();
+              await  prefs2.clear();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => mainpage()),
+                // MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (Route<dynamic> route) => false,
+              );
+            },
+            child:  Text('بله',style: TextStyle(fontSize: 16),),
+          ),
+        ],
+      ),
+    )) ?? false;
+  }
   late Timer _timer;
   updateMarkers() {
     _timer = Timer.periodic(Duration(seconds: 15), (timer) {
@@ -644,12 +688,14 @@ class _MainMapState extends State<MainMap> {
   // MapController mycontroler=MapController();
 
 
-  Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
-  }
+  // Future<Uint8List> getBytesFromAsset(String path, int width) async {
+  //   ByteData data = await rootBundle.load(path);
+  //   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+  //   ui.FrameInfo fi = await codec.getNextFrame();
+  //   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  // }
+
+
 
 
 
@@ -691,36 +737,9 @@ class _MainMapState extends State<MainMap> {
 
 
 
-
-  // void _Oncreatmap(MapboxMapController s) async
-  // {
-  //   Mcontrol=s;
-  //   var markerImage = await loadMarkerImage();
-  //
-  //   // Mcontrol.addImage('marker', markerImage);
-  //   // await Mcontrol.addSymbolLayer('sourceId', 'layerId', const SymbolLayerProperties());
-  //
-  //   s.addSymbol(SymbolOptions(
-  //     geometry: LatLng(31.319743, 48.677719),
-  //     iconImage: 'images/locloc2.png',
-  //     iconSize: 0.5,
-  //   ));
-  //
-  //
-  //   setState(() {
-  //
-  //   });
-  //
-  //
-  // }
-  //
-  // late MapboxMapController Mcontrol;
-
-  // This widget is the root of your application.
-
   @override
   void dispose() {
-    Mcontrol.dispose();
+
     super.dispose();
 
   }
@@ -748,6 +767,7 @@ class _MainMapState extends State<MainMap> {
   void _Oncreatmap(MapboxMapController s)
   {
     Mcontrol=s;
+    Mcontrol.invalidateAmbientCache();
 
   }
 
@@ -772,7 +792,6 @@ class _MainMapState extends State<MainMap> {
     sd.addImage('marker', markerImage);
 
      Mcontrol=sd;
-
 
 
      Mcontrol.onSymbolTapped.add(aFunction);
@@ -800,6 +819,8 @@ class _MainMapState extends State<MainMap> {
 
 
 
+
+
   var Flag_map=false;
   @override
   Widget build(BuildContext context) {
@@ -814,7 +835,8 @@ class _MainMapState extends State<MainMap> {
             Container(
               height: Sizewid2.height,
               width: Sizewid2.width,
-                child:  MapboxMap(
+                child:
+                    MapboxMap(
                   accessToken: 'pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
                   // accessToken: 'https://api.mapbox.com/styles/v1/nima16/cl0f23lg2001f14o2e1ji391d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmltYTE2IiwiYSI6ImNsMGR0M2dwMDBjOXEzY3Bzc2I4MWVrdG0ifQ.h5z0leQwUb4QE04yjUPiCA',
                   onMapCreated: _Oncreatmap,
@@ -825,12 +847,12 @@ class _MainMapState extends State<MainMap> {
                   },
                   initialCameraPosition: CameraPosition(
                       target: LatLng(31.330587,48.684865),
-                      zoom: 12
+                      zoom: 12,
                   ),
                 )
             ),
             Positioned(
-                key: Key('MyRoot2'),
+
                 top: 0,
                 left: 0,
                 right: 0,
@@ -838,18 +860,11 @@ class _MainMapState extends State<MainMap> {
                   padding: const EdgeInsets.symmetric(vertical: 32,horizontal: 6),
                   child: Row(
               children: [
-                  // InkWell(
-                  //     onTap: () async{
-                  //       ShowModall_setting();
-                  //       print('object');
-                  //
-                  //
-                  //
-                  //
-                  //
-                  //
-                  //     },
-                  //     child: BtnSmall('images/seti.svg',18)),
+                 GestureDetector(
+                    onTap: (){
+                      _onWillPop_exit();
+                    },
+                    child: BtnSmall('images/logout.png',18,Colors.white)),
                   Expanded(
                     child: Container(
                       child: Row(
@@ -876,7 +891,7 @@ class _MainMapState extends State<MainMap> {
                     onTap: (){
                       ShowModall_MainMenu();
                     },
-                    child: BtnSmall('images/cate23.svg',18)),
+                    child: BtnSmall('images/list.png',18,Colors.white )),
                 GestureDetector(
                   onTap: (){
                     // ShowModall_();
@@ -887,7 +902,7 @@ class _MainMapState extends State<MainMap> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 6.0),
-                    child:  BtnSmall('images/pish.svg',18),
+                    child:  BtnSmall('images/menu1.png',18,Colors.white),
                   ),
                 ),
                 Expanded(
@@ -1262,8 +1277,10 @@ class BtnSmall extends StatelessWidget {
 
    double  Size;
 
+   Color _colors;
 
-  BtnSmall(this.Icon,this.Size);
+
+  BtnSmall(this.Icon,this.Size,this._colors);
 
   @override
   Widget build(BuildContext context) {
@@ -1275,8 +1292,10 @@ class BtnSmall extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: SvgPicture.asset(Icon, color: Colors.white,
-          width: Size,height: Size,),
+        child:
+        Image.asset(Icon, color: _colors, width: Size, height: Size),
+        // SvgPicture.asset(Icon, color:_colors,
+        //   width: Size,height: Size,),
       ),
     );
   }
