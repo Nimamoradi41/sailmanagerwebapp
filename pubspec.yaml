@@ -123,6 +123,10 @@ flutter:
     - images/logout.png
     - images/list.png
     - images/menu1.png
+    - images/cate2.png
+    - images/frm1.png
+    - images/frm2.png
+    - images/ref1.png
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

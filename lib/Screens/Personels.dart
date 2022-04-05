@@ -157,6 +157,19 @@ class _PersonelsState extends State<Personels> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.arrow_back,color: BaseColor,size: 30,),
+                      ),
+                    ),
+                  ],
+                ),
                 widget.Customer_temps2.length==0?
                 Expanded(
                   child: Center(
@@ -299,7 +312,7 @@ class _PersonelsState extends State<Personels> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      BoxInfo_48( creationDateStart,':   تاریخ  ','images/datefromsale.svg',(){
+                      BoxInfo_48( creationDateStart,':   تاریخ  ','images/frm1.png',(){
                         _showDatePicker_Start(context);
                       },1),
                     ],
@@ -376,33 +389,20 @@ class BoxInfo_48 extends StatelessWidget {
             style: TextStyle(color: BaseColor,
                 fontSize: 12,
                 fontWeight: FontWeight.bold),),
-          GestureDetector(
-            onTap:callback ,
-            child: Container(
-              margin: EdgeInsets.only(right: 8),
-              height: 45,
-              width: 45,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: BaseColor.withOpacity(0.25),
-                        spreadRadius: 2,
-                        blurRadius: 8
-                    )
-                  ],
-                  color: BaseColor,
-                  borderRadius: BorderRadius.circular(8)
-              ),
-              child: Center(
-                child:
-
-                Image.network(Icone, color: Colors.white
-                    , width:   20
-                    , height:  20
-                    )
-              ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: BaseColor,
+            ),
+            onPressed:  callback,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+              child:
+              Image.asset(Icone, color: Colors.white, width:   20, height:   20),
+              // SvgPicture.asset(Icon, color:_colors,
+              //   width: Size,height: Size,),
             ),
           ),
+
 
         ],
       ),

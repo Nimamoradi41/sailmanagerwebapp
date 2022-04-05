@@ -398,124 +398,69 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      onTap: (){
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: BaseColor,
+                      ),
+                      onPressed:  (){
                         GetDataRef();
                       },
-                      child: Container(
-                        margin: EdgeInsets.only(right: 8),
-                        height:Sizewid>=470?
-                        60:50,
-                        width: Sizewid>=470?
-                        60:50,
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: BaseColor.withOpacity(0.25),
-                                  spreadRadius: 2,
-                                  blurRadius: 8
-                              )
-                            ],
-                            color: BaseColor,
-                            borderRadius: BorderRadius.circular(16)
-                        ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
                         child:
-
-                        Icon(Icons.refresh,color: Colors.white,
-                          size:    Sizewid>=470?
-                            40:30,),
+                        Image.asset('images/ref1.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
+                        // SvgPicture.asset(Icon, color:_colors,
+                        //   width: Size,height: Size,),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: (){
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: BaseColor,
+                      ),
+                      onPressed:  (){
                         _showDatePicker_End(context);
                       },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        height:Sizewid>=470?
-                        60:50,
-                        width: Sizewid>=470?
-                        60:50,
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: BaseColor.withOpacity(0.25),
-                                  spreadRadius: 2,
-                                  blurRadius: 8
-                              )
-                            ],
-                            color: BaseColor,
-                            borderRadius: BorderRadius.circular(16)
-                        ),
-                        child: Center(
-                          child:
-                          Image.network('images/datetosale.svg', color: Colors.white
-                              , width:   Sizewid>=470?
-                              25:20, height:   Sizewid>=470?
-                              25:20),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+                        child:
+                        Image.asset('images/frm2.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
+                        // SvgPicture.asset(Icon, color:_colors,
+                        //   width: Size,height: Size,),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                      primary: BaseColor,
+                                  ),
+                         onPressed:  (){
+                           _showDatePicker_Start(context);
+                           },
+                      child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+                      child:
 
-                        ),
+                      Image.asset('images/frm1.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
+
+    // SvgPicture.asset(Icon, color:_colors,
+    //   width: Size,height: Size,),
+    ),
+    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: BaseColor,
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: (){
-                        _showDatePicker_Start(context);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        height:Sizewid>=470?
-                        60:50,
-                        width: Sizewid>=470?
-                        60:50,
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: BaseColor.withOpacity(0.25),
-                                  spreadRadius: 2,
-                                  blurRadius: 8
-                              )
-                            ],
-                            color: BaseColor,
-                            borderRadius: BorderRadius.circular(16)
-                        ),
-                        child: Center(
-                          child:
-                          Image.network('images/datefromsale.svg', color: Colors.white
-                              , width:   Sizewid>=470?
-                              25:20, height:   Sizewid>=470?
-                              25:20),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: (){
+                      onPressed:  (){
                         ShowModall_Type();
                       },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        height:Sizewid>=470?
-                        60:50,
-                        width: Sizewid>=470?
-                        60:50,
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: BaseColor.withOpacity(0.25),
-                                  spreadRadius: 2,
-                                  blurRadius: 8
-                              )
-                            ],
-                            color: BaseColor,
-                            borderRadius: BorderRadius.circular(16)
-                        ),
-                        child: Center(
-                          // child: Icon(Icons.category_outlined,color: Colors.white,size: 35,),
-                          child: Image.asset('images/menu.png',width: Sizewid>=470?
-                          25:20,height: Sizewid>=470?
-                          25:20,),
-                        ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+                        child:
+                        Image.asset('images/cate2.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
+                        // SvgPicture.asset(Icon, color:_colors,
+                        //   width: Size,height: Size,),
                       ),
                     ),
+
                   ],
                 ),
               ),

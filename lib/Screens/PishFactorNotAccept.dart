@@ -371,95 +371,51 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        onTap: (){
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: BaseColor,
+                        ),
+                        onPressed:  (){
                           GetDataRef();
                         },
-                        child: Container(
-                          margin: EdgeInsets.only(right: 8),
-                          height:Sizewid>=470?
-                          60:50,
-                          width: Sizewid>=470?
-                          60:50,
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: BaseColor.withOpacity(0.25),
-                                    spreadRadius: 2,
-                                    blurRadius: 8
-                                )
-                              ],
-                              color: BaseColor,
-                              borderRadius: BorderRadius.circular(16)
-                          ),
-                          child: Icon(Icons.refresh,color: Colors.white,size:   Sizewid>=470?
-                              40:30,),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+                          child:
+                          Icon(Icons.refresh,color: Colors.white,size:   Sizewid>=470? 25:20,)
+                          // SvgPicture.asset(Icon, color:_colors,
+                          //   width: Size,height: Size,),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: (){
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: BaseColor,
+                        ),
+                        onPressed:  (){
                           _showDatePicker_End(context);
                         },
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8),
-                          height:Sizewid>=470?
-                          60:50,
-                          width: Sizewid>=470?
-                          60:50,
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: BaseColor.withOpacity(0.25),
-                                    spreadRadius: 2,
-                                    blurRadius: 8
-                                )
-                              ],
-                              color: BaseColor,
-                              borderRadius: BorderRadius.circular(16)
-                          ),
-                          child: Center(
-                            child:  Image.network('images/datetosale.svg', color: Colors.white
-                                , width:   Sizewid>=470?
-                                25:20, height:   Sizewid>=470?
-                                25:20),
-                            // SvgPicture.asset('images/datetosale.svg',width:  Sizewid>=470?
-                            // 25:20,height:  Sizewid>=470?
-                            // 25:20,color: Colors.white,),
-                          ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+                          child:
+                          Image.asset('images/frm2.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
+                          // SvgPicture.asset(Icon, color:_colors,
+                          //   width: Size,height: Size,),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: (){
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: BaseColor,
+                        ),
+                        onPressed:  (){
                           _showDatePicker_Start(context);
                         },
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8),
-                          height:Sizewid>=470?
-                          60:50,
-                          width: Sizewid>=470?
-                          60:50,
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: BaseColor.withOpacity(0.25),
-                                    spreadRadius: 2,
-                                    blurRadius: 8
-                                )
-                              ],
-                              color: BaseColor,
-                              borderRadius: BorderRadius.circular(16)
-                          ),
-                          child: Center(
-                            child:
-                            Image.network('images/datefromsale.svg', color: Colors.white
-                                , width:   Sizewid>=470?
-                                25:20, height:   Sizewid>=470?
-                                25:20),
-
-                          ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+                          child:
+                          Image.asset('images/frm1.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
+                          // SvgPicture.asset(Icon, color:_colors,
+                          //   width: Size,height: Size,),
                         ),
                       ),
-
                     ],
                   ),
                 ),

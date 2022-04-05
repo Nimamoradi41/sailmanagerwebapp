@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:html';
+
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -860,11 +860,9 @@ class _MainMapState extends State<MainMap>     {
                   padding: const EdgeInsets.symmetric(vertical: 32,horizontal: 6),
                   child: Row(
               children: [
-                 GestureDetector(
-                    onTap: (){
-                      _onWillPop_exit();
-                    },
-                    child: BtnSmall('images/logout.png',18,Colors.white)),
+                 BtnSmall2('images/logout.png',18,Colors.white,(){
+                   _onWillPop_exit();
+                 }),
                   Expanded(
                     child: Container(
                       child: Row(
@@ -887,23 +885,17 @@ class _MainMapState extends State<MainMap>     {
             padding: const EdgeInsets.all(6.0),
             child: Row(
               children: [
-                GestureDetector(
-                    onTap: (){
-                      ShowModall_MainMenu();
-                    },
-                    child: BtnSmall('images/list.png',18,Colors.white )),
-                GestureDetector(
-                  onTap: (){
-                    // ShowModall_();
+                BtnSmall2('images/list.png',18,Colors.white, (){
+                  ShowModall_MainMenu();
+                }),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child:  BtnSmall2('images/menu1.png',18,Colors.white,(){
                     Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context)
                             => PishFactorNotAccept()));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 6.0),
-                    child:  BtnSmall('images/menu1.png',18,Colors.white),
-                  ),
+                  }),
                 ),
                 Expanded(
                   child: Row(
@@ -914,7 +906,6 @@ class _MainMapState extends State<MainMap>     {
                         margin: EdgeInsets.only(left: 6),
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            // color: Colors.red,
                             boxShadow: [
                               BoxShadow(
                                   color: Colors.black12,
@@ -1292,6 +1283,37 @@ class BtnSmall extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
+        child:
+        Image.asset(Icon, color: _colors, width: Size, height: Size),
+        // SvgPicture.asset(Icon, color:_colors,
+        //   width: Size,height: Size,),
+      ),
+    );
+  }
+}
+
+
+class BtnSmall2 extends StatelessWidget {
+  String Icon;
+
+  double  Size;
+
+  Color _colors;
+
+
+  final VoidCallback function;
+
+  BtnSmall2(this.Icon,this.Size,this._colors,this.function);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: BaseColor,
+      ),
+       onPressed: function,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
         child:
         Image.asset(Icon, color: _colors, width: Size, height: Size),
         // SvgPicture.asset(Icon, color:_colors,
