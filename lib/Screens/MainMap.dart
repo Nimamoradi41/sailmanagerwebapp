@@ -49,7 +49,7 @@ class MainMap extends StatefulWidget {
 }
 
 enum TypeMap { normal, hybrid, terrain ,satellite}
-class _MainMapState extends State<MainMap>     {
+class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
 
   TypeMap _site = TypeMap.normal;
 
@@ -65,7 +65,15 @@ class _MainMapState extends State<MainMap>     {
 
 
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+        Mcontrol.invalidateAmbientCache();
+       setState(() {
 
+       });
+    }
+  }
 
 
 
@@ -743,6 +751,8 @@ class _MainMapState extends State<MainMap>     {
     super.dispose();
 
   }
+
+
 
 
   late MapboxMap _map;
