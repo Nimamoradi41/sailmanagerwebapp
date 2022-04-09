@@ -777,7 +777,9 @@ class _CustomersState extends State<Customers> {
                         itemBuilder: (Ctx,Item){
                           return  BoxInfo78(Sizewid,MyDataSourch[Item].name.trim(),'',MyDataSourch[Item].tell1,MyDataSourch[Item].tell2,
                               MyDataSourch[Item].address.trim(),(){
-                                print('dlvl,dvl,,ldlv,');
+
+
+
                                 Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) => PishFactorsCustomer(MyDataSourch[Item].id) ));
                               },(){
@@ -1132,7 +1134,7 @@ class BoxInfo78 extends StatelessWidget {
                           onTap: (){
                             if(Tel2.isNotEmpty)
                             {
-                              print('89');
+
                               _launchCaller3(Tel1);
                             }
                           },
@@ -1171,7 +1173,7 @@ class BoxInfo78 extends StatelessWidget {
                           onTap: (){
                             if(Tel1.isNotEmpty)
                             {
-                              print('89');
+
                               _launchCaller3(Tel1);
                             }
                           },

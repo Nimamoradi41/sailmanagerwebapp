@@ -50,9 +50,7 @@ class MainMap extends StatefulWidget {
 
 enum TypeMap { normal, hybrid, terrain ,satellite}
 class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
-
   TypeMap _site = TypeMap.normal;
-
   bool TypeSwitch_Now=true;
   bool TypeSwitch_After=false;
   int group=1;
@@ -350,9 +348,9 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
   }
 
 
-  ShowModall_Date(String Da)
+  ShowModall_Date(String Da,String Da2)
   {
-    print(Da);
+
     showModalBottomSheet(context: context, builder: (ctx){
       return  Container(
         child: Padding(
@@ -361,6 +359,26 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(Da2==null?'نامشخص':Da2,
+                    textAlign: TextAlign.end,
+                    style: TextStyle(color:
+                    BaseColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w100),),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(': نام ویزیتور ',
+                      textAlign: TextAlign.end,
+                      style: TextStyle(color:
+                      BaseColor,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w100),),
+                  ),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -612,7 +630,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
     var data=    await   ApiService.
     GetPerson( base.toString(), UserName!, Password!);
     // var data=    await   ApiService.GetPerson( 'http://91.108.148.38:9595/manager', 'نیما', '1');
-    print(data.toString());
+
     if(data.code==200)
       {
         if(data.res.length>0)
@@ -633,6 +651,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                   Mcontrol.addSymbol(SymbolOptions(
                      iconSize: 0.2,
                      iconImage: "marker",
+                    textAnchor:element.name,
                     textHaloColor: element.datetime,
                      // iconImage: "assets/locloc2.png",
                      geometry: LatLng(element.lat,element.lng),
@@ -653,10 +672,10 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
     if(TypeSwitch_Now)
       {
 
-        print('Data iS herre');
+
         if(myperson.visRdf!=-9)
         {
-          print('Data iS herre2');
+
           var markerImage = await loadMarkerImage2();
           Mcontrol.addImage('marker', markerImage);
 
@@ -666,6 +685,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
           Mcontrol.addSymbol(SymbolOptions(
             iconSize: 0.2,
             iconImage: "marker",
+            textAnchor:myperson.name,
             textHaloColor:myperson.datetime ,
             // iconImage: "assets/locloc2.png",
             geometry: LatLng(myperson.lat,myperson.lng),
@@ -783,11 +803,8 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
 
 
   aFunction(Symbol symbol){
-    print(symbol.data);
-    print(symbol.options.geometry);
-    print(symbol.options.textHaloColor);
-    print(symbol.id);
-    ShowModall_Date(symbol.options.textHaloColor.toString().trim());
+
+    ShowModall_Date(symbol.options.textHaloColor.toString().trim(),symbol.options.textAnchor.toString());
     // code goes here
   }
 
@@ -836,7 +853,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
     var Sizewid2=MediaQuery.of(context).size;
-    print(Sizewid.toString());
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -853,7 +870,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                   // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
                   onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
                   onMapClick:(a,b) async {
-                    print(b.toString());
+
                   },
                   initialCameraPosition: CameraPosition(
                       target: LatLng(31.330587,48.684865),
@@ -862,7 +879,6 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                 )
             ),
             Positioned(
-
                 top: 0,
                 left: 0,
                 right: 0,
@@ -935,10 +951,10 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                                       MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
                                   if(TypeSwitch_Now)
                                     {
-                                      print('TypeSwitch_Now'+ 'Is True');
+
                                       if(resuilt!=null)
                                       {
-                                        print('2302020202020200');
+
                                         if(myperson.visRdf!=-9)
                                           {
                                             // _Markers.remove(myperson_Markre);
@@ -947,7 +963,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                                         var markerImage = await loadMarkerImage2();
                                         Mcontrol.addImage('marker', markerImage);
                                         myperson=resuilt;
-                                        print(myperson.lat.toString());
+
                                         // _poly.clear();
                                         // _cordinate.clear();
                                         Polygons.clear();
@@ -959,6 +975,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                                             Mcontrol.addSymbol(SymbolOptions(
                                               iconSize: 0.2,
                                               iconImage: "marker",
+                                              textAnchor:myperson.name,
                                               textHaloColor:myperson.datetime ,
                                               // iconImage: "assets/locloc2.png",
                                               geometry: LatLng(myperson.lat,myperson.lng),
@@ -985,12 +1002,10 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
 
                                       }
                                     }else{
-                                    print('TypeSwitch_Now'+ 'Is False');
-                                     print('HI');
+
                                      if(resuilt!=null)
                                      {
-                                       print('565656565655');
-                                       print(resuilt.toString());
+
                                        // _Markers.clear();
                                        // _poly.clear();
                                        // _cordinate.clear();
@@ -1005,7 +1020,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                                            {
                                              var markerImage = await loadMarkerImage();
                                              Mcontrol.addImage('marker', markerImage);
-                                             print('Size Is '+d.length.toString());
+
                                              Polygons.clear();
                                              _Markers.clear();
                                              Mcontrol.clearSymbols();
@@ -1028,6 +1043,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                                                Mcontrol.addSymbol(SymbolOptions(
                                                  iconSize: 0.2,
                                                  iconImage: "marker",
+                                                 textAnchor:element.name,
                                                  textHaloColor: element.datetime,
                                                  // iconImage: "assets/locloc2.png",
                                                  geometry: LatLng(element.lat,element.lng),

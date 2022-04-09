@@ -34,7 +34,7 @@ class _mainpageState extends State<mainpage> {
 
 
   Future Run ()async{
-    print(address);
+
     if(!address.startsWith('https://')&&!address.startsWith('http://'))
     {
       ApiService.ShowSnackbar('آدرس سرور اشتباه وارد شده است');
