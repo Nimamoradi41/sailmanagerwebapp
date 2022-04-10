@@ -490,6 +490,8 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
 
 
 
+
+
   List<LatLng>_Markers=[];
   //
   // late GoogleMapController controller2;
@@ -783,6 +785,15 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
     return byteData.buffer.asUint8List();
   }
 
+  Future<Uint8List> loadMarkerImage3() async {
+    var byteData = await rootBundle.load("images/locnew1.png");
+    return byteData.buffer.asUint8List();
+  }
+  Future<Uint8List> loadMarkerImage4() async {
+    var byteData = await rootBundle.load("images/locnew2.png");
+    return byteData.buffer.asUint8List();
+  }
+
 
   Future<Uint8List> loadMarkerImage2() async {
     var byteData = await rootBundle.load("images/niman.png");
@@ -847,13 +858,12 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
 
 
 
-
+  int CountLoc=0;
   var Flag_map=false;
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
     var Sizewid2=MediaQuery.of(context).size;
-
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -870,7 +880,6 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                   // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
                   onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
                   onMapClick:(a,b) async {
-
                   },
                   initialCameraPosition: CameraPosition(
                       target: LatLng(31.330587,48.684865),
@@ -909,184 +918,246 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
            right: 0,
           child: Padding(
             padding: const EdgeInsets.all(6.0),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                BtnSmall2('images/list.png',18,Colors.white, (){
-                  ShowModall_MainMenu();
-                }),
-                Padding(
-                  padding: const EdgeInsets.only(left: 6.0),
-                  child:  BtnSmall2('images/menu1.png',18,Colors.white,(){
-                    Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context)
-                            => PishFactorNotAccept()));
-                  }),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        width: Sizewid>796?Sizewid/4:Sizewid<=450?Sizewid/2:Sizewid/2,
-                        margin: EdgeInsets.only(left: 6),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 3,
-                                  spreadRadius: 1
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(child: Container(
-                              child: InkWell(
-                                onTap: () async{
-                                  var resuilt=await    Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
-                                  if(TypeSwitch_Now)
-                                    {
-
-                                      if(resuilt!=null)
-                                      {
-
-                                        if(myperson.visRdf!=-9)
-                                          {
-                                            // _Markers.remove(myperson_Markre);
-                                          }
-                                        // _Markers.clear();
-                                        var markerImage = await loadMarkerImage2();
-                                        Mcontrol.addImage('marker', markerImage);
-                                        myperson=resuilt;
-
-                                        // _poly.clear();
-                                        // _cordinate.clear();
-                                        Polygons.clear();
-                                        _Markers.clear();
-                                        Mcontrol.clearSymbols();
-                                        Mcontrol.clearLines();
-                                        if(myperson.lat>0)
-                                          {
-                                            Mcontrol.addSymbol(SymbolOptions(
-                                              iconSize: 0.2,
-                                              iconImage: "marker",
-                                              textAnchor:myperson.name,
-                                              textHaloColor:myperson.datetime ,
-                                              // iconImage: "assets/locloc2.png",
-                                              geometry: LatLng(myperson.lat,myperson.lng),
-                                            ));
-                                            // var newPosition = CameraPosition(
-                                            //     target: LatLng(myperson.lat,myperson.lng),
-                                            //     zoom: 16);
-                                            // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
-                                            // controller2.moveCamera(update);
-                                            // myperson_Markre=Marker(
-                                            //     markerId:MarkerId(myperson.lat.toString()),
-                                            //     icon: markerbitmap2,
-                                            //     position: LatLng(myperson.lat,myperson.lng),
-                                            //     infoWindow: InfoWindow(
-                                            //         title: myperson.name,
-                                            //         snippet: myperson.datetime
-                                            //     )
-                                            // );
-                                            // _Markers.add(myperson_Markre);
-                                            setState(() {
-                                            });
-                                          }
-
-
-                                      }
-                                    }else{
-
-                                     if(resuilt!=null)
-                                     {
-
-                                       // _Markers.clear();
-                                       // _poly.clear();
-                                       // _cordinate.clear();
-                                       setState(() {
-
-                                       });
-                                       List<Latlng1> d=resuilt ;
-
-                                       if(d!=null)
-                                       {
-                                         if(d.length>0)
-                                           {
-                                             var markerImage = await loadMarkerImage();
-                                             Mcontrol.addImage('marker', markerImage);
-
-                                             Polygons.clear();
-                                             _Markers.clear();
-                                             Mcontrol.clearSymbols();
-                                             Mcontrol.clearLines();
-
-                                             d.forEach((element) {
-                                              _Markers.add(LatLng(element.lat, element.lng));
-                                             });
-
-
-                                             Mcontrol.addLine(
-                                               LineOptions(
-                                                   geometry: _Markers,
-                                                   lineColor: "#FF1818",
-                                                   lineWidth: 2.0,
-                                                   draggable: true),
-                                             );
-                                             d.forEach((element)
-                                             {
-                                               Mcontrol.addSymbol(SymbolOptions(
-                                                 iconSize: 0.2,
-                                                 iconImage: "marker",
-                                                 textAnchor:element.name,
-                                                 textHaloColor: element.datetime,
-                                                 // iconImage: "assets/locloc2.png",
-                                                 geometry: LatLng(element.lat,element.lng),
-                                               ));
-                                             });
-
-                                             // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
-                                             // controller2.moveCamera(update);
-                                             setState(() {
-
-                                             });
-
-                                           }
-                                       }
-                                     }
-                                  }
-                                },
-                                child: TextField(
-                                  enabled: false,
-                                  autofocus: false,
-                                  textAlign: TextAlign.end,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintStyle: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xffBEBEBE),
-                                        fontSize:Sizewid<=409?10: 12,
-                                      ),
-                                      hintText: 'پرسنل خود را جستجو کنید'
-                                  ),
-                                ),
-                              ),
-                            )),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(Icons.search,color: Color(0xffCACACA),size: 24,),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+                CountLoc!=0?
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  width: Sizewid>796?Sizewid/4:Sizewid<=450?Sizewid/2:Sizewid/2,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8)
                   ),
-                )
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(' مختصات دریافت شد ',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color:
+                          BaseColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),),
+                        Text(CountLoc.toString(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color:
+                          BaseColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                  ),
+                ):Container(),
+                Row(
+                  children: [
+                    BtnSmall2('images/list.png',18,Colors.white, (){
+                      ShowModall_MainMenu();
+                    }),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6.0),
+                      child:  BtnSmall2('images/menu1.png',18,Colors.white,(){
+                        Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context)
+                                => PishFactorNotAccept()));
+                      }),
+                    ),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            width: Sizewid>796?Sizewid/4:Sizewid<=450?Sizewid/2:Sizewid/2,
+                            margin: EdgeInsets.only(left: 6),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 3,
+                                      spreadRadius: 1
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(8)
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(child: Container(
+                                  child: InkWell(
+                                    onTap: () async{
+                                      var resuilt=await    Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
+                                      if(TypeSwitch_Now)
+                                        {
+
+                                          if(resuilt!=null)
+                                          {
+
+                                            if(myperson.visRdf!=-9)
+                                              {
+                                                // _Markers.remove(myperson_Markre);
+                                              }
+                                            // _Markers.clear();
+                                            var markerImage = await loadMarkerImage2();
+                                            Mcontrol.addImage('marker', markerImage);
+                                            myperson=resuilt;
+
+                                            // _poly.clear();
+                                            // _cordinate.clear();
+                                            Polygons.clear();
+                                            _Markers.clear();
+                                            Mcontrol.clearSymbols();
+                                            Mcontrol.clearLines();
+                                            if(myperson.lat>0)
+                                              {
+                                                Mcontrol.addSymbol(SymbolOptions(
+                                                  iconSize: 0.2,
+                                                  iconImage: "marker",
+                                                  textAnchor:myperson.name,
+                                                  textHaloColor:myperson.datetime ,
+                                                  // iconImage: "assets/locloc2.png",
+                                                  geometry: LatLng(myperson.lat,myperson.lng),
+                                                ));
+                                                // var newPosition = CameraPosition(
+                                                //     target: LatLng(myperson.lat,myperson.lng),
+                                                //     zoom: 16);
+                                                // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
+                                                // controller2.moveCamera(update);
+                                                // myperson_Markre=Marker(
+                                                //     markerId:MarkerId(myperson.lat.toString()),
+                                                //     icon: markerbitmap2,
+                                                //     position: LatLng(myperson.lat,myperson.lng),
+                                                //     infoWindow: InfoWindow(
+                                                //         title: myperson.name,
+                                                //         snippet: myperson.datetime
+                                                //     )
+                                                // );
+                                                // _Markers.add(myperson_Markre);
+                                                setState(() {
+                                                });
+                                              }
+
+
+                                          }
+                                        }else{
+                                         if(resuilt!=null)
+                                         {
+
+                                           // _Markers.clear();
+                                           // _poly.clear();
+                                           // _cordinate.clear();
+                                           setState(() {
+
+                                           });
+                                           List<Latlng1> d=resuilt ;
+
+                                           if(d!=null)
+                                           {
+                                             if(d.length>0)
+                                               {
+                                                 CountLoc=d.length;
+                                                 var markerImage = await loadMarkerImage();
+                                                 Mcontrol.addImage('marker', markerImage);
+                                                 Polygons.clear();
+                                                 _Markers.clear();
+                                                 Mcontrol.clearSymbols();
+                                                 Mcontrol.clearLines();
+
+                                                 d.forEach((element) {
+                                                  _Markers.add(LatLng(element.lat, element.lng));
+                                                 });
+
+
+
+
+
+
+
+                                                 Mcontrol.addLine(
+                                                   LineOptions(
+                                                       geometry: _Markers,
+                                                       lineColor: "#FF1818",
+                                                       lineWidth: 2.0,
+                                                       draggable: true),
+                                                 );
+
+
+
+                                                 d.forEach((element)
+                                                 {
+                                                   Mcontrol.addSymbol(SymbolOptions(
+                                                     iconSize: 0.2,
+                                                     iconImage: "marker",
+                                                     textAnchor:d[0].name,
+                                                     textHaloColor: element.datetime,
+                                                     // iconImage: "assets/locloc2.png",
+                                                     geometry: LatLng(element.lat,element.lng),
+                                                   ));
+                                                 });
+
+                                                 var markerImage3 = await loadMarkerImage3();
+                                                 Mcontrol.addImage('marker23', markerImage3);
+                                                 Mcontrol.addSymbol(SymbolOptions(
+                                                   iconSize: 0.2,
+                                                   iconImage: "marker23",
+                                                   textAnchor:d[0].name,
+                                                   textHaloColor: d[0].datetime,
+                                                   // iconImage: "assets/locloc2.png",
+                                                   geometry: LatLng(d[0].lat,d[0].lng),
+                                                 ));
+                                                 var markerImage4 = await loadMarkerImage4();
+                                                 Mcontrol.addImage('marker44', markerImage4);
+                                                 Mcontrol.addSymbol(SymbolOptions(
+                                                   iconSize: 0.2,
+                                                   iconImage: "marker44",
+                                                   textAnchor:d.last.name,
+                                                   textHaloColor: d.last.datetime,
+                                                   // iconImage: "assets/locloc2.png",
+                                                   geometry: LatLng(d.last.lat,d.last.lng),
+                                                 ));
+
+                                                 // CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
+                                                 // controller2.moveCamera(update);
+                                                 setState(() {
+
+                                                 });
+
+                                               }
+                                           }
+                                         }
+                                      }
+                                    },
+                                    child: TextField(
+                                      enabled: false,
+                                      autofocus: false,
+                                      textAlign: TextAlign.end,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintStyle: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xffBEBEBE),
+                                            fontSize:Sizewid<=409?10: 12,
+                                          ),
+                                          hintText: 'پرسنل خود را جستجو کنید'
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: Icon(Icons.search,color: Color(0xffCACACA),size: 24,),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ),
@@ -1139,6 +1210,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                           if(!TypeSwitch_After)
                           {
                             setState(() {
+                              CountLoc=0;
                               TypeSwitch_Now=false;
                               TypeSwitch_After=true;
                               _Markers.clear();

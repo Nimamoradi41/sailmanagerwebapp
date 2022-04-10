@@ -124,6 +124,9 @@ flutter:
     - images/frm1.png
     - images/frm2.png
     - images/ref1.png
+    - images/locnew.png
+    - images/locnew1.png
+    - images/locnew2.png
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
