@@ -5,6 +5,8 @@ import 'package:sailmanagerwebapp/Screens/MainMap.dart';
 import 'package:sailmanagerwebapp/Screens/mainpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'ReportPathVisitor/ReportPathVisitor.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -56,8 +58,8 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         fontFamily: 'iransans'
       ),
-      // home:mainpage()
-      home:   Flag ? mainpage():  MainMap()
+      home:ReportPathVisitor()
+      // home:   Flag ? mainpage():  MainMap()
       // home:MainMap()
     );
   }

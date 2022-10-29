@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 
     final Color BaseColor=const Color(0xff3D4785);
@@ -10,6 +11,11 @@ import 'package:flutter/cupertino.dart';
     final double SizeSecond=  13;
     final double SizeResponsive=  9;
     double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
+
+String SplitPrice(dynamic price){
+    var f = NumberFormat("###,###,###,###", "en_US");
+    return   f.format(price).toString();
+}
 String    Convert_DATE(String day,String month,String year)
 {
     var temp_day="";

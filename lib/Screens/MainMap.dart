@@ -880,6 +880,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                   // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
                   onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
                   onMapClick:(a,b) async {
+
                   },
                   initialCameraPosition: CameraPosition(
                       target: LatLng(31.330587,48.684865),
@@ -899,8 +900,6 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                    _onWillPop_exit();
                  }),
                   Expanded(
-
-
                     child: Container(
                       child: Row(
                         mainAxisAlignment: Sizewid>796?MainAxisAlignment.end:MainAxisAlignment.center,
