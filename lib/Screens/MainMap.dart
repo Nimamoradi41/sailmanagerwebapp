@@ -899,6 +899,8 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                    _onWillPop_exit();
                  }),
                   Expanded(
+
+
                     child: Container(
                       child: Row(
                         mainAxisAlignment: Sizewid>796?MainAxisAlignment.end:MainAxisAlignment.center,
