@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 
 import '../Constants.dart';
+import '../Models/ModelVisitorsAll.dart';
 import '../Models/Visitors.dart';
 
 
@@ -10,7 +11,7 @@ class ItemGridVisitor extends StatelessWidget {
 
   VoidCallback Func;
   bool IsAllProvice;
-  List<Visitors> Provice=[];
+  List<Re_VisitorsAll> Provice=[];
 
   int index;
 
@@ -51,7 +52,7 @@ class ItemGridVisitor extends StatelessWidget {
                 Icon(Icons.close,color: Colors.white,size: 15,),
                 Expanded(
                   child: Text(
-                    Provice[index].Name.toString(),
+                    Provice[index].name.toString(),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     textAlign: TextAlign.center,style: TextStyle(

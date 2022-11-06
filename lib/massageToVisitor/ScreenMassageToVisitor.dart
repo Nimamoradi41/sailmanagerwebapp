@@ -1,44 +1,73 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../ApiService.dart';
 import '../Constants.dart';
-import '../Models/Visitors.dart';
+import '../Models/ModelVisitorsAll.dart';
+import '../Models/ModelmassageVisitor.dart';
 import '../TextApp.dart';
 import '../VisitorComponent/MainItemFilterVisitor.dart';
 
 
 
-
 class ScreenMassageToVisitor extends StatefulWidget {
-
   @override
   State<ScreenMassageToVisitor> createState() => _ScreenMassageToVisitorState();
 }
 
 class _ScreenMassageToVisitorState extends State<ScreenMassageToVisitor> {
   bool IsAllVisitors=false;
+  bool ForceUpdate=false;
 
 
-  List<Visitors> main=[];
+
+
+  Future RunVisitors()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var base =prefs.getString('Baseurl');
+    var UserName =prefs.getString('UserName');
+    var Password =prefs.getString('Password');
+
+     base='http://172.10.10.3:9595/nimasalemanager';
+    UserName='مدیر';
+    Password='۱';
+    var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+    var Data=await ApiService.GetVisitorsAll(pr, base, UserName, Password);
+    // debugPrint('AAAAAAAAa');
+    pr.hide();
+    if(Data!=null)
+    {
+      if(Data.code==200)
+      {
+        if(Data.res!=null)
+        {
+
+          setState(() {
+            main=Data.res;
+          });
+          debugPrint(main.length.toString());
+          ShowModall_();
+        }else{
+          ApiService.ShowSnackbar(Data.msg.toString());
+        }
+
+      }else{
+        ApiService.ShowSnackbar(Data.msg);
+      }
+
+    }else{
+      ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+    }
+  }
+  List<Re_VisitorsAll> main=[];
   @override
   void initState() {
     super.initState();
-    var sd=Visitors();
-    sd.Name="Nima";
-    var sd2=Visitors();
-    sd2.Name="Faraz";
 
-    var sd3=Visitors();
-    sd3.Name="Ali";
-
-
-    var sd4=Visitors();
-    sd4.Name="Ahmad";
-
-
-    main.add(sd);
-    main.add(sd2);
-    main.add(sd3);
-    main.add(sd4);
 
   }
 
@@ -220,11 +249,10 @@ class _ScreenMassageToVisitorState extends State<ScreenMassageToVisitor> {
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                    main[item].Name ),
+                                                    main[item].name ),
                                                 // Text(sa),
                                                 Checkbox(
                                                   value:
-
                                                   main[item].IsCheck,
                                                   activeColor: BaseColor ,
                                                   focusColor:BaseColor ,
@@ -247,7 +275,7 @@ class _ScreenMassageToVisitorState extends State<ScreenMassageToVisitor> {
                                             ),
                                           ),
                                         ) :
-                                        txtsearch.text.isNotEmpty &&  main[item].Name.contains(txtsearch.text.toString())?
+                                        txtsearch.text.isNotEmpty &&  main[item].name.contains(txtsearch.text.toString())?
                                         Container(
                                           child: InkWell(
                                             highlightColor: Colors.transparent,
@@ -271,7 +299,7 @@ class _ScreenMassageToVisitorState extends State<ScreenMassageToVisitor> {
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                    main[item].Name ),
+                                                    main[item].name ),
                                                 // Text(sa),
                                                 Checkbox(
                                                   value:
@@ -370,178 +398,327 @@ class _ScreenMassageToVisitorState extends State<ScreenMassageToVisitor> {
 
 
 
+
+
+  Future SendMassage()async{
+    List<int> Visitors=[];
+
+
+    if(Controler_Title.text.isEmpty)
+      {
+        ApiService.ShowSnackbar('عنوان پیام را وارد کنید');
+        return;
+      }
+
+    if(Controler_Text.text.isEmpty)
+    {
+      ApiService.ShowSnackbar('متن پیام را وارد کنید');
+      return;
+    }
+
+
+
+    if(IsAllVisitors){
+      main.forEach((element) {
+          Visitors.add(element.visRdf);
+      });
+    }else if(main.length>0)
+      {
+        main.forEach((element) {
+          if(element.IsCheck)
+            {
+              Visitors.add(element.visRdf);
+            }
+        });
+      }else{
+      ApiService.ShowSnackbar('ویزیتور خود را وارد کنید');
+      return;
+    }
+
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var base =prefs.getString('Baseurl');
+    var UserName =prefs.getString('UserName');
+    var Password =prefs.getString('Password');
+    var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+    var Data=await ApiService.MessageTovisitor(pr, base!, UserName!, Password!
+        ,Controler_Title.text.toString(),Controler_Text.text.toString(),ForceUpdate,Visitors);
+    pr.hide();
+    if(Data!=null)
+    {
+      if(Data.code==200)
+      {
+       if(Data.res)
+         {
+           Controler_Text.clear();
+           Controler_Title.clear();
+           ForceUpdate=false;
+           main.forEach((element) {
+             element.IsCheck=false;
+           });
+           IsAllVisitors=false;
+
+           ApiService.ShowSnackbar('پیام با موفقیت ارسال شد');
+           setState(() {
+
+           });
+         }else{
+         ApiService.ShowSnackbar(Data.msg.toString());
+       }
+      }else{
+        ApiService.ShowSnackbar(Data.msg);
+      }
+
+    }else{
+      ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+    }
+
+
+
+
+    pr.hide();
+  }
+
   var Controler_Title=TextEditingController();
   var Controler_Text=TextEditingController();
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: BaseColor,
-        title:Column(
-          children: [
-            Text('پیام به ویزیتور',style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
-          ],
-        ),
-        leading: InkWell
-          (
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back,color: Colors.white,)),
-      ),
-      body:Container(
-        height: double.infinity,
-        width: double.infinity,
-        child: Column(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  MainItemFilterVistor(IsAllVisitors,
-                      main.where((element) => element.IsCheck==true).toList()
-                      // .sort((a, b) => a.someProperty.compareTo(b.someProperty))
-                      ,(){
-                        // if(main.length==0)
-                        // {
-                        //   Run('2');
-                        // }else{
-                        //   ShowModall_("2");
-                        // }
-
-                        ShowModall_();
-                      },() {
-
-
-
-
-
-
-
-                        setState(() {
-
-                        });
-
-
-
-
-                      }),
-
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextApp('عنوان پیام', 14 , Colors.black54, true),
-                      )),
-                  Container(
-                    width: double.infinity,
-                    height: 100,
-                    margin: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 2
-                        )
-                      ]
-                    ),
-                    child: TextField(
-                      textAlign: TextAlign.end,
-                      controller: Controler_Title,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(8),
-                          border: InputBorder.none,
-                          hintText:'عنوان خود را وارد کنید',
-                          hintStyle: TextStyle(
-                              color: Color(0xffAEAEAE)
-                          )
-                      ),
-                    ),
-                  ),
-
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextApp('متن پیام', 14 , Colors.black54, true),
-                      )),
-                  Container(
-                    width: double.infinity,
-                    height: 100,
-                    margin: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 2
-                          )
-                        ]
-                    ),
-                    child: TextField(
-                      textAlign: TextAlign.end,
-                      controller: Controler_Text,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(8),
-                          border: InputBorder.none,
-                          hintText:'متن خود را وارد کنید',
-                          hintStyle: TextStyle(
-                              color: Color(0xffAEAEAE)
-                          )
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-            ),
-            Expanded(child:   Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+    double Widdd=MediaQuery.of(context).size.width;
+    return Center(
+      child: Container(
+        width: Widdd>600?600:Widdd,
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: BaseColor,
+            title:Column(
               children: [
-                Expanded(child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-                  width: double.maxFinite,
-                  child: ElevatedButton(onPressed: (){
-                      Navigator.pop(context);
-                  },
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.red),
-                      child:
-                      Text('بستن',style: TextStyle(
-                          color: Colors.white
-                      ),)),
-                )),
-                Expanded(child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-                  width: double.maxFinite,
-                  child: ElevatedButton(
-                      onPressed: (){
-                        // setState(() {
-                        //   FlagFilter=false;
-                        // });
-                        // Navigator.pop(context);
-                        // PageCounter=1;
-                        // PageCounterMain=2;
-                        // Customers.clear();
-                        // PageCounterCheck=false;
-                        // GetCustomers('',false);
+                 Text('پیام به ویزیتور',style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
+              ],
+            ),
+            leading: InkWell
+              (
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Icon(Icons.arrow_back,color: Colors.white,)),
+          ),
+          body:Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 8,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        MainItemFilterVistor(IsAllVisitors,
+                            main.where((element) => element.IsCheck==true).toList()
+                            // .sort((a, b) => a.someProperty.compareTo(b.someProperty))
+                            ,(){
+                              if(main.length==0)
+                              {
+                                RunVisitors();
+                              }else{
+                                ShowModall_();
+                              }
+
+
+
+                            },() {
+
+
+
+
+
+
+
+                              setState(() {
+
+                              });
+
+
+
+
+                            }),
+                        InkWell(
+                          onTap: (){
+                            setState(() {
+                              ForceUpdate=!ForceUpdate;
+                            });
+
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextApp('بروزرسانی اجباری', 14 , Colors.black54, true),
+                              Checkbox(
+                                value:
+                                ForceUpdate,
+                                activeColor: BaseColor ,
+                                focusColor:BaseColor ,
+                                onChanged: (bool? value) {
+                                  setState(() {
+
+
+                                    ForceUpdate=value!;
+
+
+
+
+                                  });
+
+
+
+
+
+
+
+
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4),
+                              child: TextApp('عنوان پیام', 14 , Colors.black54, true),
+                            )),
+                        Container(
+                          width: double.infinity,
+                          height: 100,
+                          margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 2
+                              )
+                            ]
+                          ),
+                          child: TextField(
+                            textAlign: TextAlign.end,
+                            controller: Controler_Title,
+                            onTap: (){
+                              if(Controler_Title.selection == TextSelection.fromPosition(TextPosition(offset: Controler_Title.text.length -1))){
+                                setState(() {
+                                  Controler_Title.selection = TextSelection.fromPosition(TextPosition(offset: Controler_Title.text.length));
+                                });
+                              }
+                            },
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(8),
+                                border: InputBorder.none,
+                                hintText:'عنوان خود را وارد کنید',
+                                hintStyle: TextStyle(
+                                    color: Color(0xffAEAEAE)
+                                )
+                            ),
+                          ),
+                        ),
+
+                        Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4),
+                              child: TextApp('متن پیام', 14 , Colors.black54, true),
+                            )),
+                        Container(
+                          width: double.infinity,
+                          height: 200,
+                          margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    spreadRadius: 2,
+                                    blurRadius: 2
+                                )
+                              ]
+                          ),
+                          child: TextField(
+                            textAlign: TextAlign.end,
+                            controller: Controler_Text,
+                            onTap: (){
+                              if(Controler_Text.selection == TextSelection.fromPosition(TextPosition(offset: Controler_Text.text.length -1))){
+                                setState(() {
+                                  Controler_Text.selection = TextSelection.fromPosition(TextPosition(offset: Controler_Text.text.length));
+                                });
+                              }
+                            },
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(8),
+                                border: InputBorder.none,
+                                hintText:'متن خود را وارد کنید',
+                                hintStyle: TextStyle(
+                                    color: Color(0xffAEAEAE)
+                                )
+                            ),
+                          ),
+                        ),
+
+
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                    flex: 2,
+                    child:   Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                      width: double.maxFinite,
+                      child: ElevatedButton(onPressed: (){
+                          Navigator.pop(context);
                       },
-                      style: ElevatedButton.styleFrom(primary: BaseColor),
-                      child:
-                      Text('ارسال پیام',style: TextStyle(
-                          color: Colors.white
-                      ),)),
-                )),
-              ],))
-          ],
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.red),
+                          child:
+                          Text('بستن',style: TextStyle(
+                              color: Colors.white
+                          ),)),
+                    )),
+                    Expanded(child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                      width: double.maxFinite,
+                      child: ElevatedButton(
+                          onPressed: (){
+                            SendMassage();
+                            // setState(() {
+                            //   FlagFilter=false;
+                            // });
+                            // Navigator.pop(context);
+                            // PageCounter=1;
+                            // PageCounterMain=2;
+                            // Customers.clear();
+                            // PageCounterCheck=false;
+                            // GetCustomers('',false);
+                          },
+                          style: ElevatedButton.styleFrom(primary: BaseColor),
+                          child:
+                          Text('ارسال پیام',style: TextStyle(
+                              color: Colors.white
+                          ),)),
+                    )),
+                  ],))
+              ],
+            ),
+          ),
         ),
       ),
     );

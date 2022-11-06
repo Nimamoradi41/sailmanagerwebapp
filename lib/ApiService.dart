@@ -21,7 +21,9 @@ import 'Models/ModelFactorsAll.dart';
 import 'Models/ModelPIshfactorsNotAccept.dart';
 import 'Models/ModelProvice.dart';
 import 'Models/ModelRegion.dart';
+import 'Models/ModelVisitorsAll.dart';
 import 'Models/ModelWay.dart';
+import 'Models/ModelmassageVisitor.dart';
 import 'Models/OfflineModel.dart';
 import 'Models/OnlineModel.dart';
 import 'Models/PishCustomer.dart';
@@ -822,8 +824,180 @@ class ApiService{
     return login;
   }
 
+  static Future<ModelmassageVisitor> MessageTovisitor(ProgressDialog pr,String Baseurl,String User,String Pass,String Title,String Textms,bool ForcUpdate,List<int> visitors) async{
+    var login;
+
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/SendMessageVisitors');
 
 
+
+    // ignore: unrelated_type_equality_checks
+
+    pr.style(
+      textAlign: TextAlign.center,
+      message: ' درحال ارتباط با سرور',
+      messageTextStyle: TextStyle(
+          fontFamily:  'iransans',
+          fontSize: 14,
+          color: Colors.black87),
+    );
+    await  pr.show();
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "userName":User,
+      "password":Pass}) ;
+
+
+    map['listVisId'] = visitors.toString() ;
+    map['textMSG'] = jsonEncode(Textms);
+    map['titleMSG'] = jsonEncode(Title);
+    map['forceUPDATE'] = ForcUpdate.toString() ;
+
+
+
+
+
+
+    print(map);
+
+    try{
+      Response response = await post(url,  body:map
+        ,).timeout(
+        Duration(seconds: 50),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+        debugPrint("!!444");
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        throw("some arbitrary error");
+      });;
+      if(response.statusCode==200)
+      {
+        debugPrint("!!22");
+        String data=response.body;
+
+        print(data);
+        var DATA=modelmassageVisitorFromJson(data);
+
+        // ignore: unnecessary_null_comparison
+
+        if(DATA.res!=null)
+        {
+          // pr.hide();
+          login= DATA;
+        }else{
+          // pr.hide();
+          login= DATA;
+        }
+      }else{
+        debugPrint("878787");
+        debugPrint(response.statusCode.toString());
+
+        String data=response.body;
+        debugPrint(data.toString());
+        pr.hide();
+      }
+    }catch (e)
+    {
+
+      debugPrint("!!");
+      ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      login= null;
+      pr.hide();
+
+    }
+    return login;
+  }
+  static Future<ModelVisitorsAll> GetVisitorsAll(ProgressDialog pr,String Baseurl,String User,String Pass) async{
+    var login;
+
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/ListVisitors');
+
+
+
+    debugPrint(url.toString());
+
+
+    // ignore: unrelated_type_equality_checks
+
+    pr.style(
+      textAlign: TextAlign.center,
+      message: ' درحال ارتباط با سرور',
+      messageTextStyle: TextStyle(
+          fontFamily:  'iransans',
+          fontSize: 14,
+          color: Colors.black87),
+    );
+    await  pr.show();
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "userName":User,
+      "password":Pass}) ;
+
+
+
+
+
+
+
+    debugPrint(map.toString());
+
+
+    try{
+      Response response = await post(url,  body:map
+        ,).timeout(
+        Duration(seconds: 50),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+        debugPrint("!!444");
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        throw("some arbitrary error");
+      });;
+      if(response.statusCode==200)
+      {
+        debugPrint("!!22");
+        String data=response.body;
+
+        print(data);
+        var DATA=modelVisitorsAllFromJson(data);
+
+        // ignore: unnecessary_null_comparison
+
+        if(DATA.res!=null)
+        {
+          // pr.hide();
+          login= DATA;
+        }else{
+          // pr.hide();
+          login= DATA;
+        }
+      }else{
+        debugPrint("878787");
+        debugPrint(response.statusCode.toString());
+        String data=response.body;
+        debugPrint(data.toString());
+        pr.hide();
+      }
+    }catch (e)
+    {
+
+      debugPrint("!!");
+      ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      login= null;
+      pr.hide();
+
+    }
+    return login;
+  }
   static Future<ModelRegion> GetRegion(String Baseurl,String User,String Pass,String idCity,String name) async{
     var login;
     // String Base= await  Getbaseurl();

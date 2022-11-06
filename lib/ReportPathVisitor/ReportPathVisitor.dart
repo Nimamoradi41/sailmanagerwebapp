@@ -4,6 +4,7 @@ import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 
 import '../Constants.dart';
+import '../Models/ModelVisitorsAll.dart';
 import '../Models/Visitors.dart';
 import '../ReportVisitors/ItemColumn.dart';
 import '../TextApp.dart';
@@ -106,7 +107,7 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
 
 
   }
-  List<Visitors>  main=[];
+  List<Re_VisitorsAll>  main=[];
   bool FlagFilter=true;
   bool IsAllVisitors=false;
   bool FlagCheckOneDay=false;
@@ -114,23 +115,10 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
   @override
   void initState() {
     super.initState();
-    var sd=Visitors();
-    sd.Name="Nima";
-    var sd2=Visitors();
-    sd2.Name="Faraz";
-
-    var sd3=Visitors();
-    sd3.Name="Ali";
 
 
-    var sd4=Visitors();
-    sd4.Name="Ahmad";
 
 
-    main.add(sd);
-    main.add(sd2);
-    main.add(sd3);
-    main.add(sd4);
     GetDataNow();
   }
   TextEditingController txtsearch=TextEditingController();
@@ -311,7 +299,7 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                    main[item].Name ),
+                                                    main[item].name ),
                                                 // Text(sa),
                                                 Checkbox(
                                                   value:
@@ -338,7 +326,7 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
                                             ),
                                           ),
                                         ) :
-                                        txtsearch.text.isNotEmpty &&  main[item].Name.contains(txtsearch.text.toString())?
+                                        txtsearch.text.isNotEmpty &&  main[item].name.contains(txtsearch.text.toString())?
                                         Container(
                                           child: InkWell(
                                             highlightColor: Colors.transparent,
@@ -362,7 +350,7 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                    main[item].Name ),
+                                                    main[item].name ),
                                                 // Text(sa),
                                                 Checkbox(
                                                   value:

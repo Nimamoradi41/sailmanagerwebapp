@@ -4,6 +4,7 @@ import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 
 import '../Constants.dart';
+import '../Models/ModelVisitorsAll.dart';
 import '../Models/Visitors.dart';
 import '../TextApp.dart';
 import '../VisitorComponent/MainItemFilterVisitor.dart';
@@ -118,29 +119,16 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
 
 
 
-  List<Visitors>  main=[];
+  List<Re_VisitorsAll>  main=[];
   TextEditingController txtsearch=TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    var sd=Visitors();
-    sd.Name="Nima";
-    var sd2=Visitors();
-    sd2.Name="Faraz";
-
-    var sd3=Visitors();
-    sd3.Name="Ali";
 
 
-    var sd4=Visitors();
-    sd4.Name="Ahmad";
 
 
-    main.add(sd);
-    main.add(sd2);
-    main.add(sd3);
-    main.add(sd4);
     GetDataNow();
   }
 
@@ -326,7 +314,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                 main[item].Name ),
+                                                 main[item].name ),
                                                 // Text(sa),
                                                 Checkbox(
                                                   value:
@@ -353,7 +341,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                             ),
                                           ),
                                         ) :
-                                        txtsearch.text.isNotEmpty &&  main[item].Name.contains(txtsearch.text.toString())?
+                                        txtsearch.text.isNotEmpty &&  main[item].name.contains(txtsearch.text.toString())?
                                         Container(
                                           child: InkWell(
                                             highlightColor: Colors.transparent,
@@ -377,7 +365,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                   main[item].Name ),
+                                                   main[item].name ),
                                                 // Text(sa),
                                                 Checkbox(
                                                   value:
@@ -772,7 +760,6 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                             ),
                             MainItemFilterVistor(IsAllVisitors,
                                 main.where((element) => element.IsCheck==true).toList()
-
                                 // .sort((a, b) => a.someProperty.compareTo(b.someProperty))
                                 ,(){
                               // if(main.length==0)

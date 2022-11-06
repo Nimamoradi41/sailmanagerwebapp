@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../ColumItem.dart';
 import '../Constants.dart';
+import '../Models/ModelVisitorsAll.dart';
 import '../Models/Visitors.dart';
 import 'ItemGridVisitor.dart';
 
@@ -11,7 +12,7 @@ import 'ItemGridVisitor.dart';
 class MainItemFilterVistor extends StatefulWidget {
 
   bool IsAllProvice;
-  List<Visitors> City=[];
+  List<Re_VisitorsAll> City=[];
 
   VoidCallback Func;
   VoidCallback Func2;
@@ -32,7 +33,7 @@ class _MainItemFilterState extends State<MainItemFilterVistor> {
   List<Visitors> Temp=[];
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
 
   }

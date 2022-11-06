@@ -6,6 +6,7 @@ import 'package:sailmanagerwebapp/Screens/mainpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ReportPathVisitor/ReportPathVisitor.dart';
+import 'massageToVisitor/ScreenMassageToVisitor.dart';
 
 
 void main() {
@@ -51,6 +52,7 @@ class _MyAppState extends State<MyApp> {
     Runn();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,7 +60,8 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         fontFamily: 'iransans'
       ),
-      home:ReportPathVisitor()
+      // home:ReportPathVisitor()
+      home:ScreenMassageToVisitor()
       // home:   Flag ? mainpage():  MainMap()
       // home:MainMap()
     );
