@@ -34,6 +34,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 
+import '../ReportPathVisitor/ReportPathVisitor.dart';
+import '../ReportVisitors/ScreenReportVisitors.dart';
+import '../massageToVisitor/ScreenMassageToVisitor.dart';
 import 'Customers.dart';
 
 
@@ -478,6 +481,76 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                   ),
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Divider(height: 10,color: ColorLine,),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context)
+                              => ReportPathVisitor()));
+                    },
+                    child: Container(
+                      child:  Text('گزارش روز مسیر ویزیتور',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(color:
+                        BaseColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w100),),
+                    ),
+                  )),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset('images/list_4.svg',width: 15,height: 15,color: Color(0xff1F3C84),),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Divider(height: 10,color: ColorLine,),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context)
+                              => ScreenReportVisitors()));
+                    },
+                    child: Container(
+                      child:  Text('گزارش سرجمع اطلاعات ویزیتور',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(color:
+                        BaseColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w100),),
+                    ),
+                  )),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset('images/list_4.svg',width: 15,height: 15,color: Color(0xff1F3C84),),
+                    ),
+                  ),
+                ],
+              ),
 
             ],
           ),
@@ -485,6 +558,94 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
       ) ;
     });
   }
+
+
+  ShowModall_MainMenu2()
+  {
+    showModalBottomSheet(context: context, builder: (ctx){
+      return  Container(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => PishFactorNotAccept()));
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(child: Container(
+                      child:  Text('لیست پیش فاکتور های تایید نشده',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(color:
+                        BaseColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w100),),
+                    )),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SvgPicture.asset('images/admin2.svg',width: 20,height: 20,color: Color(0xff1F3C84),),
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Divider(height: 10,color: ColorLine,),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context)
+                              => ScreenMassageToVisitor()));
+                    },
+                    child: Container(
+                      child:  Text('پیام به ویزیتور',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(color:
+                        BaseColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w100),),
+                    ),
+                  )),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      // child: SvgPicture.asset('images/list_4.svg',width: 15,height: 15,color: Color(0xff1F3C84),),
+                      child: Icon(Icons.send_to_mobile,size: 25,color: BaseColor,),
+                    ),
+                  ),
+                ],
+              ),
+
+
+            ],
+          ),
+        ),
+      ) ;
+    });
+  }
+
+
+
 
 
 
@@ -879,9 +1040,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                   onMapCreated: _Oncreatmap,
                   // styleString: 'mapbox://styles/nima16/cl0f23lg2001f14o2e1ji391d',
                   onStyleLoadedCallback:()=>addCirc(Mcontrol) ,
-                  onMapClick:(a,b) async {
-
-                  },
+                  onMapClick:(a,b) async {},
                   initialCameraPosition: CameraPosition(
                       target: LatLng(31.330587,48.684865),
                       zoom: 12,
@@ -959,10 +1118,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                     Padding(
                       padding: const EdgeInsets.only(left: 6.0),
                       child:  BtnSmall2('images/menu1.png',18,Colors.white,(){
-                        Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context)
-                                => PishFactorNotAccept()));
+                        ShowModall_MainMenu2();
                       }),
                     ),
                     Expanded(

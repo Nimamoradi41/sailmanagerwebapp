@@ -1,1 +1,1 @@
-http://91.108.148.38:9595/manager
+http://172.10.10.3:9595/nimasalemanager

@@ -61,8 +61,8 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'iransans'
       ),
       // home:ReportPathVisitor()
-      home:ScreenMassageToVisitor()
-      // home:   Flag ? mainpage():  MainMap()
+      // home:ScreenMassageToVisitor()
+      home:   Flag ? mainpage():  MainMap()
       // home:MainMap()
     );
   }

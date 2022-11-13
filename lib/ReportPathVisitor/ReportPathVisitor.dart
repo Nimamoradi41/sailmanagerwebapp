@@ -788,7 +788,9 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
                                 builder: (context)
                                 => ReportSumPathVisitor(mainItems[item].visRdf.toString(),Az_Data,Ta_Data)));
                       },
-                      child: ItemReportPath(mainItems[item]));
+                      child: Container(
+                          margin: item==mainItems.length-1?EdgeInsets.only(bottom: 100):null,
+                          child: ItemReportPath(mainItems[item])));
                 }
                 ),
         ),

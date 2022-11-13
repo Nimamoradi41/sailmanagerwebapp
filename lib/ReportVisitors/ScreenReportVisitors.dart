@@ -677,7 +677,9 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                        shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (ctx,item){
-                        return ItemListview(mainItems[item]);
+                        return Container(
+                            margin: item==mainItems.length-1?EdgeInsets.only(bottom: 100):null,
+                            child: ItemListview(mainItems[item]));
                       }
                       ),
                   ),
@@ -794,7 +796,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                     InkWell(
                                         onTap: (){
                                           setState(() {
-
+                                            TypeSel = TypeSelect.uncertain;
                                           });
                                         },
                                         child: Text('غیر قطعی',style: TextStyle(color:
@@ -834,7 +836,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                     InkWell(
                                         onTap: (){
                                           setState(() {
-
+                                            TypeSel = TypeSelect.certain;
                                           });
                                         },
                                         child: Text('قطعی',style: TextStyle(color:
@@ -873,7 +875,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                     InkWell(
                                         onTap: (){
                                           setState(() {
-
+                                            TypeSel = TypeSelect.all;
                                           });
                                         },
                                         child: Text('همه',style: TextStyle(color:
@@ -961,7 +963,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                     InkWell(
                                         onTap: (){
                                           setState(() {
-
+                                            TypeSelItem = TypeSelectItem.True;
                                           });
                                         },
                                         child: Text('فروش و برگشتی براساس تاریخ فاکتور',style: TextStyle(color:
@@ -1001,6 +1003,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                     InkWell(
                                         onTap: (){
                                           setState(() {
+                                            TypeSelItem = TypeSelectItem.False;
                                           });
                                         },
                                         child: Text('فروش برگشتی براساس تاریخ برگشتی + برگشت مشتری',style: TextStyle(color:
