@@ -33,7 +33,6 @@ class ItemColumn extends StatelessWidget {
               ),
             ],
           ):Container(),
-
           Padding(
             padding: const EdgeInsets.all(1.0),
             child: TextApp( Flag?  SplitPrice(Price):Price.toInt().toString(),12,ColorSecond,false),

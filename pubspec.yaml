@@ -53,6 +53,13 @@ dependencies:
   mapbox_gl: any
   mapbox_gl_web: any
   intl: ^0.17.0
+  charts_flutter: ^0.10.0
+  syncfusion_flutter_charts: ^18.4.49
+  screenshot: any
+  image_gallery_saver: ^1.6.9
+  permission_handler: ^10.0.0
+  share: ^0.6.5
+  geolocator: ^9.0.2
 #  flutter_map: any
 #  latlng: any
 #  user_location: any
@@ -128,6 +135,10 @@ flutter:
     - images/locnew.png
     - images/locnew1.png
     - images/locnew2.png
+    - images/myplace.png
+    - images/loc44.png
+    - images/png.png
+    - images/arrow_3.svg
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

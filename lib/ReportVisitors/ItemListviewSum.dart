@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../Constants.dart';
+import '../Models/ModelVisitorsReport.dart';
 import '../TextApp.dart';
 import 'ItemColumn.dart';
 
@@ -10,13 +11,16 @@ class ItemListviewSum extends StatelessWidget {
 
   String title;
 
+  int Counter;
 
-  ItemListviewSum(this.title);
+  ModelVisitorsReport  dataa;
+
+
+  ItemListviewSum(this.title, this.Counter, this.dataa);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-
       width: double.infinity,
       margin: EdgeInsets.all(4),
       child: Column(
@@ -85,6 +89,7 @@ class ItemListviewSum extends StatelessWidget {
                     ],
                   ),
                 ),
+                Counter==1?
                 Container(
                   decoration: BoxDecoration(
                     color: Color(0xffEDAA6C).withOpacity(0.37),
@@ -96,31 +101,31 @@ class ItemListviewSum extends StatelessWidget {
                           flex: 4,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: ItemColumn('پورسانت',5484851,true,false),
+                            child: ItemColumn('پورسانت',dataa.res.KHcommission,false,false),
                           )),
 
 
                       Expanded(
                           flex: 4,
                           child: Container(
-                            child: ItemColumn('مبلغ',542445844,false,false),
+                            child: ItemColumn('مبلغ',dataa.res.KHprice,true,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('جز',14,false,false),
+                            child: ItemColumn('جز',double.parse(dataa.res.KHtedJoz.toString()),false,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('واحد',415,true,false),
+                            child: ItemColumn('واحد',double.parse(dataa.res.KHtedVah.toString()),true,false),
                           )),
                     ],
                   ),
-                ),
-
+                ):Container(),
+                Counter==2?
                 Container(
                   decoration: BoxDecoration(
                     color: Color(0xffCE3030).withOpacity(0.19),
@@ -132,31 +137,31 @@ class ItemListviewSum extends StatelessWidget {
                           flex: 4,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: ItemColumn('پورسانت',5484851,true,false),
+                            child: ItemColumn('پورسانت',dataa.res.Bcommission,false,false),
                           )),
 
 
                       Expanded(
                           flex: 4,
                           child: Container(
-                            child: ItemColumn('مبلغ',542445844,false,false),
+                            child: ItemColumn('مبلغ',dataa.res.Bprice,true,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('جز',14,false,false),
+                            child: ItemColumn('جز',double.parse(dataa.res.BtedJoz.toString()),false,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('واحد',415,true,false),
+                            child: ItemColumn('واحد',double.parse(dataa.res.BtedVah.toString()),true,false),
                           )),
                     ],
                   ),
-                ),
-
+                ):Container(),
+                Counter==3?
                 Container(
 
                   decoration: BoxDecoration(
@@ -169,32 +174,31 @@ class ItemListviewSum extends StatelessWidget {
                           flex: 4,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: ItemColumn('',5484851,true,false),
+                            child: ItemColumn('',dataa.res.KHcommission,false,false),
                           )),
 
 
                       Expanded(
                           flex: 4,
                           child: Container(
-                            child: ItemColumn('',542445844,false,false),
+                            child: ItemColumn('',dataa.res.KHprice,true,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('',14,false,false),
+                            child: ItemColumn('',double.parse(dataa.res.KHtedJoz.toString()),false,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
 
-                            child: ItemColumn('',415,true,false),
+                            child: ItemColumn('',double.parse(dataa.res.KHtedVah.toString()),false,false),
                           )),
                     ],
                   ),
-                )
-
+                ):Container()
               ],
             ),
           )

@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../Constants.dart';
+import '../Models/ModelVisitorsReport.dart';
 import '../TextApp.dart';
 import 'ItemColumn.dart';
 
 
 class ItemListview extends StatelessWidget {
-  const ItemListview({
-    Key? key,
-  }) : super(key: key);
+
+
+  TotalVisitorSale items;
 
   @override
   Widget build(BuildContext context) {
+
+    debugPrint(items.toJson().toString());
     return Container(
       width: double.infinity,
       margin: EdgeInsets.all(4),
@@ -27,7 +30,8 @@ class ItemListview extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4),
               child: TextApp(
-                  'نیما مرادی پخش نیکوکار',12,Colors.white,false
+                  items.visName,12,Colors.white,false
+                  // 'items.visName',12,Colors.white,false
               ),
             ),
           ),
@@ -91,26 +95,26 @@ class ItemListview extends StatelessWidget {
                           flex: 4,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: ItemColumn('پورسانت',5484851,true,false),
+                            child: ItemColumn('پورسانت',items.Ncommission,true,false),
                           )),
 
 
                       Expanded(
                           flex: 4,
                           child: Container(
-                            child: ItemColumn('مبلغ',542445844,false,false),
+                            child: ItemColumn('مبلغ',items.Nprice,true,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('جز',14,false,false),
+                            child: ItemColumn('جز',double.parse(items.NtedJoz.toString()) ,false,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('واحد',415,true,false),
+                            child: ItemColumn('واحد',double.parse(items.NtedVah.toString()),true,false),
                           )),
                     ],
                   ),
@@ -127,33 +131,32 @@ class ItemListview extends StatelessWidget {
                           flex: 4,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: ItemColumn('پورسانت',5484851,true,false),
+                            child: ItemColumn('پورسانت',items.Bcommission,true,false),
                           )),
 
 
                       Expanded(
                           flex: 4,
                           child: Container(
-                            child: ItemColumn('مبلغ',542445844,false,false),
+                            child: ItemColumn('مبلغ',items.Bprice,true,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('جز',14,false,false),
+                            child: ItemColumn('جز',double.parse(items.BtedJoz.toString()),false,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('واحد',415,true,false),
+                            child: ItemColumn('واحد',double.parse(items.BtedVah.toString()),true,false),
                           )),
                     ],
                   ),
                 ),
 
                 Container(
-
                   decoration: BoxDecoration(
                       color: Color(0xff017013).withOpacity(0.22),
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8),bottomRight: Radius.circular(8))
@@ -164,27 +167,27 @@ class ItemListview extends StatelessWidget {
                           flex: 4,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: ItemColumn('',5484851,true,false),
+                            child: ItemColumn('',items.KHcommission,true,false),
                           )),
 
 
                       Expanded(
                           flex: 4,
                           child: Container(
-                            child: ItemColumn('',542445844,false,false),
+                            child: ItemColumn('',items.KHprice,true,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
-                            child: ItemColumn('',14,false,false),
+                            child: ItemColumn('',double.parse(items.KHtedJoz.toString()),false,false),
                           )),
 
                       Expanded(
                           flex: 2,
                           child: Container(
 
-                            child: ItemColumn('',415,true,false),
+                            child: ItemColumn('',double.parse(items.KHtedVah.toString()),true,false),
                           )),
                     ],
                   ),
@@ -197,4 +200,6 @@ class ItemListview extends StatelessWidget {
       ),
     );
   }
+
+  ItemListview(this.items);
 }

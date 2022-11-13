@@ -19,11 +19,14 @@ import 'Models/ModelConfirm.dart';
 import 'Models/ModelDetailFactor.dart';
 import 'Models/ModelFactorsAll.dart';
 import 'Models/ModelPIshfactorsNotAccept.dart';
+import 'Models/ModelPathSumVis.dart';
 import 'Models/ModelProvice.dart';
 import 'Models/ModelRegion.dart';
 import 'Models/ModelVisitorsAll.dart';
+import 'Models/ModelVisitorsReport.dart';
 import 'Models/ModelWay.dart';
 import 'Models/ModelmassageVisitor.dart';
+import 'Models/Modelpathvisitor.dart';
 import 'Models/OfflineModel.dart';
 import 'Models/OnlineModel.dart';
 import 'Models/PishCustomer.dart';
@@ -1653,6 +1656,316 @@ class ApiService{
   }
 
 
+
+  // ** /*************************************************
+
+
+  static Future<Modelpathvisitor> GetVisitorsPath(ProgressDialog pr,String Baseurl,String User,String Pass,
+      String toDate,String fromDate,List<int> listVisId,bool FlagMasirDay) async{
+    var login;
+
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/ReportMasirDay');
+
+
+
+    // ignore: unrelated_type_equality_checks
+
+    pr.style(
+      textAlign: TextAlign.center,
+      message: ' درحال ارتباط با سرور',
+      messageTextStyle: TextStyle(
+          fontFamily:  'iransans',
+          fontSize: 14,
+          color: Colors.black87),
+    );
+    await  pr.show();
+
+
+
+
+
+
+
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "userName":User,
+      "password":Pass}) ;
+
+
+
+    map['date'] =
+        jsonEncode({ "toDate":toDate,
+          "fromDate":fromDate}) ;
+
+
+    map['listVisId'] = jsonEncode(listVisId);
+    map['FlagMasirDay'] = jsonEncode(FlagMasirDay);
+
+
+
+
+
+
+
+    print(map);
+
+
+
+
+    try{
+      Response response = await post(url,  body:map
+        ,).timeout(
+        Duration(seconds: 50),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+        debugPrint("!!444");
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        throw("some arbitrary error");
+      });;
+      if(response.statusCode==200)
+      {
+        debugPrint("!!22");
+        String data=response.body;
+
+        print(data);
+        var DATA=ModelpathvisitorFromJson(data);
+
+        // ignore: unnecessary_null_comparison
+
+        if(DATA.res!=null)
+        {
+          // pr.hide();
+          login= DATA;
+        }else{
+          // pr.hide();
+          login= DATA;
+        }
+      }else{
+        debugPrint("878787");
+        debugPrint(response.statusCode.toString());
+        String data=response.body;
+        debugPrint(data.toString());
+        pr.hide();
+      }
+    }catch (e)
+    {
+
+      debugPrint("!!");
+      ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      login= null;
+      pr.hide();
+
+    }
+    return login;
+  }
+
+
+
+  static Future<ModelPathSumVis> GetVisitorsPathSum(ProgressDialog pr,String Baseurl,String User,String Pass,
+      String toDate,String fromDate,String listVisId) async{
+    var login;
+
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/ReportMasirSumKalaDay');
+
+
+
+    // ignore: unrelated_type_equality_checks
+
+    pr.style(
+      textAlign: TextAlign.center,
+      message: ' درحال ارتباط با سرور',
+      messageTextStyle: TextStyle(
+          fontFamily:  'iransans',
+          fontSize: 14,
+          color: Colors.black87),
+    );
+    await  pr.show();
+
+
+
+
+
+
+
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "userName":User,
+      "password":Pass}) ;
+
+
+
+    map['date'] =
+        jsonEncode({ "toDate":toDate,
+          "fromDate":fromDate}) ;
+
+
+    map['VisId'] = jsonEncode(listVisId);
+
+
+
+
+
+
+
+
+    print(map);
+
+
+
+
+    try{
+      Response response = await post(url,  body:map
+        ,).timeout(
+        Duration(seconds: 50),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+        debugPrint("!!444");
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        throw("some arbitrary error");
+      });;
+      if(response.statusCode==200)
+      {
+        debugPrint("!!22");
+        String data=response.body;
+
+        print(data);
+        var DATA=ModelPathSumVisFromJson(data);
+
+        // ignore: unnecessary_null_comparison
+
+        if(DATA.res!=null)
+        {
+          // pr.hide();
+          login= DATA;
+        }else{
+          // pr.hide();
+          login= DATA;
+        }
+      }else{
+        debugPrint("878787");
+        debugPrint(response.statusCode.toString());
+        String data=response.body;
+        debugPrint(data.toString());
+        pr.hide();
+      }
+    }catch (e)
+    {
+
+      debugPrint("!!");
+      ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      login= null;
+      pr.hide();
+
+    }
+    return login;
+  }
+
+
+
+
+  static Future<ModelVisitorsReport> GetVisitorsReport(ProgressDialog pr,String Baseurl,String User,
+      String Pass,String toDate,String fromDate,List<int> listVisId,int
+      FlagGhatee,bool FlagBargashti) async{
+    var login;
+
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/TotalVisitorSales');
+
+
+
+    // ignore: unrelated_type_equality_checks
+
+    pr.style(
+      textAlign: TextAlign.center,
+      message: ' درحال ارتباط با سرور',
+      messageTextStyle: TextStyle(
+          fontFamily:  'iransans',
+          fontSize: 14,
+          color: Colors.black87),
+    );
+    await  pr.show();
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "userName":User,
+      "password":Pass}) ;
+
+    map['date'] = jsonEncode({ "toDate":toDate,
+      "fromDate":fromDate}) ;
+
+
+    map['listVisId'] = jsonEncode(listVisId);
+    map['FlagGhatee'] = jsonEncode(FlagGhatee);
+    map['FlagBargashti'] = jsonEncode(FlagBargashti);
+
+
+
+
+
+
+
+    print(map);
+
+    try{
+      Response response = await post(url,  body:map
+        ,).timeout(
+        Duration(seconds: 50),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+        debugPrint("!!444");
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        throw("some arbitrary error");
+      });;
+      if(response.statusCode==200)
+      {
+        debugPrint("!!22");
+        String data=response.body;
+
+        print(data);
+        var DATA=ModelVisitorsReportFromJson(data);
+
+        // ignore: unnecessary_null_comparison
+
+        if(DATA.res!=null)
+        {
+          // pr.hide();
+          login= DATA;
+        }else{
+          // pr.hide();
+          login= DATA;
+        }
+      }else{
+        debugPrint("878787");
+        debugPrint(response.statusCode.toString());
+        String data=response.body;
+        debugPrint(data.toString());
+        pr.hide();
+      }
+    }catch (e)
+    {
+
+      debugPrint("!!");
+      debugPrint(e.toString());
+      ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      login= null;
+      pr.hide();
+
+    }
+    return login;
+  }
 
 
 

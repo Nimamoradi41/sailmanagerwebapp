@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../ApiService.dart';
 import '../Constants.dart';
 import '../Models/ModelVisitorsAll.dart';
-import '../Models/Visitors.dart';
+
+import '../Models/Modelpathvisitor.dart';
 import '../ReportVisitors/ItemColumn.dart';
 import '../TextApp.dart';
 import '../VisitorComponent/MainItemFilterVisitor.dart';
 import 'ItemReportPath.dart';
+import 'ReportSumPathVisitor.dart';
 
 class ReportPathVisitor extends StatefulWidget {
 
@@ -115,12 +120,126 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
   @override
   void initState() {
     super.initState();
-
-
-
-
     GetDataNow();
   }
+
+  List<Res_Vis_Path>  mainItems=[];
+  Future RunVisitors()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var base =prefs.getString('Baseurl');
+    var UserName =prefs.getString('UserName');
+    var Password =prefs.getString('Password');
+    var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+    var Data=await ApiService.GetVisitorsAll(pr, base!, UserName!, Password!);
+    pr.hide();
+    if(Data!=null)
+    {
+      if(Data.code==200)
+      {
+        if(Data.res!=null)
+        {
+          main=Data.res;
+          setState(() {
+
+          });
+          ShowModall_();
+        }else{
+          ApiService.ShowSnackbar(Data.msg.toString());
+        }
+
+      }else{
+        ApiService.ShowSnackbar(Data.msg.toString());
+      }
+
+    }else{
+      ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+    }
+  }
+  Future GetData()async{
+    List<int> visid=[];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var base =prefs.getString('Baseurl');
+    var UserName =prefs.getString('UserName');
+    var Password =prefs.getString('Password');
+
+    if(IsAllVisitors)
+    {
+      main.forEach((element) {
+        visid.add(element.visRdf);
+      });
+    }else if(main.length>0)
+    {
+      main.forEach((element) {
+        if(element.IsCheck)
+        {
+          visid.add(element.visRdf);
+        }
+      });
+    }
+
+
+    setState(() {
+      FlagFilter=false;
+    });
+
+    var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+
+    var Data=await ApiService.GetVisitorsPath(pr, base!, UserName!, Password!,
+        Ta_Data,Az_Data,visid,FlagCheckOneDay
+        );
+    pr.hide();
+    if(Data!=null)
+    {
+      if(Data.code==200)
+      {
+        if(Data.res!=null)
+        {
+          setState(() {
+            mainItems=Data.res;
+          });
+        }else{
+          ApiService.ShowSnackbar(Data.msg.toString());
+        }
+      }else{
+        ApiService.ShowSnackbar(Data.msg);
+      }
+
+    }else{
+
+      ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+    }
+  }
+
+
+  Future<Null> _refresh() {
+    mainItems.clear();
+    return GetData().then((_user) {
+    });
+  }
+  Future<bool> _onWillPop2() async {
+
+    if(FlagFilter==false)
+    {
+      Navigator.pop(context);
+      return false;
+    }else{
+      if(mainItems.length==0)
+      {
+        Navigator.pop(context);
+        return false;
+      }else{
+        setState(() {
+          FlagFilter=false;
+        });
+      }
+
+    }
+
+    return false;
+
+
+  }
+
   TextEditingController txtsearch=TextEditingController();
   Future ShowModall_() async
   {
@@ -448,221 +567,235 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: BaseColor,
-        title:Column(
-          children: [
-            Text('گزارش روز مسیر ویزیتور',
-              style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
-          ],
+    return WillPopScope(
+      onWillPop:_onWillPop2,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: BaseColor,
+          title:Column(
+            children: [
+              Text('گزارش روز مسیر ویزیتور',
+                style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
+            ],
+          ),
+          leading: InkWell
+            (
+              onTap: (){
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.arrow_back,color: Colors.white,)),
         ),
-        leading: InkWell
-          (
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back,color: Colors.white,)),
-      ),
-      body: FlagFilter==true?
-       Column(
-         children: [
-           SingleChildScrollView(
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.end,
-               children: [
-                 Padding(
-                   padding: const EdgeInsets.all(8.0),
-                   child: Row(
-                     children: [
-                       Expanded(child: Align(
-                           alignment: Alignment.centerRight,
-                           child:
-                           FlagCheckOneDay ==false?
-                           Padding(
-                             padding: const EdgeInsets.only(right: 8.0),
-                             child: TextApp('تا تاریخ', 10, Colors.grey, true),
-                           ):Container())),
-                           Expanded(child:Align(
-                           alignment: Alignment.centerRight,
-                           child: Padding(
-                             padding: const EdgeInsets.only(right: 8.0),
-                             child: TextApp(FlagCheckOneDay?'روز خاص':'از تاریخ', 10, Colors.grey, true),
-                           ))),
-                     ],
+        body: FlagFilter==true?
+         Column(
+           children: [
+             SingleChildScrollView(
+               child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.end,
+                 children: [
+                   Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: Row(
+                       children: [
+                         Expanded(child: Align(
+                             alignment: Alignment.centerRight,
+                             child:
+                             Padding(
+                               padding: const EdgeInsets.only(right: 8.0),
+                               child: TextApp('تا تاریخ', 10, Colors.grey, true),
+                             ))),
+                             Expanded(child:Align(
+                             alignment: Alignment.centerRight,
+                             child: Padding(
+                               padding: const EdgeInsets.only(right: 8.0),
+                               child: TextApp('از تاریخ', 10, Colors.grey, true),
+                             ))),
+                       ],
+                     ),
                    ),
-                 ),
-                 Row(
-                   children: [
-                     Expanded(child: FlagCheckOneDay ==false? Padding(
-                         padding: const EdgeInsets.all(8),
-                         child: InkWell(
-                             onTap:  _showDatePicker_From,
-                             // child:    CardMain(Data_To, BaseColor),
-                             child:    Container(
-                               decoration: BoxDecoration(
-                                 border: Border.all(color: BaseColor,width: 1),
-                                 borderRadius: BorderRadius.circular(8),
-                               ),
-                               child: Row(
-                                 children: [
-                                   Padding(
-                                     padding: const EdgeInsets.only(left: 8.0),
-                                     child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
-                                   ),
-                                   Expanded(
-                                     child: Padding(
-                                       padding: const EdgeInsets.all(8.0),
-                                       child: TextApp(Data_From,12,Colors.black54,false),
+                   Row(
+                     children: [
+                       Expanded(child:  Padding(
+                           padding: const EdgeInsets.all(8),
+                           child: InkWell(
+                               onTap:  _showDatePicker_From,
+                               // child:    CardMain(Data_To, BaseColor),
+                               child:    Container(
+                                 decoration: BoxDecoration(
+                                   border: Border.all(color: BaseColor,width: 1),
+                                   borderRadius: BorderRadius.circular(8),
+                                 ),
+                                 child: Row(
+                                   children: [
+                                     Padding(
+                                       padding: const EdgeInsets.only(left: 8.0),
+                                       child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
                                      ),
-                                   ),
-                                 ],
-                               ),
-                             )
-                         ),
-                       ):Container()),
-                     Expanded(
-                       child: Padding(
-                         padding: const EdgeInsets.all(8),
-                         child: InkWell(
-                             onTap:  _showDatePicker_To,
-                             // child:    CardMain(Data_To, BaseColor),
-                             child:    Container(
-                               decoration: BoxDecoration(
-                                 border: Border.all(color: BaseColor,width: 1),
-                                 borderRadius: BorderRadius.circular(8),
-                               ),
-                               child: Row(
-                                 children: [
-                                   Padding(
-                                     padding: const EdgeInsets.only(left: 8.0),
-                                     child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
-                                   ),
-                                   Expanded(
-                                     child: Padding(
-                                       padding: const EdgeInsets.all(8.0),
-                                       child: TextApp(Data_To,12,Colors.black54,false),
+                                     Expanded(
+                                       child: Padding(
+                                         padding: const EdgeInsets.all(8.0),
+                                         child: TextApp(Data_From,12,Colors.black54,false),
+                                       ),
                                      ),
-                                   ),
-                                 ],
-                               ),
-                             )
+                                   ],
+                                 ),
+                               )
+                           ),
+                         )),
+                       Expanded(
+                         child: Padding(
+                           padding: const EdgeInsets.all(8),
+                           child: InkWell(
+                               onTap:  _showDatePicker_To,
+                               // child:    CardMain(Data_To, BaseColor),
+                               child:    Container(
+                                 decoration: BoxDecoration(
+                                   border: Border.all(color: BaseColor,width: 1),
+                                   borderRadius: BorderRadius.circular(8),
+                                 ),
+                                 child: Row(
+                                   children: [
+                                     Padding(
+                                       padding: const EdgeInsets.only(left: 8.0),
+                                       child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
+                                     ),
+                                     Expanded(
+                                       child: Padding(
+                                         padding: const EdgeInsets.all(8.0),
+                                         child: TextApp(Data_To,12,Colors.black54,false),
+                                       ),
+                                     ),
+                                   ],
+                                 ),
+                               )
+                           ),
                          ),
                        ),
-                     ),
-                   ],
-                 ),
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.end,
-                   crossAxisAlignment: CrossAxisAlignment.center,
-                   children: [
-                     TextApp('انتخاب روز خاص',12,Colors.grey,true),
-                     Checkbox(
-                       value:
-                       FlagCheckOneDay,
-                       activeColor: BaseColor ,
-                       focusColor:BaseColor ,
-                       onChanged: (bool? value) {
-                         setState(() {
-                           FlagCheckOneDay=!FlagCheckOneDay;
-                         });
+                     ],
+                   ),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.end,
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     children: [
+                       TextApp('براساس روز مسیر',12,Colors.grey,true),
+                       Checkbox(
+                         value:
+                         FlagCheckOneDay,
+                         activeColor: BaseColor ,
+                         focusColor:BaseColor ,
+                         onChanged: (bool? value) {
+                           setState(() {
+                             FlagCheckOneDay=!FlagCheckOneDay;
+                           });
 
 
 
-                       },
-                     ),
-                   ],
-                 ),
-                 MainItemFilterVistor(IsAllVisitors,
-                     main.where((element) => element.IsCheck==true).toList()
+                         },
+                       ),
+                     ],
+                   ),
+                   MainItemFilterVistor(IsAllVisitors,
+                       main.where((element) => element.IsCheck==true).toList()
 
-                     // .sort((a, b) => a.someProperty.compareTo(b.someProperty))
-                     ,(){
-                       // if(main.length==0)
-                       // {
-                       //   Run('2');
-                       // }else{
-                       //   ShowModall_("2");
-                       // }
+                       // .sort((a, b) => a.someProperty.compareTo(b.someProperty))
+                       ,(){
+                         if(main.length==0)
+                         {
+                           RunVisitors();
+                         }else{
+                           ShowModall_();
+                         }
 
-                       ShowModall_();
-                     },() {
-
-
-
+                         // ShowModall_();
+                       },() {
 
 
 
 
-                       setState(() {});
-                     }),
-               ],
+
+
+
+                         setState(() {});
+                       }),
+                 ],
+               ),
              ),
-           ),
-           Expanded(
-               child:
-               Row(
-             crossAxisAlignment: CrossAxisAlignment.end,
-             children: [
-               Expanded(child: Container(
-                 margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-                 width: double.maxFinite,
-                 child: ElevatedButton(onPressed: (){
-                   if(main.length==0)
-                   {
-                     Navigator.pop(context);
-                   }else{
-                     setState(() {
-                       FlagFilter=!FlagFilter;
-                     });
-                   }
-                 },
-                     style: ElevatedButton.styleFrom(
-                         primary: Colors.red),
-                     child:
-                     Text('بستن',style: TextStyle(
-                         color: Colors.white
-                     ),)),
-               )),
-               Expanded(child: Container(
-                 margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-                 width: double.maxFinite,
-                 child: ElevatedButton(
-                     onPressed: (){
+             Expanded(
+                 child:
+                 Row(
+               crossAxisAlignment: CrossAxisAlignment.end,
+               children: [
+                 Expanded(child: Container(
+                   margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                   width: double.maxFinite,
+                   child: ElevatedButton(onPressed: (){
+                     if(main.length==0)
+                     {
+                       Navigator.pop(context);
+                     }else{
                        setState(() {
-                         FlagFilter=false;
+                         FlagFilter=!FlagFilter;
                        });
-                       // PageCounter=1;
-                       // PageCounterMain=2;
-                       // Customers.clear();
-                       // PageCounterCheck=false;
+                     }
+                   },
+                       style: ElevatedButton.styleFrom(
+                           primary: Colors.red),
+                       child:
+                       Text('بستن',style: TextStyle(
+                           color: Colors.white
+                       ),)),
+                 )),
+                 Expanded(child: Container(
+                   margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                   width: double.maxFinite,
+                   child: ElevatedButton(
+                       onPressed: (){
 
-                       // GetCustomers('',false);
-                     },
-                     style: ElevatedButton.styleFrom(primary: BaseColor),
-                     child:
-                     Text('نمایش',style: TextStyle(
-                         color: Colors.white
-                     ),)),
-               )),
-             ],)
-           )
-         ],
-       ):
-       Container(
-      width: double.infinity,
-      margin: EdgeInsets.all(4),
-      child: ItemReportPath(),
-    ),
-      floatingActionButton: FlagFilter==false?
-      InkWell(
-        onTap: (){
-          setState(() {
-            FlagFilter=!FlagFilter;
-          });
-        },
-        child:   Padding(
+
+
+                         GetData();
+                         // PageCounter=1;
+                         // PageCounterMain=2;
+                         // Customers.clear();
+                         // PageCounterCheck=false;
+
+                         // GetCustomers('',false);
+                       },
+                       style: ElevatedButton.styleFrom(primary: BaseColor),
+                       child:
+                       Text('نمایش',style: TextStyle(
+                           color: Colors.white
+                       ),)),
+                 )),
+               ],)
+             )
+           ],
+         ):
+        RefreshIndicator(
+          onRefresh: _refresh,
+           child: Container(
+        width: double.infinity,
+
+        child: Padding(
+          padding: EdgeInsets.only(right: 4,bottom: 90,left: 4,top: 4),
+          child: ListView.builder(
+                itemCount: mainItems.length,
+                itemBuilder: (ctx,item){
+                  return  InkWell(
+                      onTap: (){
+                        Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context)
+                                => ReportSumPathVisitor(mainItems[item].visRdf.toString(),Az_Data,Ta_Data)));
+                      },
+                      child: ItemReportPath(mainItems[item]));
+                }
+                ),
+        ),
+      ),
+         ),
+        floatingActionButton: FlagFilter==false?
+        Padding(
           padding: const EdgeInsets.only(top: 0.0),
           child: FloatingActionButton(
             backgroundColor: BaseColor,
@@ -683,8 +816,8 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
               ),
             ),
           ),
-        ),
-      ):Container(),
+        ):Container(),
+      ),
     );
   }
 }

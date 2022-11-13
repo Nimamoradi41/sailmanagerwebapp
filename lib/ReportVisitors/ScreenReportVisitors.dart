@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../ApiService.dart';
 import '../Constants.dart';
 import '../Models/ModelVisitorsAll.dart';
-import '../Models/Visitors.dart';
+
+
+
+
+
+
+import '../Models/ModelVisitorsReport.dart';
 import '../TextApp.dart';
 import '../VisitorComponent/MainItemFilterVisitor.dart';
 import '../VisitorComponent/ScreenDetailVisitor.dart';
 import 'ItemColumn.dart';
 import 'ItemListview.dart';
+import 'ScreenChartCircle.dart';
+import 'ScreenChartLine.dart';
+import 'ScreenChartLineToLine.dart';
 enum TypeSelect { all,certain,uncertain }
 enum TypeSelectItem { True,False }
 class ScreenReportVisitors extends StatefulWidget {
@@ -117,25 +129,142 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
 
 
 
+  Future RunVisitors()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var base =prefs.getString('Baseurl');
+    var UserName =prefs.getString('UserName');
+    var Password =prefs.getString('Password');
+    var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+    var Data=await ApiService.GetVisitorsAll(pr, base!, UserName!, Password!);
+    pr.hide();
+    if(Data!=null)
+    {
+      if(Data.code==200)
+      {
+        if(Data.res!=null)
+        {
+          main=Data.res;
+          setState(() {
+
+          });
+          ShowModall_();
+        }else{
+          ApiService.ShowSnackbar(Data.msg.toString());
+        }
+
+      }else{
+        ApiService.ShowSnackbar(Data.msg.toString());
+      }
+
+    }else{
+      ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+    }
+  }
 
 
-  List<Re_VisitorsAll>  main=[];
+  late ModelVisitorsReport datasum;
+  bool Flag3=false;
+  Future GetData()async{
+    List<int> visid=[];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var base =prefs.getString('Baseurl');
+    var UserName =prefs.getString('UserName');
+    var Password =prefs.getString('Password');
+
+    if(IsAllVisitors)
+      {
+        main.forEach((element) {
+          visid.add(element.visRdf);
+        });
+      }else if(main.length>0)
+        {
+          main.forEach((element) {
+             if(element.IsCheck)
+               {
+                 visid.add(element.visRdf);
+               }
+          });
+        }
+
+
+
+
+
+
+    setState(() {
+      FlagFilter=true;
+    });
+
+    var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+
+    print(TypeSel.name.toString());
+    print(TypeSelItem.name.toString());
+
+    var Data=await ApiService.GetVisitorsReport(pr, base!, UserName!, Password!,Ta_Data,Az_Data,visid,
+        TypeSel.name=='all'?0:
+    TypeSel.name=='certain'?1:2,TypeSelItem.name==TypeSelectItem.True?false:true);
+    pr.hide();
+    if(Data!=null)
+    {
+      if(Data.code==200)
+      {
+        if(Data.res!=null)
+        {
+         setState(() {
+           Flag3=true;
+           datasum=Data;
+           mainItems=Data.res.totalVisitorSale;
+         });
+        }else{
+          ApiService.ShowSnackbar(Data.msg.toString());
+        }
+      }else{
+        Flag3=false;
+        ApiService.ShowSnackbar(Data.msg);
+      }
+
+    }else{
+      Flag3=false;
+      ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+    }
+  }
+
+  List<Re_VisitorsAll> main=[];
+  List<TotalVisitorSale>  mainItems=[];
   TextEditingController txtsearch=TextEditingController();
+
 
   @override
   void initState() {
     super.initState();
-
-
-
-
+    // var sd=Visitors();
+    // sd.Name="Nima";
+    // var sd2=Visitors();
+    // sd2.Name="Faraz";
+    //
+    // var sd3=Visitors();
+    // sd3.Name="Ali";
+    //
+    //
+    // var sd4=Visitors();
+    // sd4.Name="Ahmad";
+    //
+    //
+    // main.add(sd);
+    // main.add(sd2);
+    // main.add(sd3);
+    // main.add(sd4);
     GetDataNow();
   }
 
 
 
+
+
+
   TypeSelect TypeSel = TypeSelect.all;
   TypeSelectItem TypeSelItem = TypeSelectItem.True;
+
 
   Future ShowModall_() async
   {
@@ -372,9 +501,8 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                                  main[item].IsCheck,
                                                   activeColor: BaseColor ,
                                                   focusColor:BaseColor ,
-                                                  onChanged: (bool? value) {
-
-
+                                                  onChanged: (bool? value)
+                                                  {
                                                       if(IsAllVisitors==false)
                                                       {
                                                         state(() {
@@ -382,10 +510,6 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                                                         });
                                                       }
                                                       // Navigator.pop(context);
-
-
-
-
                                                   },
                                                 ),
                                               ],
@@ -459,504 +583,611 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
     //   }
 
 
-    print(b.toString());
+
   }
 
 
+
+
+
   bool IsAllVisitors=false;
+
+
+  Future<Null> _refresh() {
+    mainItems.clear();
+    return GetData().then((_user) {
+    });
+  }
+  Future<bool> _onWillPop2() async {
+
+    if(FlagFilter==false)
+    {
+      Navigator.pop(context);
+      return false;
+    }else{
+      if(mainItems.length==0)
+      {
+        Navigator.pop(context);
+        return false;
+      }else{
+        setState(() {
+          FlagFilter=false;
+        });
+      }
+
+    }
+
+    return false;
+
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorBack,
-      appBar: AppBar(
-        centerTitle: true,
-        actions: [
-          main.length>0?
-          InkWell(
-            onTap: (){
-
-
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-                  ScreenDetailVisitor()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.info_outline,color: Colors.white,),
-            ),
-          ):Container()
-        ],
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('لیست پیش فاکتور های تایید نشده',style: TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.bold
-          ),),
-        ),
-        backgroundColor: BaseColor,
-        leading: GestureDetector(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back,color: Colors.white,)),
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child:FlagFilter==true?
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 80),
-                child: ListView.builder(
-                  itemCount: 10,
-                  shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (ctx,item){
-                    return ItemListview();
-                  }
-                  ),
+    return WillPopScope(
+      onWillPop:_onWillPop2,
+      child: Scaffold(
+        backgroundColor: ColorBack,
+        appBar: AppBar(
+          centerTitle: true,
+          actions: [
+            mainItems.length>0&&Flag3==true?
+            InkWell(
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                    ScreenDetailVisitor(datasum)));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.info_outline,color: Colors.white,),
               ),
-
-            ],
+            ):Container()
+          ],
+          title: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('سرجمع فروش ویزیتور ها',style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.bold
+            ),),
           ),
-        ):
-        Container(
-          child: Container(
-            width: double.infinity,
-            child: InkWell
-              (
+          backgroundColor: BaseColor,
+
+          leading: GestureDetector(
+              onTap: (){
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.arrow_back,color: Colors.white,)),
+        ),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child:FlagFilter==true?
+          RefreshIndicator(
+            onRefresh: _refresh,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 150),
+                    child: ListView.builder(
+                      itemCount: mainItems.length,
+                       shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (ctx,item){
+                        return ItemListview(mainItems[item]);
+                      }
+                      ),
+                  ),
+
+                ],
+              ),
+            ),
+          ):
+          Container(
+            child: Container(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  children: [
+                    SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: TextApp('تا تاریخ', 10, Colors.grey, true),
+                                  ))),
+                              Expanded(child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: TextApp('از تاریخ', 10, Colors.grey, true),
+                                  ))),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: InkWell(
+                                      onTap:  _showDatePicker_To,
+                                      // child:    CardMain(Data_To, BaseColor),
+                                      child:    Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: BaseColor,width: 1),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 8.0),
+                                              child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: TextApp(Data_To,12,Colors.black54,false),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ),
+                                  ),
+                                ),
+
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: InkWell(
+                                      onTap:  _showDatePicker_From,
+                                      // child:    CardMain(Data_To, BaseColor),
+                                      child:    Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: BaseColor,width: 1),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 8.0),
+                                              child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: TextApp(Data_From,12,Colors.black54,false),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TextApp('وضعیت', 12, Colors.grey,  true),
+                          ),
+                          Row(
+                            children: [
+                              Expanded(child:  InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    TypeSel = TypeSelect.uncertain;
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                        onTap: (){
+                                          setState(() {
+
+                                          });
+                                        },
+                                        child: Text('غیر قطعی',style: TextStyle(color:
+                                        Colors.black54
+                                            ,fontSize: 12),)),
+                                    Theme(
+                                        data: Theme.of(context).copyWith(
+                                          unselectedWidgetColor: BaseColor,
+                                        ),
+                                        child:
+
+                                        Radio<TypeSelect>(
+                                          value: TypeSelect.uncertain,
+                                          groupValue: TypeSel,
+                                          activeColor: BaseColor,
+                                          onChanged: (TypeSelect? value) {
+                                            setState(() {
+                                              TypeSel = value!;
+
+                                            });
+                                          },
+                                        )
+
+                                    ),
+                                  ],
+                                ),
+                              )),
+                              Expanded(child:  InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    TypeSel = TypeSelect.certain;
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                        onTap: (){
+                                          setState(() {
+
+                                          });
+                                        },
+                                        child: Text('قطعی',style: TextStyle(color:
+                                        Colors.black54
+                                            ,fontSize: 12),)),
+                                    Theme(
+                                        data: Theme.of(context).copyWith(
+                                          unselectedWidgetColor: BaseColor,
+                                        ),
+                                        child:
+
+                                        Radio<TypeSelect>(
+                                          value: TypeSelect.certain,
+                                          groupValue: TypeSel,
+                                          activeColor: BaseColor,
+                                          onChanged: (TypeSelect? value) {
+                                            setState(() {
+                                              TypeSel = value!;
+                                            });
+                                          },
+                                        )
+
+                                    ),
+                                  ],
+                                ),
+                              )),
+                              Expanded(child:  InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    TypeSel = TypeSelect.all;
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                        onTap: (){
+                                          setState(() {
+
+                                          });
+                                        },
+                                        child: Text('همه',style: TextStyle(color:
+                                        Colors.black54
+                                            ,fontSize: 12),)),
+                                    Theme(
+                                        data: Theme.of(context).copyWith(
+                                          unselectedWidgetColor: BaseColor,
+                                        ),
+                                        child: Radio<TypeSelect>(
+                                          value: TypeSelect.all,
+                                          groupValue: TypeSel,
+                                          activeColor: BaseColor,
+                                          onChanged: (TypeSelect? value) {
+                                            setState(() {
+                                              TypeSel = value!;
+                                            });
+                                          },
+                                        )
+                                      // Radio(
+                                      //   value: 'جدید ترین',
+                                      //   groupValue: TypeSel,
+                                      //   onChanged: (TypeSelect? value) {
+                                      //     setState(() {
+                                      //       TypeSel=value;
+                                      //       NewItem=false;
+                                      //       OldItem=false;
+                                      //       DateItem=!DateItem;
+                                      //     });
+                                      //   },
+                                      // ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TextApp('ویزیتور', 12, Colors.grey,  true),
+                          ),
+                          MainItemFilterVistor(IsAllVisitors,
+                              main.where((element) => element.IsCheck==true).toList()
+                              // .sort((a, b) => a.someProperty.compareTo(b.someProperty))
+                              ,(){
+                            if(main.length==0)
+                            {
+                              RunVisitors();
+                            }else{
+                              ShowModall_();
+                            }
+
+
+                          },() {
+
+
+
+
+
+
+
+                            setState(() {
+
+                            });
+
+
+
+
+                          }),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TextApp('حالت ویزیتور', 12, Colors.grey,  true),
+                          ),
+                          Column(
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    TypeSelItem = TypeSelectItem.True;
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                        onTap: (){
+                                          setState(() {
+
+                                          });
+                                        },
+                                        child: Text('فروش و برگشتی براساس تاریخ فاکتور',style: TextStyle(color:
+                                        Colors.black54
+                                            ,fontSize: 12),)),
+                                    Theme(
+                                        data: Theme.of(context).copyWith(
+                                          unselectedWidgetColor: BaseColor,
+                                        ),
+                                        child:
+
+                                        Radio<TypeSelectItem>(
+                                          value: TypeSelectItem.True,
+                                          groupValue: TypeSelItem,
+                                          activeColor: BaseColor,
+                                          onChanged: (TypeSelectItem? value) {
+                                            setState(() {
+                                              TypeSelItem = value!;
+
+                                            });
+                                          },
+                                        )
+
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    TypeSelItem = TypeSelectItem.False;
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                        onTap: (){
+                                          setState(() {
+                                          });
+                                        },
+                                        child: Text('فروش برگشتی براساس تاریخ برگشتی + برگشت مشتری',style: TextStyle(color:
+                                        Colors.black54
+                                            ,fontSize: 12),)),
+                                    Theme(
+                                        data: Theme.of(context).copyWith(
+                                          unselectedWidgetColor: BaseColor,
+                                        ),
+                                        child:
+
+                                        Radio<TypeSelectItem>(
+                                          value: TypeSelectItem.False,
+                                          groupValue: TypeSelItem,
+                                          activeColor: BaseColor,
+                                          onChanged: (TypeSelectItem? value) {
+                                            setState(() {
+                                              TypeSelItem = value!;
+                                            });
+                                          },
+                                        )
+
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(child:Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                      Expanded(child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                        width: double.maxFinite,
+                        child: ElevatedButton(onPressed: (){
+                          if(main.length==0)
+                          {
+                            Navigator.pop(context);
+                          }else{
+                            setState(() {
+                              FlagFilter=!FlagFilter;
+                            });
+                          }
+                        },
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.red),
+                            child:
+                            Text('بستن',style: TextStyle(
+                                color: Colors.white
+                            ),)),
+                      )),
+                      Expanded(child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                        width: double.maxFinite,
+                        child: ElevatedButton(
+                            onPressed: (){
+
+                              // PageCounter=1;
+                              // PageCounterMain=2;
+                              // Customers.clear();
+                              // PageCounterCheck=false;
+                              GetData();
+                              // GetCustomers('',false);
+                            },
+                            style: ElevatedButton.styleFrom(primary: BaseColor),
+                            child:
+                            Text('نمایش',style: TextStyle(
+                                color: Colors.white
+                            ),)),
+                      )),
+                    ],))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        floatingActionButton: FlagFilter==true?
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: InkWell(
                 onTap: (){
                   setState(() {
                     FlagFilter=!FlagFilter;
                   });
                 },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Column(
-                    children: [
-                      SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
-                                      child: TextApp('تا تاریخ', 10, Colors.grey, true),
-                                    ))),
-                                Expanded(child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
-                                      child: TextApp('از تاریخ', 10, Colors.grey, true),
-                                    ))),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: InkWell(
-                                        onTap:  _showDatePicker_To,
-                                        // child:    CardMain(Data_To, BaseColor),
-                                        child:    Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: BaseColor,width: 1),
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 8.0),
-                                                child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: TextApp(Data_From,12,Colors.black54,false),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ),
-                                    ),
-                                  ),
-
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: InkWell(
-                                        onTap:  _showDatePicker_To,
-                                        // child:    CardMain(Data_To, BaseColor),
-                                        child:    Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: BaseColor,width: 1),
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 8.0),
-                                                child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: TextApp(Data_To,12,Colors.black54,false),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: TextApp('وضعیت', 12, Colors.grey,  true),
-                            ),
-                            Row(
-                              children: [
-                                Expanded(child:  InkWell(
-                                  onTap: (){
-                                    setState(() {
-                                      TypeSel = TypeSelect.uncertain;
-                                    });
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                          onTap: (){
-                                            setState(() {
-
-                                            });
-                                          },
-                                          child: Text('غیر قطعی',style: TextStyle(color:
-                                          Colors.black54
-                                              ,fontSize: 12),)),
-                                      Theme(
-                                          data: Theme.of(context).copyWith(
-                                            unselectedWidgetColor: BaseColor,
-                                          ),
-                                          child:
-
-                                          Radio<TypeSelect>(
-                                            value: TypeSelect.uncertain,
-                                            groupValue: TypeSel,
-                                            activeColor: BaseColor,
-                                            onChanged: (TypeSelect? value) {
-                                              setState(() {
-                                                TypeSel = value!;
-
-                                              });
-                                            },
-                                          )
-
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                                Expanded(child:  InkWell(
-                                  onTap: (){
-                                    setState(() {
-                                      TypeSel = TypeSelect.certain;
-                                    });
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                          onTap: (){
-                                            setState(() {
-
-                                            });
-                                          },
-                                          child: Text('قطعی',style: TextStyle(color:
-                                          Colors.black54
-                                              ,fontSize: 12),)),
-                                      Theme(
-                                          data: Theme.of(context).copyWith(
-                                            unselectedWidgetColor: BaseColor,
-                                          ),
-                                          child:
-
-                                          Radio<TypeSelect>(
-                                            value: TypeSelect.certain,
-                                            groupValue: TypeSel,
-                                            activeColor: BaseColor,
-                                            onChanged: (TypeSelect? value) {
-                                              setState(() {
-                                                TypeSel = value!;
-                                              });
-                                            },
-                                          )
-
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                                Expanded(child:  InkWell(
-                                  onTap: (){
-                                    setState(() {
-                                      TypeSel = TypeSelect.all;
-                                    });
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                          onTap: (){
-                                            setState(() {
-
-                                            });
-                                          },
-                                          child: Text('همه',style: TextStyle(color:
-                                          Colors.black54
-                                              ,fontSize: 12),)),
-                                      Theme(
-                                          data: Theme.of(context).copyWith(
-                                            unselectedWidgetColor: BaseColor,
-                                          ),
-                                          child: Radio<TypeSelect>(
-                                            value: TypeSelect.all,
-                                            groupValue: TypeSel,
-                                            activeColor: BaseColor,
-                                            onChanged: (TypeSelect? value) {
-                                              setState(() {
-                                                TypeSel = value!;
-                                              });
-                                            },
-                                          )
-                                        // Radio(
-                                        //   value: 'جدید ترین',
-                                        //   groupValue: TypeSel,
-                                        //   onChanged: (TypeSelect? value) {
-                                        //     setState(() {
-                                        //       TypeSel=value;
-                                        //       NewItem=false;
-                                        //       OldItem=false;
-                                        //       DateItem=!DateItem;
-                                        //     });
-                                        //   },
-                                        // ),
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: TextApp('ویزیتور', 12, Colors.grey,  true),
-                            ),
-                            MainItemFilterVistor(IsAllVisitors,
-                                main.where((element) => element.IsCheck==true).toList()
-                                // .sort((a, b) => a.someProperty.compareTo(b.someProperty))
-                                ,(){
-                              // if(main.length==0)
-                              // {
-                              //   Run('2');
-                              // }else{
-                              //   ShowModall_("2");
-                              // }
-
-                              ShowModall_();
-                            },() {
-
-
-
-
-
-
-
-                              setState(() {
-
-                              });
-
-
-
-
-                            }),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: TextApp('حالت ویزیتور', 12, Colors.grey,  true),
-                            ),
-                            Column(
-                              children: [
-                                InkWell(
-                                  onTap: (){
-                                    setState(() {
-                                      TypeSelItem = TypeSelectItem.True;
-                                    });
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                          onTap: (){
-                                            setState(() {
-
-                                            });
-                                          },
-                                          child: Text('فروش و برگشتی براساس تاریخ فاکتور',style: TextStyle(color:
-                                          Colors.black54
-                                              ,fontSize: 12),)),
-                                      Theme(
-                                          data: Theme.of(context).copyWith(
-                                            unselectedWidgetColor: BaseColor,
-                                          ),
-                                          child:
-
-                                          Radio<TypeSelectItem>(
-                                            value: TypeSelectItem.True,
-                                            groupValue: TypeSelItem,
-                                            activeColor: BaseColor,
-                                            onChanged: (TypeSelectItem? value) {
-                                              setState(() {
-                                                TypeSelItem = value!;
-
-                                              });
-                                            },
-                                          )
-
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: (){
-                                    setState(() {
-                                      TypeSelItem = TypeSelectItem.False;
-                                    });
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                          onTap: (){
-                                            setState(() {
-                                            });
-                                          },
-                                          child: Text('فروش برگشتی براساس تاریخ برگشتی + برگشت مشتری',style: TextStyle(color:
-                                          Colors.black54
-                                              ,fontSize: 12),)),
-                                      Theme(
-                                          data: Theme.of(context).copyWith(
-                                            unselectedWidgetColor: BaseColor,
-                                          ),
-                                          child:
-
-                                          Radio<TypeSelectItem>(
-                                            value: TypeSelectItem.False,
-                                            groupValue: TypeSelItem,
-                                            activeColor: BaseColor,
-                                            onChanged: (TypeSelectItem? value) {
-                                              setState(() {
-                                                TypeSelItem = value!;
-                                              });
-                                            },
-                                          )
-
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                              ],
-                            ),
-                          ],
-                        ),
+                child:   Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: FloatingActionButton(
+                    backgroundColor: BaseColor,
+                    onPressed: (){
+                      setState(() {
+                        FlagFilter=!FlagFilter;
+                      });
+                    },
+                    child: InkWell(
+                      onTap: (){
+                        setState(() {
+                          FlagFilter=!FlagFilter;
+                        });
+                      },
+                      child: Icon(
+                        Icons.filter_alt_sharp,
+                        color: Colors.white,
                       ),
-                      Expanded(child:Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                        Expanded(child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-                          width: double.maxFinite,
-                          child: ElevatedButton(onPressed: (){
-                            if(main.length==0)
-                            {
-                              Navigator.pop(context);
-                            }else{
-                              setState(() {
-                                FlagFilter=!FlagFilter;
-                              });
-                            }
-                          },
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.red),
-                              child:
-                              Text('بستن',style: TextStyle(
-                                  color: Colors.white
-                              ),)),
-                        )),
-                        Expanded(child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-                          width: double.maxFinite,
-                          child: ElevatedButton(
-                              onPressed: (){
-                                setState(() {
-                                  FlagFilter=false;
-                                });
-                                // PageCounter=1;
-                                // PageCounterMain=2;
-                                // Customers.clear();
-                                // PageCounterCheck=false;
-
-                                // GetCustomers('',false);
-                              },
-                              style: ElevatedButton.styleFrom(primary: BaseColor),
-                              child:
-                              Text('نمایش',style: TextStyle(
-                                  color: Colors.white
-                              ),)),
-                        )),
-                      ],))
-                    ],
+                    ),
                   ),
-                )),
-          ),
-        ),
-      ),
-      floatingActionButton: FlagFilter==true?
-      InkWell(
-        onTap: (){
-          setState(() {
-            FlagFilter=!FlagFilter;
-          });
-        },
-        child:   Padding(
-          padding: const EdgeInsets.only(top: 0.0),
-          child: FloatingActionButton(
-            backgroundColor: BaseColor,
-            onPressed: (){
-              setState(() {
-                FlagFilter=!FlagFilter;
-              });
-            },
-            child: InkWell(
-              onTap: (){
-                setState(() {
-                  FlagFilter=!FlagFilter;
-                });
-              },
-              child: Icon(
-                Icons.filter_alt_sharp,
-                color: Colors.white,
+                ),
               ),
             ),
-          ),
-        ),
-      ):Container(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+
+                mainItems.length>0&&Flag3==true?
+                InkWell(
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                        ScreenChartLine(mainItems)));
+                  },
+                  child:   Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: FloatingActionButton(
+                      backgroundColor: BaseColor,
+                      onPressed: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                            ScreenChartLine(mainItems)));
+                      },
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                              ScreenChartLine(mainItems)));
+                        },
+                        child: Icon(
+                          Icons.bar_chart,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ):Container(),
+                mainItems.length>0&&Flag3==true?
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: InkWell(
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                          ScreenChartCircle(mainItems)));
+                    },
+                    child:   Padding(
+                      padding: const EdgeInsets.only(top: 0.0),
+                      child: FloatingActionButton(
+                        backgroundColor: BaseColor,
+                        onPressed: (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                              ScreenChartCircle(mainItems)));
+                        },
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                                ScreenChartCircle(mainItems)));
+                          },
+                          child: Icon(
+                            Icons.pie_chart,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ):Container(),
+              ],
+            )
+
+          ],
+        ):Container(),
+      ),
     );
   }
 }

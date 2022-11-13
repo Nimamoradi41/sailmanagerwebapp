@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 
+final Color Color_Mosbat=const Color(0xff2ccb10);
+final Color Color_Manfi=const   Color(0xffc60000);
+
     final Color BaseColor=const Color(0xff3D4785);
     final Color ColorLine=const Color(0xffEFEFEF);
     final Color ColorBack=const Color(0xffF1F7FE);
@@ -11,6 +14,12 @@ import 'package:intl/intl.dart';
     final double SizeSecond=  13;
     final double SizeResponsive=  9;
     double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
+
+
+String SplitPrice2(dynamic price){
+    var f = NumberFormat("##.##", "en_US");
+    return   f.format(price).toString();
+}
 
 String SplitPrice(dynamic price){
     var f = NumberFormat("###,###,###,###", "en_US");

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../Constants.dart';
+import '../Models/ModelVisitorsReport.dart';
 import '../ReportVisitors/ItemListviewSum.dart';
 
 
@@ -10,7 +11,10 @@ class ScreenDetailVisitor extends StatelessWidget {
   // List<Detail> detail;
 
 
-  ScreenDetailVisitor();
+  ModelVisitorsReport  dataa;
+
+
+  ScreenDetailVisitor(this.dataa);
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +41,13 @@ class ScreenDetailVisitor extends StatelessWidget {
           children: [
             Container(
                 margin: EdgeInsets.only(bottom: 20),
-                child: ItemListviewSum('ناخالص')),
+                child: ItemListviewSum('ناخالص',1,dataa)),
             Container(
-                margin: EdgeInsets.only(bottom: 20),
-                child: ItemListviewSum('برگشتی')),
+                margin: EdgeInsets.only(bottom: 10),
+                child: ItemListviewSum('برگشتی',2,dataa)),
             Container(
-                margin: EdgeInsets.only(bottom: 20),
-                child: ItemListviewSum('خالص')),
+                margin: EdgeInsets.only(bottom: 10),
+                child: ItemListviewSum('خالص',3,dataa)),
           ],
         ),
       ),
