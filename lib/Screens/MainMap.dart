@@ -574,8 +574,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                   setState(() {
                     FlagCheckPishFactor=false;
                   });
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => PishFactorNotAccept()));
+                  Navigator.of(context).push(MaterialPageRoute(builder:(context)=>PishFactorNotAccept()));
                 },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -584,8 +583,8 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                     Expanded(child: Container(
                       child:  Text('لیست پیش فاکتور های تایید نشده',
                         textAlign: TextAlign.end,
-                        style: TextStyle(color:
-                        BaseColor,
+                        style:TextStyle(
+                            color:BaseColor,
                             fontSize: 16,
                             fontWeight: FontWeight.w100),),
                     )),
@@ -598,7 +597,6 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                         child: SvgPicture.asset('images/admin2.svg',width: 20,height: 20,color: Color(0xff1F3C84),),
                       ),
                     ),
-
                   ],
                 ),
               ),
