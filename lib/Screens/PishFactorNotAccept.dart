@@ -145,302 +145,307 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: ColorBack,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('لیست پیش فاکتور های تایید نشده',style: TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.bold
-          ),),
-        ),
-        backgroundColor: BaseColor,
-        leading: GestureDetector(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back,color: Colors.white,)),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            height: double.infinity,
-            width: double.infinity,
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: BaseColor)
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                        Text(creationDateEnd,
-                          style: TextStyle(
-                              fontSize: SizeSecond,
-                              fontWeight: FontWeight.bold,
-                              color: BaseColor
-                          ),),
-                        Text(': تا تاریخ',
-                          style: TextStyle(
-                              fontSize: SizeSecond,
-                              color: BaseColor
-
-                          ),),
-                      ],)),
-                      Container(
-                        width: 2,
-                        color: ColorLine,
-                          height:Sizewid>=470?
-                          50:Sizewid*1/10
-                      ),
-                      Expanded(child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(creationDateStart,
-                            style: TextStyle(
-                                fontSize: SizeSecond,
-                                color: BaseColor,
-                                fontWeight: FontWeight.bold
-                            ),),
-                          Text(': از تاریخ',
-                            style: TextStyle(
-                                fontSize: SizeSecond,
-                                color: BaseColor,
-                            ),),
-                        ],)),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child:
-                     Stack(
-                       children: [
-                         RefreshIndicator(
-                             key: _refreshIndicatorKey,
-                             onRefresh: GetDataRef,
-                             // onRefresh: ()async{
-                             //   GetDataRef();
-                             // },
-                             // child:  MyData.length>0?
-                             child:
-                             Column(
-                               children: [
-                                 Expanded(
-                                     child:
-                                     ListView.builder(
-                                       itemCount: MyData.length,
-                                       // itemCount: 20,
-                                       itemBuilder: (ctx,item){
-                                         return GestureDetector(
-                                           onTap: () async{
-                                             var Date= await      Navigator.of(context).push(
-                                                 MaterialPageRoute(
-                                                     builder: (context)
-                                                     => DetailPishFactor(MyData[item].id.toString(),MyData[item],true)));
-                                             if(Date!=null)
-                                             {
-                                               MyData.removeAt(item);
-                                               setState(() {
-
-                                               });
-                                             }
-                                           },
-                                           child: Container(
-                                             width: double.infinity,
-                                             margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                                             decoration: BoxDecoration(
-                                                 color: Colors.white,
-                                                 borderRadius: BorderRadius.circular(16),
-                                                 boxShadow: [
-                                                   BoxShadow(
-                                                       color: BaseColor.withOpacity(0.25),
-                                                       spreadRadius: 2,
-                                                       blurRadius: 8
-                                                   )
-                                                 ]
-                                             ),
-                                             child: Padding(
-                                               padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
-                                               child: Column(
-                                                 children: [
-                                                   Container(
-                                                     child: Row(
-                                                       children: [
-                                                         Expanded(
-                                                             flex: 25,
-                                                             child: BoxInfo_3('تاریخ',MyData[item].date)),
-                                                         Container(
-                                                           width: 2,
-                                                           height:Sizewid>=470?
-                                                           50:Sizewid*1/10,
-                                                           color: ColorLine,
-                                                         ),
-                                                         Expanded(
-                                                             flex: 75,
-                                                             child:
-                                                             BoxInfo_Right_2('نام مشتری',MyData[item].customerName,MyData[item].id.toString())
-                                                         )
-                                                       ],
-                                                     ),
-                                                   ),
-                                                   Container(
-                                                     margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                                                     height: 2,
-                                                     width: double.infinity,
-                                                     color: ColorLine,
-                                                   ),
-                                                   Row(
-                                                     children: [
-                                                       Expanded(child: BoxInfo_3('مبلغ',MyData[item].payment)),
-                                                       Container(
-                                                         width: 2,
-                                                         height:Sizewid>=470?
-                                                         50:Sizewid*1/10,
-                                                         color: ColorLine,
-                                                       ),
-                                                       Expanded(child: BoxInfo_3('کل',MyData[item].tedJoz)),
-                                                       Container(
-                                                         width: 2,
-                                                         height:Sizewid>=470?
-                                                         50:Sizewid*1/10,
-                                                         color: ColorLine,
-                                                       ),
-                                                       Expanded(child: BoxInfo_3('جز',MyData[item].tedJoz)),
-                                                       Container(
-                                                         width: 2,
-                                                         height:Sizewid>=470?
-                                                         50:Sizewid*1/10,
-                                                         color: ColorLine,
-                                                       ),
-                                                       Expanded(child: BoxInfo_3('واحد',MyData[item].tedVah)),
-
-                                                     ],
-                                                   )
-                                                 ],
-                                               ),
-                                             ) ,
-                                           ),
-                                         );
-                                         return  Container(color: Colors.red, margin: EdgeInsets.all(8),height: 250);
-                                       },
-                                     )
-
-                                 ),
-
-                               ],
-                             )
-
-
-                         ),
-                          MyData.length==0?
-                         Center(
-                           child: Column(
-                             crossAxisAlignment: CrossAxisAlignment.center,
-                             mainAxisAlignment: MainAxisAlignment.center,
-                             children: [
-                               SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
-                               Padding(
-                                 padding: const EdgeInsets.symmetric(vertical: 24.0),
-                                 child: Text('محتوایی برای نمایش وجود ندارد',
-                                   textAlign: TextAlign.center,
-                                   style: TextStyle(
-                                       fontSize: SizeFirst,
-                                       fontWeight: FontWeight.bold,
-                                       color: BaseColor
-                                   ),),
-                               ),
-                             ],
-                           ),
-                         ):Container(),
-
-                       ],
-
-                     )
-
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: BaseColor,
-                        ),
-                        onPressed:  (){
-                          GetDataRef();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
-                          child:
-                          Icon(Icons.refresh,color: Colors.white,size:   Sizewid>=470? 25:20,)
-                          // SvgPicture.asset(Icon, color:_colors,
-                          //   width: Size,height: Size,),
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: BaseColor,
-                        ),
-                        onPressed:  (){
-                          _showDatePicker_End(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
-                          child:
-                          Image.asset('images/frm2.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
-                          // SvgPicture.asset(Icon, color:_colors,
-                          //   width: Size,height: Size,),
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: BaseColor,
-                        ),
-                        onPressed:  (){
-                          _showDatePicker_Start(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
-                          child:
-                          Image.asset('images/frm1.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
-                          // SvgPicture.asset(Icon, color:_colors,
-                          //   width: Size,height: Size,),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+    return Center(
+      child: Container(
+        width: Sizewid>600?600:Sizewid,
+        child: Scaffold(
+          backgroundColor: ColorBack,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('لیست پیش فاکتور های تایید نشده',style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.bold
+              ),),
             ),
+            backgroundColor: BaseColor,
+            leading: GestureDetector(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Icon(Icons.arrow_back,color: Colors.white,)),
           ),
+          body: Stack(
+            children: [
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: BaseColor)
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                            Text(creationDateEnd,
+                              style: TextStyle(
+                                  fontSize: SizeSecond,
+                                  fontWeight: FontWeight.bold,
+                                  color: BaseColor
+                              ),),
+                            Text(': تا تاریخ',
+                              style: TextStyle(
+                                  fontSize: SizeSecond,
+                                  color: BaseColor
 
-          // DraggableScrollableSheet(
-          //   initialChildSize: 0.2,
-          //   minChildSize: 0.1,
-          //   maxChildSize: 0.3,
-          //   builder: (contex, con)=>
-          //   Container(
-          //     decoration: BoxDecoration(
-          //       borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight: Radius.circular(16))
-          //     ),
-          //     child: SingleChildScrollView(
-          //       controller: con,
-          //       child: Container(height: 50,color: Colors.black,),
-          //     ),
-          //   )
-          // )
-        ],
+                              ),),
+                          ],)),
+                          Container(
+                            width: 2,
+                            color: ColorLine,
+                              height:Sizewid>=470?
+                              50:Sizewid*1/10
+                          ),
+                          Expanded(child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(creationDateStart,
+                                style: TextStyle(
+                                    fontSize: SizeSecond,
+                                    color: BaseColor,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                              Text(': از تاریخ',
+                                style: TextStyle(
+                                    fontSize: SizeSecond,
+                                    color: BaseColor,
+                                ),),
+                            ],)),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child:
+                         Stack(
+                           children: [
+                             RefreshIndicator(
+                                 key: _refreshIndicatorKey,
+                                 onRefresh: GetDataRef,
+                                 // onRefresh: ()async{
+                                 //   GetDataRef();
+                                 // },
+                                 // child:  MyData.length>0?
+                                 child:
+                                 Column(
+                                   children: [
+                                     Expanded(
+                                         child:
+                                         ListView.builder(
+                                           itemCount: MyData.length,
+                                           // itemCount: 20,
+                                           itemBuilder: (ctx,item){
+                                             return GestureDetector(
+                                               onTap: () async{
+                                                 var Date= await      Navigator.of(context).push(
+                                                     MaterialPageRoute(
+                                                         builder: (context)
+                                                         => DetailPishFactor(MyData[item].id.toString(),MyData[item],true)));
+                                                 if(Date!=null)
+                                                 {
+                                                   MyData.removeAt(item);
+                                                   setState(() {
 
-      )
+                                                   });
+                                                 }
+                                               },
+                                               child: Container(
+                                                 width: double.infinity,
+                                                 margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                                 decoration: BoxDecoration(
+                                                     color: Colors.white,
+                                                     borderRadius: BorderRadius.circular(16),
+                                                     boxShadow: [
+                                                       BoxShadow(
+                                                           color: BaseColor.withOpacity(0.25),
+                                                           spreadRadius: 2,
+                                                           blurRadius: 8
+                                                       )
+                                                     ]
+                                                 ),
+                                                 child: Padding(
+                                                   padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
+                                                   child: Column(
+                                                     children: [
+                                                       Container(
+                                                         child: Row(
+                                                           children: [
+                                                             Expanded(
+                                                                 flex: 25,
+                                                                 child: BoxInfo_3('تاریخ',MyData[item].date)),
+                                                             Container(
+                                                               width: 2,
+                                                               height:Sizewid>=470?
+                                                               50:Sizewid*1/10,
+                                                               color: ColorLine,
+                                                             ),
+                                                             Expanded(
+                                                                 flex: 75,
+                                                                 child:
+                                                                 BoxInfo_Right_2('نام مشتری',MyData[item].customerName,MyData[item].id.toString())
+                                                             )
+                                                           ],
+                                                         ),
+                                                       ),
+                                                       Container(
+                                                         margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                                         height: 2,
+                                                         width: double.infinity,
+                                                         color: ColorLine,
+                                                       ),
+                                                       Row(
+                                                         children: [
+                                                           Expanded(child: BoxInfo_3('مبلغ',MyData[item].payment)),
+                                                           Container(
+                                                             width: 2,
+                                                             height:Sizewid>=470?
+                                                             50:Sizewid*1/10,
+                                                             color: ColorLine,
+                                                           ),
+                                                           Expanded(child: BoxInfo_3('کل',MyData[item].tedJoz)),
+                                                           Container(
+                                                             width: 2,
+                                                             height:Sizewid>=470?
+                                                             50:Sizewid*1/10,
+                                                             color: ColorLine,
+                                                           ),
+                                                           Expanded(child: BoxInfo_3('جز',MyData[item].tedJoz)),
+                                                           Container(
+                                                             width: 2,
+                                                             height:Sizewid>=470?
+                                                             50:Sizewid*1/10,
+                                                             color: ColorLine,
+                                                           ),
+                                                           Expanded(child: BoxInfo_3('واحد',MyData[item].tedVah)),
+
+                                                         ],
+                                                       )
+                                                     ],
+                                                   ),
+                                                 ) ,
+                                               ),
+                                             );
+                                             return  Container(color: Colors.red, margin: EdgeInsets.all(8),height: 250);
+                                           },
+                                         )
+
+                                     ),
+
+                                   ],
+                                 )
+
+
+                             ),
+                              MyData.length==0?
+                             Center(
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.center,
+                                 mainAxisAlignment: MainAxisAlignment.center,
+                                 children: [
+                                   SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
+                                   Padding(
+                                     padding: const EdgeInsets.symmetric(vertical: 24.0),
+                                     child: Text('محتوایی برای نمایش وجود ندارد',
+                                       textAlign: TextAlign.center,
+                                       style: TextStyle(
+                                           fontSize: SizeFirst,
+                                           fontWeight: FontWeight.bold,
+                                           color: BaseColor
+                                       ),),
+                                   ),
+                                 ],
+                               ),
+                             ):Container(),
+
+                           ],
+
+                         )
+
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: BaseColor,
+                            ),
+                            onPressed:  (){
+                              GetDataRef();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+                              child:
+                              Icon(Icons.refresh,color: Colors.white,size:   Sizewid>=470? 25:20,)
+                              // SvgPicture.asset(Icon, color:_colors,
+                              //   width: Size,height: Size,),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: BaseColor,
+                            ),
+                            onPressed:  (){
+                              _showDatePicker_End(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+                              child:
+                              Image.asset('images/frm2.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
+                              // SvgPicture.asset(Icon, color:_colors,
+                              //   width: Size,height: Size,),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: BaseColor,
+                            ),
+                            onPressed:  (){
+                              _showDatePicker_Start(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 12),
+                              child:
+                              Image.asset('images/frm1.png', color: Colors.white, width:   Sizewid>=470? 25:20, height:   Sizewid>=470? 25:20),
+                              // SvgPicture.asset(Icon, color:_colors,
+                              //   width: Size,height: Size,),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // DraggableScrollableSheet(
+              //   initialChildSize: 0.2,
+              //   minChildSize: 0.1,
+              //   maxChildSize: 0.3,
+              //   builder: (contex, con)=>
+              //   Container(
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.only(topLeft: Radius.circular(16),topRight: Radius.circular(16))
+              //     ),
+              //     child: SingleChildScrollView(
+              //       controller: con,
+              //       child: Container(height: 50,color: Colors.black,),
+              //     ),
+              //   )
+              // )
+            ],
+
+          )
+        ),
+      ),
     );
   }
 }

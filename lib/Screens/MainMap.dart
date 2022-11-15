@@ -229,7 +229,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('نسخه 1.0.0',style: TextStyle(
+                  Text('نسخه 2.0.2',style: TextStyle(
                     color: BaseColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 12
@@ -532,7 +532,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                               => ScreenReportVisitors()));
                     },
                     child: Container(
-                      child:  Text('گزارش سرجمع اطلاعات ویزیتور',
+                      child:  Text('گزارش سرجمع فروش ويزيتور ها',
                         textAlign: TextAlign.end,
                         style: TextStyle(color:
                         BaseColor,
@@ -571,6 +571,9 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
             children: [
               GestureDetector(
                 onTap: (){
+                  setState(() {
+                    FlagCheckPishFactor=false;
+                  });
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => PishFactorNotAccept()));
                 },
@@ -615,7 +618,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                               => ScreenMassageToVisitor()));
                     },
                     child: Container(
-                      child:  Text('پیام به ویزیتور',
+                      child:  Text('ارسال پيام به ويزيتور ها',
                         textAlign: TextAlign.end,
                         style: TextStyle(color:
                         BaseColor,
@@ -760,6 +763,8 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
       if(TypeSwitch_Now)
       {
         GetAll();
+      }else{
+        GetAll2();
       }
 
     });
@@ -790,14 +795,15 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
     var base =prefs.getString('Baseurl');
     var UserName =prefs.getString('UserName');
     var Password =prefs.getString('Password');
-    var data=    await   ApiService.
-    GetPerson( base.toString(), UserName!, Password!);
+    var data=    await   ApiService.GetPerson( base.toString(), UserName!, Password!);
     // var data=    await   ApiService.GetPerson( 'http://91.108.148.38:9595/manager', 'نیما', '1');
-
+    debugPrint(data.toJson().toString());
     if(data.code==200)
       {
+        FlagCheckPishFactor=data.pishFactorNotConfirmed;
         if(data.res.length>0)
           {
+
             Customer_temps2=data.res;
             // _Markers.clear();
             // _poly.clear();
@@ -876,6 +882,38 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
     }
 
   }
+  Future GetAll2()async{
+
+
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var base =prefs.getString('Baseurl');
+    var UserName =prefs.getString('UserName');
+    var Password =prefs.getString('Password');
+    var data=    await   ApiService.GetPerson( base.toString(), UserName!, Password!);
+
+    if(data.code==200)
+    {
+
+
+
+      FlagCheckPishFactor=data.pishFactorNotConfirmed;
+
+
+      setState(() {
+
+      });
+
+    }
+
+
+
+
+
+
+
+
+  }
   // MapController mycontroler=MapController();
 
 
@@ -889,7 +927,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
 
 
 
-
+  bool  FlagCheckPishFactor=false;
   @override
   void initState()   {
     super.initState();
@@ -899,7 +937,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
     // polylinePoints=PolylinePoints();
 
 
-    // GetAll();
+    GetAll();
 
     // final Uint8List markerIcon = await getBytesFromAsset('images/locloc2.png', 100);
 
@@ -1115,11 +1153,29 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                     BtnSmall2('images/list.png',18,Colors.white, (){
                       ShowModall_MainMenu();
                     }),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 6.0),
-                      child:  BtnSmall2('images/menu1.png',18,Colors.white,(){
-                        ShowModall_MainMenu2();
-                      }),
+                    Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 6.0),
+                          child:  BtnSmall2('images/menu1.png',18,Colors.white,(){
+                            ShowModall_MainMenu2();
+                          }),
+                        ),
+                        FlagCheckPishFactor==true?
+                        Positioned(
+                          left: 10,
+                          top: 6,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.deepOrange,
+                                borderRadius: BorderRadius.circular(2)
+                            ),
+                            width: 8,
+                            height: 8,
+                          ),
+                        ):Container(),
+                      ],
+
                     ),
                     Expanded(
                       child: Row(

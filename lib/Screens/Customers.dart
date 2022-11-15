@@ -690,268 +690,272 @@ class _CustomersState extends State<Customers> {
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorBack,
-        body: Stack(
-          children: [
-            Container(
-                height: double.infinity,
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: (){
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.arrow_back,color: BaseColor,),
-                          ),
-                        ),
-                        Expanded(
-                          child: Card(
-                           margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                            child: Directionality(
-                              textDirection: TextDirection.rtl,
-                              child: TextField(
-                                onChanged: (val) async{
-                                  if(val.isNotEmpty)
-                                  {
-                                    // val=val.replaceAll('ی','ي');
-                                    // val=val.replaceAll('ک','ك');
-                                    var MyDataCustomer = await ApiService.GetCustomer( base, UserName, Password, groupId,
-                                        IdProvine, IdCity, IdState, IdWay,val.toString(),flagAccount.toString(),false,pr);
-                                    if(MyDataCustomer!=null)
-                                      {
-                                        if(MyDataCustomer.res.length==0)
-                                        {
+      child: Center(
+        child: Container(
+          width: Sizewid>600?600:Sizewid,
+          child: Scaffold(
+            backgroundColor: ColorBack,
+            body: Stack(
+              children: [
+                Container(
 
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                Navigator.pop(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(Icons.arrow_back,color: BaseColor,),
+                              ),
+                            ),
+                            Expanded(
+                              child: Card(
+                               margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: TextField(
+                                    onChanged: (val) async{
+                                      if(val.isNotEmpty)
+                                      {
+                                        // val=val.replaceAll('ی','ي');
+                                        // val=val.replaceAll('ک','ك');
+                                        var MyDataCustomer = await ApiService.GetCustomer( base, UserName, Password, groupId,
+                                            IdProvine, IdCity, IdState, IdWay,val.toString(),flagAccount.toString(),false,pr);
+                                        if(MyDataCustomer!=null)
+                                          {
+                                            if(MyDataCustomer.res.length==0)
+                                            {
+
+                                              MyData.clear();
+                                              MyDataSourch.clear();
+                                              setState(() {
+                                              });
+                                            }else{
+                                              setState(() {
+                                                MyDataSourch=MyDataCustomer.res;
+                                                MyData=MyDataCustomer.res;
+                                              });
+                                            }
+                                          }else{
                                           MyData.clear();
                                           MyDataSourch.clear();
-                                          setState(() {
-                                          });
-                                        }else{
-                                          setState(() {
-                                            MyDataSourch=MyDataCustomer.res;
-                                            MyData=MyDataCustomer.res;
-                                          });
                                         }
+
+                                        setState(() {
+
+                                        });
                                       }else{
-                                      MyData.clear();
-                                      MyDataSourch.clear();
-                                    }
+                                        MyDataSourch.clear();
+                                        // print(Customer.length.toString());
+                                        setState(() {
 
-                                    setState(() {
+                                        });
 
-                                    });
-                                  }else{
-                                    MyDataSourch.clear();
-                                    // print(Customer.length.toString());
-                                    setState(() {
-
-                                    });
-
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(8),
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                      fontSize: 12,
-                                        color: Color(0xff1F3C84).withOpacity(0.80)
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(8),
+                                        border: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                          fontSize: 12,
+                                            color: Color(0xff1F3C84).withOpacity(0.80)
+                                        ),
+                                        hintText: 'مشتری خود را جستجو کنید...'
                                     ),
-                                    hintText: 'مشتری خود را جستجو کنید...'
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                    Expanded(
-                      child:   MyDataSourch.length>0? ListView.builder(
-                        itemCount: MyDataSourch.length>30?MyDataSourch.take(30).length:
-                        MyDataSourch.length,
-                        itemBuilder: (Ctx,Item){
-                          return  BoxInfo78(Sizewid,MyDataSourch[Item].name.trim(),'',MyDataSourch[Item].tell1,MyDataSourch[Item].tell2,
-                              MyDataSourch[Item].address.trim(),(){
+                        Expanded(
+                          child:   MyDataSourch.length>0? ListView.builder(
+                            itemCount: MyDataSourch.length>30?MyDataSourch.take(30).length:
+                            MyDataSourch.length,
+                            itemBuilder: (Ctx,Item){
+                              return  BoxInfo78(Sizewid,MyDataSourch[Item].name.trim(),'',MyDataSourch[Item].tell1,MyDataSourch[Item].tell2,
+                                  MyDataSourch[Item].address.trim(),(){
 
 
 
-                                Navigator.of(context).push(
-                                    MaterialPageRoute(builder: (context) => PishFactorsCustomer(MyDataSourch[Item].id) ));
-                              },(){
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) => PishFactorsCustomer(MyDataSourch[Item].id) ));
+                                  },(){
 
-                            if(MyDataSourch[Item].lat==null||MyDataSourch[Item].lng==null)
-                              return;
+                                if(MyDataSourch[Item].lat==null||MyDataSourch[Item].lng==null)
+                                  return;
 
-                            if(MyDataSourch[Item].lat!=0&&MyDataSourch[Item].lng!=0)
-                              {
-                                openMap(MyDataSourch[Item].lat, MyDataSourch[Item].lng);
-                              }
-
-                              },MyDataSourch[Item].id,MyDataSourch[Item].mande,MyDataSourch[Item].lat,MyDataSourch[Item].lng);
-                        },
-                      ):Center(
-                        child:  Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 24.0),
-                                child: Text('محتوایی برای نمایش وجود ندارد',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: SizeFirst,
-                                      fontWeight: FontWeight.bold,
-                                      color: BaseColor
-                                  ),),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ) ,
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8,left: 8,top: 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: (){
-                                Run22();
-                              },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 8),
-                                    height: 45,
-                                    width: 45,
-                                    decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: BaseColor.withOpacity(0.25),
-                                              spreadRadius: 2,
-                                              blurRadius: 8
-                                          )
-                                        ],
-                                        color: BaseColor,
-                                        borderRadius: BorderRadius.circular(8)
-                                    ),
-                                    child: Icon(Icons.refresh,color: Colors.white,size: 25,),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                    child: Text('دریافت اطلاعات',
-                                      textAlign: TextAlign.center,
-                                      style:
-                                    TextStyle(
-                                        color: ColorFirst,
-                                        fontSize: 12
-                                    ),),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: (){
-                                if(ReCustGroup.length>2)
+                                if(MyDataSourch[Item].lat!=0&&MyDataSourch[Item].lng!=0)
                                   {
-                                    ShowModall_CusGroups(ReCustGroup,Sizewid);
-                                  }else{
-                                  GetGroups(Sizewid);
-                                }
+                                    openMap(MyDataSourch[Item].lat, MyDataSourch[Item].lng);
+                                  }
 
-                              },
+                                  },MyDataSourch[Item].id,MyDataSourch[Item].mande,MyDataSourch[Item].lat,MyDataSourch[Item].lng);
+                            },
+                          ):Center(
+                            child:  Center(
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 8),
-                                    height: 45,
-                                    width: 45,
-                                    decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: BaseColor.withOpacity(0.25),
-                                              spreadRadius: 2,
-                                              blurRadius: 8
-                                          )
-                                        ],
-                                        color: BaseColor,
-                                        borderRadius: BorderRadius.circular(8)
-                                    ),
-                                    child: Center(
-                                      child: SvgPicture.asset('images/cate23.svg',width: 15,height: 15,color: Colors.white,),
-                                    ),
-                                  ),
+                                  SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                    child: Text('فیلتر',
+                                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                                    child: Text('محتوایی برای نمایش وجود ندارد',
                                       textAlign: TextAlign.center,
-                                      style:
-                                      TextStyle(
-                                          color: ColorFirst,
-                                          fontSize: 12
+                                      style: TextStyle(
+                                          fontSize: SizeFirst,
+                                          fontWeight: FontWeight.bold,
+                                          color: BaseColor
                                       ),),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          Container(
-                            // height: Sizewid*1/SizeResponsive,
-                            height:Sizewid>=470?
-                            30:
-                            Sizewid*1/SizeResponsive,
-                            width: 2,
-                            color: ColorLine,
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text('تعداد مشتری',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                    TextStyle(
-                                        color: ColorFirst,
-                                        fontSize: 12
-                                    ),),
+                        ) ,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8,left: 8,top: 2),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: (){
+                                    Run22();
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 8),
+                                        height: 45,
+                                        width: 45,
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: BaseColor.withOpacity(0.25),
+                                                  spreadRadius: 2,
+                                                  blurRadius: 8
+                                              )
+                                            ],
+                                            color: BaseColor,
+                                            borderRadius: BorderRadius.circular(8)
+                                        ),
+                                        child: Icon(Icons.refresh,color: Colors.white,size: 25,),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                        child: Text('دریافت اطلاعات',
+                                          textAlign: TextAlign.center,
+                                          style:
+                                        TextStyle(
+                                            color: ColorFirst,
+                                            fontSize: 12
+                                        ),),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text(MyDataSourch.length.toString(),
-                                    textAlign: TextAlign.center,
-                                    style:
-                                    TextStyle(
-                                        color: ColorFirst,
-                                        fontSize: 12
-                                    ),),
-                                ),
-                              ],
-                            ),
-                          ),
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: (){
+                                    if(ReCustGroup.length>2)
+                                      {
+                                        ShowModall_CusGroups(ReCustGroup,Sizewid);
+                                      }else{
+                                      GetGroups(Sizewid);
+                                    }
 
-                        ],
-                      ),
-                    ),
-                  ],
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 8),
+                                        height: 45,
+                                        width: 45,
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: BaseColor.withOpacity(0.25),
+                                                  spreadRadius: 2,
+                                                  blurRadius: 8
+                                              )
+                                            ],
+                                            color: BaseColor,
+                                            borderRadius: BorderRadius.circular(8)
+                                        ),
+                                        child: Center(
+                                          child: SvgPicture.asset('images/cate23.svg',width: 15,height: 15,color: Colors.white,),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                        child: Text('فیلتر',
+                                          textAlign: TextAlign.center,
+                                          style:
+                                          TextStyle(
+                                              color: ColorFirst,
+                                              fontSize: 12
+                                          ),),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                // height: Sizewid*1/SizeResponsive,
+                                height:Sizewid>=470?
+                                30:
+                                Sizewid*1/SizeResponsive,
+                                width: 2,
+                                color: ColorLine,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                      child: Text('تعداد مشتری',
+                                        textAlign: TextAlign.center,
+                                        style:
+                                        TextStyle(
+                                            color: ColorFirst,
+                                            fontSize: 12
+                                        ),),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                      child: Text(MyDataSourch.length.toString(),
+                                        textAlign: TextAlign.center,
+                                        style:
+                                        TextStyle(
+                                            color: ColorFirst,
+                                            fontSize: 12
+                                        ),),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+
                 )
-
+              ],
             )
-          ],
-        )
+          ),
+        ),
       ),
     );
   }

@@ -13,18 +13,21 @@ class ListPersonel {
     required this.code,
     required this.msg,
     required this.error,
+    required this.pishFactorNotConfirmed,
     required this.res,
   });
 
   int code;
   String msg;
   bool error;
+  bool pishFactorNotConfirmed;
   List<RePerson> res;
 
   factory ListPersonel.fromJson(Map<String, dynamic> json) => ListPersonel(
     code: json["code"],
     msg: json["msg"],
     error: json["error"],
+    pishFactorNotConfirmed: json["pishFactorNotConfirmed"],
     res: List<RePerson>.from(json["res"].map((x) => RePerson.fromJson(x))),
   );
 
@@ -32,6 +35,7 @@ class ListPersonel {
     "code": code,
     "msg": msg,
     "error": error,
+    "pishFactorNotConfirmed": pishFactorNotConfirmed,
     "res": List<dynamic>.from(res.map((x) => x.toJson())),
   };
 }

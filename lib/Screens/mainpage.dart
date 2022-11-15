@@ -11,6 +11,7 @@ import 'package:sailmanagerwebapp/teeeee.dart';
 import 'package:sailmanagerwebapp/tetstst.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import '../Responsive.dart';
 import '../ScreensArts/Art2.dart';
 
 
@@ -207,76 +208,81 @@ class _mainpageState extends State<mainpage> {
                      ),
                    ],
                  ),
-                 Container(
-                   margin: EdgeInsets.only(top:SizeApp.height*0.07),
-                   child: SingleChildScrollView(
-                     child: Column(
-                       mainAxisAlignment: MainAxisAlignment.start,
-                       children: [
-                         Image.asset('images/slma.png',   width: SizeApp.height>=600 ? 100:50,
-                             height: SizeApp.height>=600 ? 100:60),
-                         Text('گروه نرم افزاری آتیران',
-                           style: TextStyle(color: Color(0xff575757),
-                               fontSize: SizeApp.height>=600 ? 16:12 ,
-                               fontWeight: FontWeight.bold),),
-                         // BoxInput('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1,SizeApp.height),
-                         BoxInput('images/admin2.svg','نام کاربری خود را وارد کنید','نام کاربری',txt_2,SizeApp.height),
-                         BoxInput('images/ghofl.svg','کلمه عبور خود را وارد کنید','کلمه عبور',txt_3,SizeApp.height),
-                         Container(
-                           margin: EdgeInsets.symmetric(horizontal: 16),
-                           width: double.infinity,
-                           child: Row(
-                             mainAxisAlignment: MainAxisAlignment.end,
-                             children: [
-                               Expanded(child: Text(
-                                 'مرا به خاطر بسپار',
-                                 textAlign: TextAlign.end,
-                                 style: TextStyle(
-                                     color: BaseColor,
-                                     fontSize: SizeApp.height>=600 ? 16:12  ,
-                                     fontWeight: FontWeight.bold
-                                 ),
-                               )),
-                               Theme(
-                                 data: ThemeData(unselectedWidgetColor:  BaseColor),
-                                 child: Checkbox(
-                                     value: Remember,
-                                     onChanged: (val){
-                                       setState(() {
-                                         Remember=!Remember;
-                                       });
-                                     }),
-                               )
-                             ],
+                 Align(
+                   alignment: Alignment.topCenter,
+                   child: Container(
+                     width: Responsive.isDesktop(context)||Responsive.isTablet(context)?MediaQuery.of(context).size.width*2/4:double.infinity,
+                     margin: EdgeInsets.only(top:SizeApp.height*0.07 ),
+                     child: SingleChildScrollView(
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.center,
+                         mainAxisAlignment: MainAxisAlignment.start,
+                         children: [
+                           Image.asset('images/slma.png',   width: SizeApp.height>=600 ? 100:50,
+                               height: SizeApp.height>=600 ? 100:60),
+                           Text('گروه نرم افزاری آتیران',
+                             style: TextStyle(color: Color(0xff575757),
+                                 fontSize: SizeApp.height>=600 ? 16:12 ,
+                                 fontWeight: FontWeight.bold),),
+                           // BoxInput('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1,SizeApp.height),
+                           BoxInput('images/admin2.svg','نام کاربری خود را وارد کنید','نام کاربری',txt_2,SizeApp.height),
+                           BoxInput('images/ghofl.svg','کلمه عبور خود را وارد کنید','کلمه عبور',txt_3,SizeApp.height),
+                           Container(
+                             margin: EdgeInsets.symmetric(horizontal: 16),
+                             width: double.infinity,
+                             child: Row(
+                               mainAxisAlignment: MainAxisAlignment.end,
+                               children: [
+                                 Expanded(child: Text(
+                                   'مرا به خاطر بسپار',
+                                   textAlign: TextAlign.end,
+                                   style: TextStyle(
+                                       color: BaseColor,
+                                       fontSize: SizeApp.height>=600 ? 16:12  ,
+                                       fontWeight: FontWeight.bold
+                                   ),
+                                 )),
+                                 Theme(
+                                   data: ThemeData(unselectedWidgetColor:  BaseColor),
+                                   child: Checkbox(
+                                       value: Remember,
+                                       onChanged: (val){
+                                         setState(() {
+                                           Remember=!Remember;
+                                         });
+                                       }),
+                                 )
+                               ],
+                             ),
                            ),
-                         ),
-                         Container(
-                           width:SizeApp.width>= 359? SizeApp.width/2:   double.infinity,
-                           margin: EdgeInsets.only(right: 16,left: 16,top: 32),
-                           child: ElevatedButton(onPressed: Run,
-                               style: ButtonStyle(
-                                 backgroundColor: MaterialStateProperty.all(BaseColor),
-                                 padding: MaterialStateProperty.all(EdgeInsets.all(14)),
-                                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                       RoundedRectangleBorder(
-                                           borderRadius: BorderRadius.circular(24.0),
+                           Container(
+                             width:SizeApp.width>= 359? SizeApp.width/2:   double.infinity,
+                             margin: EdgeInsets.only(right: 16,left: 16,top: 32),
+                             child: ElevatedButton(onPressed: Run,
+                                 style: ButtonStyle(
+                                   backgroundColor: MaterialStateProperty.all(BaseColor),
+                                   padding: MaterialStateProperty.all(EdgeInsets.all(14)),
+                                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                         RoundedRectangleBorder(
+                                             borderRadius: BorderRadius.circular(24.0),
 
-                                       )
-                                   )
-                               ),
-                               child:Text('ورود',
-                             style: TextStyle(color:Colors.white,
-                                 fontSize: 16,
-                                 fontWeight: FontWeight.bold),)),
-                         )
-                       ],
+                                         )
+                                     )
+                                 ),
+                                 child:Text('ورود',
+                               style: TextStyle(color:Colors.white,
+                                   fontSize: 16,
+                                   fontWeight: FontWeight.bold),)),
+                           )
+                         ],
+                       ),
                      ),
                    ),
                  ),
                  Positioned(
                    right: 8,
                    bottom: 8,
-                   child: Text('نسخه 1.0.0',
+                   child: Text('نسخه 2.0.2',
                    style: TextStyle(
                      fontWeight: FontWeight.bold,
                      color: Colors.white,

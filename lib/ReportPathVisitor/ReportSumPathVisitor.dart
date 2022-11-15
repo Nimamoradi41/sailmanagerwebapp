@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
+import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ApiService.dart';
@@ -138,45 +139,51 @@ class _ReportPathVisitorState extends State<ReportSumPathVisitor> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop:_onWillPop2,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: BaseColor,
-          title:Column(
-            children: [
-              Text(
-                'سرجمع اقلام ویزیت شده',
-                style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
-            ],
+    var Sizewid=MediaQuery.of(context).size.width;
+
+    return Center(
+      child: Container(
+        width: Sizewid>600?600:Sizewid,
+        child: WillPopScope(
+          onWillPop:_onWillPop2,
+          child: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              backgroundColor: BaseColor,
+              title:Column(
+                children: [
+                  Text(
+                    'سرجمع اقلام ویزیت شده',
+                    style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
+                ],
+              ),
+              leading: InkWell
+                (
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.arrow_back,color: Colors.white,)),
+            ),
+            body:
+            RefreshIndicator(
+              onRefresh: _refresh,
+               child: Container(
+            width: double.infinity,
+
+            child: ListView.builder(
+                  itemCount: mainItems.length,
+                  itemBuilder: (ctx,item){
+                    return  InkWell(
+                        child: Container(
+                            margin: item==mainItems.length-1?EdgeInsets.only(bottom: 80):null,
+                            child: BoxSumPath(mainItems[item])));
+                  }
+                  ),
           ),
-          leading: InkWell
-            (
-              onTap: (){
-                Navigator.pop(context);
-              },
-              child: Icon(Icons.arrow_back,color: Colors.white,)),
-        ),
-        body:
-        RefreshIndicator(
-          onRefresh: _refresh,
-           child: Container(
-        width: double.infinity,
+             ),
 
-        child: Padding(
-          padding: EdgeInsets.only(right: 4,bottom: 90,left: 4,top: 4),
-          child: ListView.builder(
-                itemCount: mainItems.length,
-                itemBuilder: (ctx,item){
-                  return  InkWell(
-                      child: BoxSumPath(mainItems[item]));
-                }
-                ),
+          ),
         ),
-      ),
-         ),
-
       ),
     );
   }

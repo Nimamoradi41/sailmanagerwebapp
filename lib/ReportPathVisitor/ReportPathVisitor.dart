@@ -184,6 +184,9 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
 
     var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
 
+
+    debugPrint(Ta_Data);
+    debugPrint(Az_Data);
     var Data=await ApiService.GetVisitorsPath(pr, base!, UserName!, Password!,
         Ta_Data,Az_Data,visid,FlagCheckOneDay
         );
@@ -243,304 +246,310 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
   TextEditingController txtsearch=TextEditingController();
   Future ShowModall_() async
   {
+    var Sizewid=MediaQuery.of(context).size.width;
     bool b=await   showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         builder: (ctx){
 
-          return Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-            child: StatefulBuilder(
-                builder: (context,state){
-                  return  SafeArea(
-                    child:
-                    Stack(
-                        children:[
-                          Container(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.1),
-                                  ),
-                                  child: Container(
-                                    margin: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8)
-                                    ),
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: 'جستجو کنید',
-                                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                                          hintStyle: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.grey
-                                          )
+          return Center(
+            child: Container(
+              width: Sizewid>600?600:Sizewid,
+              child: Padding(
+                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                child: StatefulBuilder(
+                    builder: (context,state){
+                      return  SafeArea(
+                        child:
+                        Stack(
+                            children:[
+                              Container(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.1),
                                       ),
+                                      child: Container(
+                                        margin: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(8)
+                                        ),
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: 'جستجو کنید',
+                                              contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                                              hintStyle: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey
+                                              )
+                                          ),
 
-                                      textAlign: TextAlign.right,
-                                      controller: txtsearch,
-                                      onChanged: (val){
-                                        state(() {
-                                          var  s=val.replaceAll('ی','ي');
-                                          s=s.replaceAll('ک','ك');
-                                          txtsearch.text=s;
-                                        });
-                                      },
+                                          textAlign: TextAlign.right,
+                                          controller: txtsearch,
+                                          onChanged: (val){
+                                            state(() {
+                                              var  s=val.replaceAll('ی','ي');
+                                              s=s.replaceAll('ک','ك');
+                                              txtsearch.text=s;
+                                            });
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: (){
-                                    state(() {
+                                    InkWell(
+                                      onTap: (){
+                                        state(() {
 
 
-                                      IsAllVisitors=!IsAllVisitors;
+                                          IsAllVisitors=!IsAllVisitors;
 
 
 
 
-                                    });
-
-
-                                    if(IsAllVisitors==true)
-                                    {
-                                      state(() {
-                                        main.forEach((element) {
-                                          element.IsCheck=true;
                                         });
-                                      });
-
-                                    }else{
-                                      state(() {
-                                        main.forEach((element) {
-                                          element.IsCheck=false;
-                                        });
-                                      });
-                                    }
 
 
-
-
-
-
-
-
-
-
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text('انتخاب همه'),
-                                      Checkbox(
-                                        value:
-
-                                        IsAllVisitors,
-                                        activeColor: BaseColor ,
-                                        focusColor:BaseColor ,
-                                        onChanged: (bool? value) {
+                                        if(IsAllVisitors==true)
+                                        {
                                           state(() {
-
-
-                                            IsAllVisitors=!IsAllVisitors;
-
-
-
-
+                                            main.forEach((element) {
+                                              element.IsCheck=true;
+                                            });
                                           });
 
-
-                                          if(IsAllVisitors==true)
-                                          {
-
-
-                                            state(() {
-                                              main.forEach((element) {
-                                                element.IsCheck=true;
-                                              });
+                                        }else{
+                                          state(() {
+                                            main.forEach((element) {
+                                              element.IsCheck=false;
                                             });
+                                          });
+                                        }
 
-                                          }else{
-                                            state(() {
-                                              main.forEach((element) {
-                                                element.IsCheck=false;
+
+
+
+
+
+
+
+
+
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text('انتخاب همه'),
+                                          Checkbox(
+                                            value:
+
+                                            IsAllVisitors,
+                                            activeColor: BaseColor ,
+                                            focusColor:BaseColor ,
+                                            onChanged: (bool? value) {
+                                              state(() {
+
+
+                                                IsAllVisitors=!IsAllVisitors;
+
+
+
+
                                               });
-                                            });
-                                          }
 
 
+                                              if(IsAllVisitors==true)
+                                              {
+
+
+                                                state(() {
+                                                  main.forEach((element) {
+                                                    element.IsCheck=true;
+                                                  });
+                                                });
+
+                                              }else{
+                                                state(() {
+                                                  main.forEach((element) {
+                                                    element.IsCheck=false;
+                                                  });
+                                                });
+                                              }
+
+
+
+
+
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: ListView.builder(
+                                        // itemCount: Departments.length,
+                                        itemCount:  main.length,
+                                        itemBuilder: (ctx,item){
+                                          return
+                                            txtsearch.text.isEmpty?
+                                            Container(
+                                              child: InkWell(
+                                                highlightColor: Colors.transparent,
+                                                onTap: ()
+                                                {
+
+
+                                                  if(IsAllVisitors==false)
+                                                  {
+                                                    state(() {
+                                                      main[item].IsCheck= !main[item].IsCheck;
+                                                    });
+                                                  }
+                                                  // Navigator.pop(context);
+
+
+
+
+
+
+                                                  FocusScope.of(context).unfocus();
+
+                                                  // Navigator.pop(context,Departments[item].toString());
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                        main[item].name ),
+                                                    // Text(sa),
+                                                    Checkbox(
+                                                      value:
+
+                                                      main[item].IsCheck,
+                                                      activeColor: BaseColor ,
+                                                      focusColor:BaseColor ,
+                                                      onChanged: (bool? value) {
+
+                                                        if(IsAllVisitors==false)
+                                                        {
+                                                          state(() {
+                                                            main[item].IsCheck=value!;
+                                                          });
+                                                        }
+                                                        // Navigator.pop(context);
+
+
+
+
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ) :
+                                            txtsearch.text.isNotEmpty &&  main[item].name.contains(txtsearch.text.toString())?
+                                            Container(
+                                              child: InkWell(
+                                                highlightColor: Colors.transparent,
+                                                onTap: ()
+                                                {
+
+
+                                                  if(IsAllVisitors==false)
+                                                  {
+                                                    state(() {
+                                                      main[item].IsCheck= !main[item].IsCheck;
+                                                    });
+                                                  }
+                                                  // Navigator.pop(context);
+
+                                                  FocusScope.of(context).unfocus();
+
+                                                  // Navigator.pop(context,Departments[item].toString());
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                        main[item].name ),
+                                                    // Text(sa),
+                                                    Checkbox(
+                                                      value:
+                                                      main[item].IsCheck,
+                                                      activeColor: BaseColor ,
+                                                      focusColor:BaseColor ,
+                                                      onChanged: (bool? value) {
+
+
+                                                        if(IsAllVisitors==false)
+                                                        {
+                                                          state(() {
+                                                            main[item].IsCheck=value!;
+                                                          });
+                                                        }
+                                                        // Navigator.pop(context);
+
+
+
+
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ):Container();
 
 
 
                                         },
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: ListView.builder(
-                                    // itemCount: Departments.length,
-                                    itemCount:  main.length,
-                                    itemBuilder: (ctx,item){
-                                      return
-                                        txtsearch.text.isEmpty?
-                                        Container(
-                                          child: InkWell(
-                                            highlightColor: Colors.transparent,
-                                            onTap: ()
-                                            {
-
-
-                                              if(IsAllVisitors==false)
-                                              {
-                                                state(() {
-                                                  main[item].IsCheck= !main[item].IsCheck;
-                                                });
-                                              }
-                                              // Navigator.pop(context);
-
-
-
-
-
-
-                                              FocusScope.of(context).unfocus();
-
-                                              // Navigator.pop(context,Departments[item].toString());
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                    main[item].name ),
-                                                // Text(sa),
-                                                Checkbox(
-                                                  value:
-
-                                                  main[item].IsCheck,
-                                                  activeColor: BaseColor ,
-                                                  focusColor:BaseColor ,
-                                                  onChanged: (bool? value) {
-
-                                                    if(IsAllVisitors==false)
-                                                    {
-                                                      state(() {
-                                                        main[item].IsCheck=value!;
-                                                      });
-                                                    }
-                                                    // Navigator.pop(context);
-
-
-
-
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ) :
-                                        txtsearch.text.isNotEmpty &&  main[item].name.contains(txtsearch.text.toString())?
-                                        Container(
-                                          child: InkWell(
-                                            highlightColor: Colors.transparent,
-                                            onTap: ()
-                                            {
-
-
-                                              if(IsAllVisitors==false)
-                                              {
-                                                state(() {
-                                                  main[item].IsCheck= !main[item].IsCheck;
-                                                });
-                                              }
-                                              // Navigator.pop(context);
-
-                                              FocusScope.of(context).unfocus();
-
-                                              // Navigator.pop(context,Departments[item].toString());
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                    main[item].name ),
-                                                // Text(sa),
-                                                Checkbox(
-                                                  value:
-                                                  main[item].IsCheck,
-                                                  activeColor: BaseColor ,
-                                                  focusColor:BaseColor ,
-                                                  onChanged: (bool? value) {
-
-
-                                                    if(IsAllVisitors==false)
-                                                    {
-                                                      state(() {
-                                                        main[item].IsCheck=value!;
-                                                      });
-                                                    }
-                                                    // Navigator.pop(context);
-
-
-
-
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ):Container();
+                              ),
+                              Positioned(
+                                  left: 0,
+                                  bottom: 0,
+                                  child: InkWell(
+                                    onTap: (){
+                                      FocusManager.instance.primaryFocus?.unfocus();
+                                      Navigator.pop(context);
 
 
 
                                     },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                              left: 0,
-                              bottom: 0,
-                              child: InkWell(
-                                onTap: (){
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  Navigator.pop(context);
-
-
-
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.black54,
-                                      borderRadius: BorderRadius.circular(8)
-                                  ),
-                                  margin: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4),
-                                    child: Row(
-                                      children: [
-                                        Text('بستن',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16
-                                          ),),
-                                        Icon(Icons.close,color: Colors.white,)
-                                      ],
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black54,
+                                          borderRadius: BorderRadius.circular(8)
+                                      ),
+                                      margin: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4),
+                                        child: Row(
+                                          children: [
+                                            Text('بستن',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16
+                                              ),),
+                                            Icon(Icons.close,color: Colors.white,)
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ))
-                        ]
-                    ),
-                  );
-                }),
+                                  ))
+                            ]
+                        ),
+                      );
+                    }),
+              ),
+            ),
           );
         });
 
@@ -567,258 +576,269 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
   }
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop:_onWillPop2,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: BaseColor,
-          title:Column(
-            children: [
-              Text('گزارش روز مسیر ویزیتور',
-                style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
-            ],
-          ),
-          leading: InkWell
-            (
-              onTap: (){
-                Navigator.pop(context);
-              },
-              child: Icon(Icons.arrow_back,color: Colors.white,)),
-        ),
-        body: FlagFilter==true?
-         Column(
-           children: [
-             SingleChildScrollView(
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.end,
-                 children: [
-                   Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Row(
-                       children: [
-                         Expanded(child: Align(
-                             alignment: Alignment.centerRight,
-                             child:
-                             Padding(
-                               padding: const EdgeInsets.only(right: 8.0),
-                               child: TextApp('تا تاریخ', 10, Colors.grey, true),
-                             ))),
-                             Expanded(child:Align(
-                             alignment: Alignment.centerRight,
-                             child: Padding(
-                               padding: const EdgeInsets.only(right: 8.0),
-                               child: TextApp('از تاریخ', 10, Colors.grey, true),
-                             ))),
-                       ],
-                     ),
-                   ),
-                   Row(
+    var Sizewid=MediaQuery.of(context).size.width;
+    return Center(
+      child: Container(
+        width: Sizewid>600?600:Sizewid,
+        child: WillPopScope(
+          onWillPop:_onWillPop2,
+          child: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              backgroundColor: BaseColor,
+              title:Column(
+                children: [
+                  Text('گزارش روز مسیر ویزیتور',
+                    style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
+                ],
+              ),
+              leading: InkWell
+                (
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.arrow_back,color: Colors.white,)),
+            ),
+            body: FlagFilter==true?
+             Column(
+               children: [
+                 SingleChildScrollView(
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.end,
                      children: [
-                       Expanded(child:  Padding(
-                           padding: const EdgeInsets.all(8),
-                           child: InkWell(
-                               onTap:  _showDatePicker_From,
-                               // child:    CardMain(Data_To, BaseColor),
-                               child:    Container(
-                                 decoration: BoxDecoration(
-                                   border: Border.all(color: BaseColor,width: 1),
-                                   borderRadius: BorderRadius.circular(8),
-                                 ),
-                                 child: Row(
-                                   children: [
-                                     Padding(
-                                       padding: const EdgeInsets.only(left: 8.0),
-                                       child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
-                                     ),
-                                     Expanded(
-                                       child: Padding(
-                                         padding: const EdgeInsets.all(8.0),
-                                         child: TextApp(Data_From,12,Colors.black54,false),
-                                       ),
-                                     ),
-                                   ],
-                                 ),
-                               )
-                           ),
-                         )),
-                       Expanded(
-                         child: Padding(
-                           padding: const EdgeInsets.all(8),
-                           child: InkWell(
-                               onTap:  _showDatePicker_To,
-                               // child:    CardMain(Data_To, BaseColor),
-                               child:    Container(
-                                 decoration: BoxDecoration(
-                                   border: Border.all(color: BaseColor,width: 1),
-                                   borderRadius: BorderRadius.circular(8),
-                                 ),
-                                 child: Row(
-                                   children: [
-                                     Padding(
-                                       padding: const EdgeInsets.only(left: 8.0),
-                                       child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
-                                     ),
-                                     Expanded(
-                                       child: Padding(
-                                         padding: const EdgeInsets.all(8.0),
-                                         child: TextApp(Data_To,12,Colors.black54,false),
-                                       ),
-                                     ),
-                                   ],
-                                 ),
-                               )
-                           ),
+                       Padding(
+                         padding: const EdgeInsets.all(8.0),
+                         child: Row(
+                           children: [
+                             Expanded(child: Align(
+                                 alignment: Alignment.centerRight,
+                                 child:
+
+                                 Padding(
+                                   padding: const EdgeInsets.only(right: 8.0),
+                                   child: TextApp('تا تاریخ', 10, Colors.grey, true),
+                                 ))),
+                                 Expanded(child:Align(
+                                 alignment: Alignment.centerRight,
+                                 child: Padding(
+                                   padding: const EdgeInsets.only(right: 8.0),
+                                   child: TextApp('از تاریخ', 10, Colors.grey, true),
+                                 ))),
+                           ],
                          ),
                        ),
-                     ],
-                   ),
-                   Row(
-                     mainAxisAlignment: MainAxisAlignment.end,
-                     crossAxisAlignment: CrossAxisAlignment.center,
-                     children: [
-                       TextApp('براساس روز مسیر',12,Colors.grey,true),
-                       Checkbox(
-                         value:
-                         FlagCheckOneDay,
-                         activeColor: BaseColor ,
-                         focusColor:BaseColor ,
-                         onChanged: (bool? value) {
+                       Row(
+                         children: [
+                           Expanded(child:  Padding(
+                               padding: const EdgeInsets.all(8),
+                               child: InkWell(
+                                   onTap:  _showDatePicker_To,
+                                   // child:    CardMain(Data_To, BaseColor),
+                                   child:    Container(
+                                     decoration: BoxDecoration(
+                                       border: Border.all(color: BaseColor,width: 1),
+                                       borderRadius: BorderRadius.circular(8),
+                                     ),
+                                     child: Row(
+                                       children: [
+                                         Padding(
+                                           padding: const EdgeInsets.only(left: 8.0),
+                                           child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
+                                         ),
+                                         Expanded(
+                                           child: Padding(
+                                             padding: const EdgeInsets.all(8.0),
+                                             child: TextApp(Data_To,12,Colors.black54,false),
+                                           ),
+                                         ),
+                                       ],
+                                     ),
+                                   )
+                               ),
+                             )),
+                           Expanded(
+                             child: Padding(
+                               padding: const EdgeInsets.all(8),
+                               child: InkWell(
+                                   onTap:  _showDatePicker_From,
+                                   // child:    CardMain(Data_To, BaseColor),
+                                   child:    Container(
+                                     decoration: BoxDecoration(
+                                       border: Border.all(color: BaseColor,width: 1),
+                                       borderRadius: BorderRadius.circular(8),
+                                     ),
+                                     child: Row(
+                                       children: [
+                                         Padding(
+                                           padding: const EdgeInsets.only(left: 8.0),
+                                           child: SvgPicture.asset('images/arrow_3.svg',width: 10,height: 10,),
+                                         ),
+                                         Expanded(
+                                           child: Padding(
+                                             padding: const EdgeInsets.all(8.0),
+                                             child: TextApp(Data_From,12,Colors.black54,false),
+                                           ),
+                                         ),
+                                       ],
+                                     ),
+                                   )
+                               ),
+                             ),
+                           ),
+                         ],
+                       ),
+                       InkWell(
+                         onTap: (){
                            setState(() {
                              FlagCheckOneDay=!FlagCheckOneDay;
                            });
-
-
-
                          },
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.end,
+                           crossAxisAlignment: CrossAxisAlignment.center,
+                           children: [
+                             TextApp('براساس روز مسیر',12,Colors.grey,true),
+                             Checkbox(
+                               value:
+                               FlagCheckOneDay,
+                               activeColor: BaseColor ,
+                               focusColor:BaseColor ,
+                               onChanged: (bool? value) {
+                                 setState(() {
+                                   FlagCheckOneDay=!FlagCheckOneDay;
+                                 });
+
+
+
+                               },
+                             ),
+                           ],
+                         ),
                        ),
+                       MainItemFilterVistor(IsAllVisitors,
+                           main.where((element) => element.IsCheck==true).toList()
+
+                           // .sort((a, b) => a.someProperty.compareTo(b.someProperty))
+                           ,(){
+                             if(main.length==0)
+                             {
+                               RunVisitors();
+                             }else{
+                               ShowModall_();
+                             }
+
+                             // ShowModall_();
+                           },() {
+
+
+
+
+
+
+
+                             setState(() {});
+                           }),
                      ],
                    ),
-                   MainItemFilterVistor(IsAllVisitors,
-                       main.where((element) => element.IsCheck==true).toList()
-
-                       // .sort((a, b) => a.someProperty.compareTo(b.someProperty))
-                       ,(){
+                 ),
+                 Expanded(
+                     child:
+                     Row(
+                   crossAxisAlignment: CrossAxisAlignment.end,
+                   children: [
+                     Expanded(child: Container(
+                       margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                       width: double.maxFinite,
+                       child: ElevatedButton(onPressed: (){
                          if(main.length==0)
                          {
-                           RunVisitors();
+                           Navigator.pop(context);
                          }else{
-                           ShowModall_();
+                           setState(() {
+                             FlagFilter=!FlagFilter;
+                           });
                          }
-
-                         // ShowModall_();
-                       },() {
-
-
-
-
-
-
-
-                         setState(() {});
-                       }),
-                 ],
-               ),
-             ),
-             Expanded(
-                 child:
-                 Row(
-               crossAxisAlignment: CrossAxisAlignment.end,
-               children: [
-                 Expanded(child: Container(
-                   margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-                   width: double.maxFinite,
-                   child: ElevatedButton(onPressed: (){
-                     if(main.length==0)
-                     {
-                       Navigator.pop(context);
-                     }else{
-                       setState(() {
-                         FlagFilter=!FlagFilter;
-                       });
-                     }
-                   },
-                       style: ElevatedButton.styleFrom(
-                           primary: Colors.red),
-                       child:
-                       Text('بستن',style: TextStyle(
-                           color: Colors.white
-                       ),)),
-                 )),
-                 Expanded(child: Container(
-                   margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
-                   width: double.maxFinite,
-                   child: ElevatedButton(
-                       onPressed: (){
-
-
-
-                         GetData();
-                         // PageCounter=1;
-                         // PageCounterMain=2;
-                         // Customers.clear();
-                         // PageCounterCheck=false;
-
-                         // GetCustomers('',false);
                        },
-                       style: ElevatedButton.styleFrom(primary: BaseColor),
-                       child:
-                       Text('نمایش',style: TextStyle(
-                           color: Colors.white
-                       ),)),
-                 )),
-               ],)
-             )
-           ],
-         ):
-        RefreshIndicator(
-          onRefresh: _refresh,
-           child: Container(
-        width: double.infinity,
+                           style: ElevatedButton.styleFrom(
+                               primary: Colors.red),
+                           child:
+                           Text('بستن',style: TextStyle(
+                               color: Colors.white
+                           ),)),
+                     )),
+                     Expanded(child: Container(
+                       margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                       width: double.maxFinite,
+                       child: ElevatedButton(
+                           onPressed: (){
 
-        child: Padding(
-          padding: EdgeInsets.only(right: 4,bottom: 90,left: 4,top: 4),
-          child: ListView.builder(
-                itemCount: mainItems.length,
-                itemBuilder: (ctx,item){
-                  return  InkWell(
-                      onTap: (){
-                        Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context)
-                                => ReportSumPathVisitor(mainItems[item].visRdf.toString(),Az_Data,Ta_Data)));
-                      },
-                      child: Container(
-                          margin: item==mainItems.length-1?EdgeInsets.only(bottom: 100):null,
-                          child: ItemReportPath(mainItems[item])));
-                }
-                ),
-        ),
-      ),
-         ),
-        floatingActionButton: FlagFilter==false?
-        Padding(
-          padding: const EdgeInsets.only(top: 0.0),
-          child: FloatingActionButton(
-            backgroundColor: BaseColor,
-            onPressed: (){
-              setState(() {
-                FlagFilter=!FlagFilter;
-              });
-            },
-            child: InkWell(
-              onTap: (){
-                setState(() {
-                  FlagFilter=!FlagFilter;
-                });
-              },
-              child: Icon(
-                Icons.filter_alt_sharp,
-                color: Colors.white,
-              ),
-            ),
+
+
+                             GetData();
+                             // PageCounter=1;
+                             // PageCounterMain=2;
+                             // Customers.clear();
+                             // PageCounterCheck=false;
+
+                             // GetCustomers('',false);
+                           },
+                           style: ElevatedButton.styleFrom(primary: BaseColor),
+                           child:
+                           Text('نمایش',style: TextStyle(
+                               color: Colors.white
+                           ),)),
+                     )),
+                   ],)
+                 )
+               ],
+             ):
+            RefreshIndicator(
+              onRefresh: _refresh,
+               child: Container(
+            width: double.infinity,
+
+             child: ListView.builder(
+                  itemCount: mainItems.length,
+                  itemBuilder: (ctx,item){
+                    return  InkWell(
+                        onTap: (){
+                          Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context)
+                                  => ReportSumPathVisitor(mainItems[item].visRdf.toString(),Az_Data,Ta_Data)));
+                        },
+                        child: Container(
+                            margin: item==mainItems.length-1?EdgeInsets.only(bottom: 80):null,
+                            child: ItemReportPath(mainItems[item])));
+                  }
+                  ),
           ),
-        ):Container(),
+             ),
+            floatingActionButton: FlagFilter==false?
+            Padding(
+              padding: const EdgeInsets.only(top: 0.0),
+              child: FloatingActionButton(
+                backgroundColor: BaseColor,
+                onPressed: (){
+                  setState(() {
+                    FlagFilter=!FlagFilter;
+                  });
+                },
+                child: InkWell(
+                  onTap: (){
+                    setState(() {
+                      FlagFilter=!FlagFilter;
+                    });
+                  },
+                  child: Icon(
+                    Icons.filter_alt_sharp,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ):Container(),
+          ),
+        ),
       ),
     );
   }

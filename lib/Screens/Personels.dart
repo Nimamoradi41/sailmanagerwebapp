@@ -45,7 +45,7 @@ class _PersonelsState extends State<Personels> {
   }
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     GetDataNow();
     pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
@@ -145,234 +145,239 @@ class _PersonelsState extends State<Personels> {
   Widget build(BuildContext context) {
     var wid=deviceWidth(context);
 
-    return Scaffold(
-      backgroundColor: Color(0xffF1F7FE),
-      body: Padding(
-        padding:   EdgeInsets.only(top:
-        wid>=760?wid*0.02:
-        wid*0.05),
-        child: Stack(
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return Center(
+      child: Container(
+        width: wid>600?600:wid,
+        child: Scaffold(
+          backgroundColor: Color(0xffF1F7FE),
+          body: Padding(
+            padding:   EdgeInsets.only(top:
+            wid>=760?wid*0.02:
+            wid*0.05),
+            child: Stack(
               children: [
-                Row(
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    InkWell(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.arrow_back,color: BaseColor,),
-                      ),
-                    ),
-                    Expanded(
-                      child: Card(
-                        margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                        child: TextField(
-                          textAlign: TextAlign.end,
-                          onChanged: (val) async{
-                            if(val.isNotEmpty)
-                            {
-                              print(Customer.length.toString());
-                              // val=val.replaceAll('ی','ي');
-                              // val=val.replaceAll('ک','ك');
-                              Customer_temps3 =widget.Customer_temps2.where((i) => i.name.contains(val)||i.tell2.contains(val.toString())
-                                  ||i.tell1.contains(val)).toList();
-
-                              // Customer_temps2.sort((a, b) => a.name.compareTo(b.name));
-
-                              // Customer_temps2.sort((a,b){})
-
-                              // Customer_temps2.sort((a, b) {
-                              //   return a.name.toLowerCase().compareTo(b.name.toLowerCase());
-                              // });
-                              setState(() {
-                                if(Customer_temps3.length==0)
-                                {
-                                  Customer_temps3.clear();
-                                }
-                              });
-
-
-
-
-                            }else{
-                              // print(Customer.length.toString());
-                              setState(() {
-                                Customer_temps3=widget.Customer_temps2;
-                              });
-
-                            }
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            Navigator.pop(context);
                           },
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                  color: Color(0xff1F3C84).withOpacity(0.80)
-                              ),
-                              hintText: 'پرسنل خود را جستجو کنید...'
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.arrow_back,color: BaseColor,),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                Customer_temps3.length==0?
-                Expanded(
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 24.0),
-                          child: Text('محتوایی برای نمایش وجود ندارد',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: SizeFirst,
-                                fontWeight: FontWeight.bold,
-                                color: BaseColor
-                            ),),
+                        Expanded(
+                          child: Card(
+                            margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                            child: TextField(
+                              textAlign: TextAlign.end,
+                              onChanged: (val) async{
+                                if(val.isNotEmpty)
+                                {
+                                  print(Customer.length.toString());
+                                  // val=val.replaceAll('ی','ي');
+                                  // val=val.replaceAll('ک','ك');
+                                  Customer_temps3 =widget.Customer_temps2.where((i) => i.name.contains(val)||i.tell2.contains(val.toString())
+                                      ||i.tell1.contains(val)).toList();
+
+                                  // Customer_temps2.sort((a, b) => a.name.compareTo(b.name));
+
+                                  // Customer_temps2.sort((a,b){})
+
+                                  // Customer_temps2.sort((a, b) {
+                                  //   return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+                                  // });
+                                  setState(() {
+                                    if(Customer_temps3.length==0)
+                                    {
+                                      Customer_temps3.clear();
+                                    }
+                                  });
+
+
+
+
+                                }else{
+                                  // print(Customer.length.toString());
+                                  setState(() {
+                                    Customer_temps3=widget.Customer_temps2;
+                                  });
+
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(8),
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      color: Color(0xff1F3C84).withOpacity(0.80)
+                                  ),
+                                  hintText: 'پرسنل خود را جستجو کنید...'
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ):Container(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            // itemCount: Customer_temps2.take(30).length,
-                            itemCount:
-                            Customer_temps3.length,
-                            itemBuilder: (ctx,item){
-                              return   InkWell(
-                                onTap: () async{
+                    Customer_temps3.length==0?
+                    Expanded(
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 24.0),
+                              child: Text('محتوایی برای نمایش وجود ندارد',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: SizeFirst,
+                                    fontWeight: FontWeight.bold,
+                                    color: BaseColor
+                                ),),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ):Container(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                // itemCount: Customer_temps2.take(30).length,
+                                itemCount:
+                                Customer_temps3.length,
+                                itemBuilder: (ctx,item){
+                                  return   InkWell(
+                                    onTap: () async{
 
-                                  if(widget.TypeSwitch_Now)
-                                  {
-                                    if(  Customer_temps3[item].lat>0)
+                                      if(widget.TypeSwitch_Now)
                                       {
-                                        Navigator.pop(context, Customer_temps3[item]);
-                                      }else{
-                                      ApiService.ShowSnackbar('پرسنل مورد نظر موقعیت مکانی ندارد');
-                                    }
-                                  }else{
-
-                                    // var data= await ApiService.OfflinePeson(pr, Baseurl, UserName, Password,
-                                    //     widget.Customer_temps2[item].visRdf.toString(),creationDateStart,
-                                    //     creationDateEnd,creationDateStart_En,creationDateEnd_En);
-                                    datatransfe.clear();
-                                      await Run77(pr, Baseurl, UserName, Password, Customer_temps3[item].visRdf.toString()
-                                        , creationDateStart, creationDateEnd, creationDateStart_En, creationDateEnd_En, pageCounter1.toString());
-                                    // List<Latlng> data=data3;
-                                    if(datatransfe!=null)
-                                      {
-                                        if(datatransfe.length>0)
+                                        if(  Customer_temps3[item].lat>0)
                                           {
-
-                                            pr.hide();
-                                            datatransfe[0].name=Customer_temps3[item].name;
-                                            Navigator.pop(context,datatransfe);
+                                            Navigator.pop(context, Customer_temps3[item]);
                                           }else{
-
-                                          pr.hide();
                                           ApiService.ShowSnackbar('پرسنل مورد نظر موقعیت مکانی ندارد');
                                         }
+                                      }else{
 
-                                      } else{
+                                        // var data= await ApiService.OfflinePeson(pr, Baseurl, UserName, Password,
+                                        //     widget.Customer_temps2[item].visRdf.toString(),creationDateStart,
+                                        //     creationDateEnd,creationDateStart_En,creationDateEnd_En);
+                                        datatransfe.clear();
+                                          await Run77(pr, Baseurl, UserName, Password, Customer_temps3[item].visRdf.toString()
+                                            , creationDateStart, creationDateEnd, creationDateStart_En, creationDateEnd_En, pageCounter1.toString());
+                                        // List<Latlng> data=data3;
+                                        if(datatransfe!=null)
+                                          {
+                                            if(datatransfe.length>0)
+                                              {
 
-                                    }
-                                  }
+                                                pr.hide();
+                                                datatransfe[0].name=Customer_temps3[item].name;
+                                                Navigator.pop(context,datatransfe);
+                                              }else{
+
+                                              pr.hide();
+                                              ApiService.ShowSnackbar('پرسنل مورد نظر موقعیت مکانی ندارد');
+                                            }
+
+                                          } else{
+
+                                        }
+                                      }
+
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      margin: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(16),
+                                          border: Border.all(color: BaseColor,width: 2),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: BaseColor.withOpacity(0.10),
+                                                spreadRadius: 1,
+                                                blurRadius: 2
+                                            )
+                                          ]
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              'نام پرسنل:  '+
+                                                  Customer_temps3[item].name.toString()==null?'نامشخص':
+                                              'نام پرسنل:  '+
+                                                  Customer_temps3[item].name.toString(),
+                                              style: TextStyle(color: BaseColor,
+                                                  fontSize:wid<=406?13:14 ,
+                                                  fontWeight: FontWeight.bold),),
+                                            Padding(
+                                              padding: const EdgeInsets.all(2.0),
+                                              child: Divider(height: 10,),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                    child:
+                                                    rowInfo_2( 'موبایل',  Customer_temps3[item].cell,wid)),
+                                                Container(width: 2, color: ColorLine,),
+                                                Expanded(
+                                                    child:
+                                                    rowInfo_2( 'تلفن 2',  Customer_temps3[item].tell2,wid)),
+                                                Container(width: 2, color: ColorLine,),
+                                                Expanded(
+                                                    child:
+                                                    rowInfo_2( 'تلفن ۱',  Customer_temps3[item].tell1,wid)),
+                                              ],
+                                            )
+
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
 
                                 },
-                                child: Container(
-                                  width: double.infinity,
-                                  margin: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(color: BaseColor,width: 2),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: BaseColor.withOpacity(0.10),
-                                            spreadRadius: 1,
-                                            blurRadius: 2
-                                        )
-                                      ]
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          'نام پرسنل:  '+
-                                              Customer_temps3[item].name.toString()==null?'نامشخص':
-                                          'نام پرسنل:  '+
-                                              Customer_temps3[item].name.toString(),
-                                          style: TextStyle(color: BaseColor,
-                                              fontSize:wid<=406?13:14 ,
-                                              fontWeight: FontWeight.bold),),
-                                        Padding(
-                                          padding: const EdgeInsets.all(2.0),
-                                          child: Divider(height: 10,),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                child:
-                                                rowInfo_2( 'موبایل',  Customer_temps3[item].cell,wid)),
-                                            Container(width: 2, color: ColorLine,),
-                                            Expanded(
-                                                child:
-                                                rowInfo_2( 'تلفن 2',  Customer_temps3[item].tell2,wid)),
-                                            Container(width: 2, color: ColorLine,),
-                                            Expanded(
-                                                child:
-                                                rowInfo_2( 'تلفن ۱',  Customer_temps3[item].tell1,wid)),
-                                          ],
-                                        )
-
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-
-                            },
-                          ),
-                        )
-                      ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                widget.TypeSwitch_Now==false?
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      BoxInfo_48( creationDateStart,':   تاریخ  ','images/frm1.png',(){
-                        _showDatePicker_Start(context);
-                      },1),
-                    ],
-                  ),
-                ):Container(),
+                    widget.TypeSwitch_Now==false?
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          BoxInfo_48( creationDateStart,':   تاریخ  ','images/frm1.png',(){
+                            _showDatePicker_Start(context);
+                          },1),
+                        ],
+                      ),
+                    ):Container(),
+                  ],
+                )
               ],
-            )
-          ],
 
+            ),
+          )
         ),
-      )
+      ),
     );
   }
 
