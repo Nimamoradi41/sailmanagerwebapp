@@ -131,13 +131,15 @@ class _ScreenChartLineState extends State<ScreenChartLine> {
   Future GetCap()async{
 
 
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.storage.request().isGranted)   {
 
       final res=  await Cont.capture();
-      // Share.shareFiles([res[0]]);
+      await SaveANShare(res!);
+      // Share.shareFiles([res.path]);
 
       if(res==null)
         {
+
 
         return;
 
@@ -358,7 +360,6 @@ class _ScreenChartLineState extends State<ScreenChartLine> {
                                   primary: Colors.white),
                               onPressed: (){}, child: GestureDetector(
                             onTap: (){
-                              print('A');
                               GetCap();
                             },
                                 child: Text('اشتراک گذاری',
@@ -378,7 +379,6 @@ class _ScreenChartLineState extends State<ScreenChartLine> {
                                   primary: Colors.white),
                               onPressed: (){}, child: GestureDetector(
                             onTap: (){
-                              print('A');
                               ConvertwidgetToImage();
                             },
                             child: Text('ذخیره',

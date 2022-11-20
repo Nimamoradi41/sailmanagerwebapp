@@ -268,15 +268,15 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
 
   Future ShowModall_() async
   {
-    var Sizewid=MediaQuery.of(context).size.width;
+
     bool b=await   showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         builder: (ctx){
-
+          double Widdd=MediaQuery.of(context).size.width;
           return Center(
             child: Container(
-              width: Sizewid>600?600:Sizewid,
+              width: Widdd>600?600:Widdd,
               child: Padding(
                 padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                 child: StatefulBuilder(
@@ -632,12 +632,12 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
 
   @override
   Widget build(BuildContext context) {
-    var Sizewid=MediaQuery.of(context).size.width;
-    return Center(
-      child: Container(
-        width: Sizewid>600?600:Sizewid,
-        child: WillPopScope(
-          onWillPop:_onWillPop2,
+    double Widdd=MediaQuery.of(context).size.width;
+    return WillPopScope(
+      onWillPop:_onWillPop2,
+      child: Center(
+        child: Container(
+          width: Widdd>600?600:Widdd,
           child: Scaffold(
             backgroundColor: ColorBack,
             appBar: AppBar(
@@ -1053,7 +1053,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
                             margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
                             width: double.maxFinite,
                             child: ElevatedButton(onPressed: (){
-                              if(main.length==0)
+                              if(mainItems.length==0)
                               {
                                 Navigator.pop(context);
                               }else{

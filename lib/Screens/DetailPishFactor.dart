@@ -63,14 +63,14 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child:  Text('نه',style: TextStyle(fontSize: 16)),
+            child: Text('نه',style: TextStyle(fontSize: 16)),
           ),
           TextButton(
             onPressed: (){
               Navigator.pop(context);
               RunAcceptOrNotAccept(Flag,txt_1.text,Flag_Desc);
             },
-            child:  Text('بله',style: TextStyle(fontSize: 16),),
+            child: Text('بله',style: TextStyle(fontSize: 16)),
           ),
         ],
       ),

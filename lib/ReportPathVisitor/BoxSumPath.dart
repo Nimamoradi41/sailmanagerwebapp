@@ -34,8 +34,8 @@ class BoxSumPath extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            TextApp('نام کالا', 12,Colors.grey,false),
-            TextApp(data.nameKala, 12,Colors.grey,false),
+            TextApp('نام کالا', 12,Colors.black54,false),
+            TextApp(data.nameKala, 12,Colors.black87,false),
             Container(
               height: 0.5,
               margin: EdgeInsets.all(4),
@@ -46,18 +46,19 @@ class BoxSumPath extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(child:
-                  BoxInfo89('محتوی',data.mohvah.toString())),
+                  BoxInfo89('وزن',data.weight.round()==data.weight?data.weight.round().toString():data.weight.toString())),
+
                   Container(
                     height: 25,
                     width: 1,
                     color: Colors.grey,
                   ),
                   Expanded(child:
-                  BoxInfo89('شماره کالا',data.shka.toString())),
+                  BoxInfo89('محتوی',data.mohvah.toString())),
                   Container(
                     height: 25,
                     width: 1,
-                    color: Colors.grey,
+                    color: Colors.black54,
                   ),
                   Expanded(child:
                   BoxInfo89('جز',data.tedJoz.toString())),

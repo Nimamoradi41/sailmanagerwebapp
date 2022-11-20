@@ -82,27 +82,34 @@ class _ScreenChartLineToLineState extends State<ScreenChartLineToLine> {
     );
   }
   Future GetCap()async{
-
-
-
+    print('EEEE');
     if (await Permission.storage.request().isGranted) {
-      print('A');
+      print('CC');
       final res=  await Cont.capture();
+       print('AA');
+      // await Share.shareFiles([res.path]);
+      // await Cont.capture(delay: const Duration(milliseconds: 10)).then((image) async {
+      //   if (image != null) {
+      //     final directory = await getApplicationDocumentsDirectory();
+      //     final imagePath = await File('${directory.path}/image.png').create();
+      //     await imagePath.writeAsBytes(image);
+      //     await Share.shareFiles([imagePath.path]);
+      //     ShowSnackbar('عکس از نمودار با موفقیت انجام شد');
+      //   }
+      // });
+
       // Share.shareFiles([res.path]);
-      if(res==null)
-      {
-
-        return;
-
-
-      }else{
-        // await  SaveANShare(res);
-
-
-
-
-
-      }
+      // if(res==null)
+      // {
+      //   return;
+      // }else{
+      //   // await  SaveANShare(res);
+      //
+      //
+      //
+      //
+      //
+      // }
 
 
     }else{
@@ -130,7 +137,7 @@ class _ScreenChartLineToLineState extends State<ScreenChartLineToLine> {
   }
   Future<String> SaveImage(Uint8List byts)async{
     if (await Permission.storage.request().isGranted) {
-      print('A');
+
       final time=DateTime.now()
           .toIso8601String()
           .replaceAll('.','-')
@@ -164,6 +171,7 @@ class _ScreenChartLineToLineState extends State<ScreenChartLineToLine> {
   }
 
   GlobalKey cont_key=GlobalKey();
+
 
   void ConvertwidgetToImage()async{
     setState(() {
@@ -350,7 +358,7 @@ class _ScreenChartLineToLineState extends State<ScreenChartLineToLine> {
                                       primary: Colors.white),
                                   onPressed: (){}, child: GestureDetector(
                                 onTap: (){
-                                  print('A');
+                                  print('۵۵');
                                   GetCap();
                                 },
                                 child: Text('اشتراک گذاری',
@@ -369,7 +377,7 @@ class _ScreenChartLineToLineState extends State<ScreenChartLineToLine> {
                                       primary: Colors.white),
                                   onPressed: (){}, child: GestureDetector(
                                 onTap: (){
-                                  print('A');
+                                  print('8585');
                                   ConvertwidgetToImage();
                                 },
                                 child: Text('ذخیره',

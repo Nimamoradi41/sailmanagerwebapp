@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:screenshot/screenshot.dart';
+import 'package:share/share.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -159,15 +160,22 @@ class ScreenChartCircleState extends State<ScreenChartCircle> {
 
     });
   }
+
+
   void ConvertwidgetToImage()async{
     setState(() {
       FlAG=true;
     });
     try{
-      RenderRepaintBoundary? renderRepaintBoundary=cont_key.currentContext!.findRenderObject() as RenderRepaintBoundary?;
-      ui.Image boxImge=await renderRepaintBoundary!.toImage(pixelRatio: 1);
+
+      RenderRepaintBoundary renderRepaintBoundary=cont_key.currentContext?.findRenderObject() as RenderRepaintBoundary;
+
+      ui.Image boxImge=await renderRepaintBoundary.toImage(pixelRatio: 1);
+
       ByteData? data=await boxImge.toByteData(format: ui.ImageByteFormat.png);
+
       Uint8List uint8list=data!.buffer.asUint8List();
+
       SaveImage(uint8list);
     }catch(E)
     {
@@ -179,16 +187,32 @@ class ScreenChartCircleState extends State<ScreenChartCircle> {
   }
   final Cont=ScreenshotController();
 
+  Future  SaveANShare(Uint8List byts) async{
+    final Direc=await getApplicationDocumentsDirectory();
+    final image=File(Direc.path+'/'+'flutter.png');
+    image.writeAsBytesSync(byts);
+    final text='Share';
+    await Share.shareFiles([image.path],text: text);
+
+  }
+
+
+
+
+
+
   Future GetCap()async{
 
 
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.storage.request().isGranted)   {
 
       final res=  await Cont.capture();
-      // Share.shareFiles([res[0]]);
+      await SaveANShare(res!);
+      // Share.shareFiles([res.path]);
 
       if(res==null)
       {
+
 
         return;
 
@@ -218,6 +242,9 @@ class ScreenChartCircleState extends State<ScreenChartCircle> {
 
 
   }
+
+
+
 
 
 
@@ -261,99 +288,105 @@ class ScreenChartCircleState extends State<ScreenChartCircle> {
 
    @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: BaseColor,
-            actions: [
-              InkWell(
-                onTap: (){
-                  ShowInfoCustomer();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.info_outline,color: Colors.white,),
-                ),
-              )
-            ],
-            title:Column(
-              children: [
-                Text('آتیران ', textAlign: TextAlign.center),
-                Text(' نمودار ' ,style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
-              ],
-            )),
-        body:
-        FlAG==false?
-        Container(
-          margin: EdgeInsets.all(4),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 20,
-                child:Container(child: buildSfCircularChart()),
+    return Screenshot(
+      controller: Cont,
+      child: RepaintBoundary(
+        key: cont_key,
+        child: SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+                centerTitle: true,
+                backgroundColor: BaseColor,
+                actions: [
+                  InkWell(
+                    onTap: (){
+                      ShowInfoCustomer();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.info_outline,color: Colors.white,),
+                    ),
+                  )
+                ],
+                title:Column(
+                  children: [
+                    Text('آتیران ', textAlign: TextAlign.center),
+                    Text(' نمودار ' ,style: TextStyle(fontSize: 10),textAlign: TextAlign.center,)
+                  ],
+                )),
+            body:
+            FlAG==false?
+            Container(
+              margin: EdgeInsets.all(4),
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 20,
+                    child:Container(child: buildSfCircularChart()),
+                  ),
+                  // Expanded(
+                  //     child: Container(
+                  //         width: double.infinity,
+                  //         decoration: BoxDecoration(
+                  //
+                  //         ),
+                  //         child: Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //
+                  //             Padding(
+                  //               padding: const EdgeInsets.all(4),
+                  //               child: ElevatedButton(
+                  //
+                  //                   style: ElevatedButton.styleFrom(
+                  //
+                  //
+                  //                       primary: Colors.white),
+                  //                   onPressed: (){}, child: GestureDetector(
+                  //                 onTap: (){
+                  //
+                  //                   GetCap();
+                  //                 },
+                  //                 child: Text('اشتراک گذاری',
+                  //                   style: TextStyle(
+                  //                       fontSize: 10,
+                  //                       color: BaseColor
+                  //                   ),),
+                  //               )),
+                  //             ),
+                  //             Padding(
+                  //               padding: const EdgeInsets.all(4),
+                  //               child: ElevatedButton(
+                  //
+                  //                   style: ElevatedButton.styleFrom(
+                  //
+                  //
+                  //                       primary: Colors.white),
+                  //                   onPressed: (){}, child: GestureDetector(
+                  //                 onTap: (){
+                  //
+                  //                   ConvertwidgetToImage();
+                  //                 },
+                  //                 child: Text('ذخیره',
+                  //                   style: TextStyle(
+                  //                       fontSize: 12,
+                  //                       color: BaseColor
+                  //                   ),),
+                  //               )),
+                  //             ),
+                  //
+                  //
+                  //           ],
+                  //         )))
+
+                ],
               ),
-              Expanded(
-                  child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-
-                          Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: ElevatedButton(
-
-                                style: ElevatedButton.styleFrom(
-
-
-                                    primary: Colors.white),
-                                onPressed: (){}, child: GestureDetector(
-                              onTap: (){
-                                print('A');
-                                GetCap();
-                              },
-                              child: Text('اشتراک گذاری',
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    color: BaseColor
-                                ),),
-                            )),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: ElevatedButton(
-
-                                style: ElevatedButton.styleFrom(
-
-
-                                    primary: Colors.white),
-                                onPressed: (){}, child: GestureDetector(
-                              onTap: (){
-                                print('A');
-                                ConvertwidgetToImage();
-                              },
-                              child: Text('ذخیره',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: BaseColor
-                                ),),
-                            )),
-                          ),
-
-
-                        ],
-                      )))
-
-            ],
+            )
+                : Container(
+                color: Colors.white,
+                child: Center(child: CircularProgressIndicator())),
           ),
-        )
-            : Container(
-            color: Colors.white,
-            child: Center(child: CircularProgressIndicator())),
+        ),
       ),
     );
   }

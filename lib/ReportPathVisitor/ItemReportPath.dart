@@ -20,6 +20,7 @@ class ItemReportPath extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+
           Container(
             decoration: BoxDecoration(
                 color: BaseColor,
@@ -28,7 +29,7 @@ class ItemReportPath extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4),
               child: TextApp(
-                  data.visName,12,Colors.white,false
+                  data.visName+' - مشاهده جمع اقلام ',12,Colors.white,false
               ),
             ),
           ),
@@ -71,8 +72,8 @@ class ItemReportPath extends StatelessWidget {
                                             crossAxisAlignment: CrossAxisAlignment.end,
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              TextApp('عدد',10, Colors.grey,false),
-                                              TextApp(data.numAllCustomers.toInt().toString(),10, Colors.grey,false),
+                                              TextApp('عدد',10, Colors.black54,false),
+                                              TextApp(data.numAllCustomers.toInt().toString(),10, Colors.black87,false),
                                             ],
                                           ),
                                         )),
@@ -87,7 +88,7 @@ class ItemReportPath extends StatelessWidget {
                                 flex: 4,
                                 child: TextApp(
                                     'تعداد کل مشتریان مسیر',
-                                    10,Colors.grey,false
+                                    10,Colors.black54,false
                                 )
                             )
                           ],
@@ -116,7 +117,7 @@ class ItemReportPath extends StatelessWidget {
                                             crossAxisAlignment: CrossAxisAlignment.end,
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              TextApp('درصد',10, Colors.grey,false),
+                                              TextApp('درصد',10, Colors.black87,false),
                                               TextApp(data.numCustomersVisitedPercent.toInt()
                                                   .toString()+' % ',10, Colors.grey,false),
                                             ],
@@ -132,7 +133,7 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('عدد',10, Colors.grey,false),
+                                            TextApp('عدد',10, Colors.black87,false),
                                             TextApp(data.numCustomersVisited.toInt()
                                                 .toString(),10, Colors.grey,false),
                                           ],
@@ -148,7 +149,7 @@ class ItemReportPath extends StatelessWidget {
                                 flex: 4,
                                 child: TextApp(
                                     'پوشش مشتریان ویزیت شده',
-                                    10,Colors.grey,false
+                                    10,Colors.black54,false
                                 ))
                           ],
                         ),
@@ -172,8 +173,8 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('مبلغ',10, Colors.grey,false),
-                                            TextApp(SplitPrice(data.priceOrders),10, Colors.grey,false),
+                                            TextApp('مبلغ',10, Colors.black54,false),
+                                            TextApp(SplitPrice(data.priceOrders),10, Colors.black87,false),
                                           ],
                                         )),
                                     Container(
@@ -186,8 +187,8 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('درصد',10, Colors.grey,false),
-                                            TextApp(data.numCustomersVisitedPercentWithOrder.toInt().toString()+'%',10, Colors.grey,false),
+                                            TextApp('درصد',10, Colors.black54,false),
+                                            TextApp(data.numCustomersVisitedPercentWithOrder.toInt().toString()+'%',10, Colors.black87,false),
                                           ],
                                         )),
                                     Container(
@@ -200,8 +201,8 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('عدد',10, Colors.grey,false),
-                                            TextApp(data.numCustomersVisitedWithOrder.toInt().toString(),10, Colors.grey,false),
+                                            TextApp('عدد',10, Colors.black54,false),
+                                            TextApp(data.numCustomersVisitedWithOrder.toInt().toString(),10, Colors.black87,false),
                                           ],
                                         )),
                                   ],
@@ -215,7 +216,7 @@ class ItemReportPath extends StatelessWidget {
                                 flex: 4,
                                 child: TextApp(
                                     'ویزیت های دارای سفارش',
-                                    10,Colors.grey,false
+                                    10,Colors.black54,false
                                 ))
                           ],
                         ),
@@ -243,8 +244,8 @@ class ItemReportPath extends StatelessWidget {
                                             crossAxisAlignment: CrossAxisAlignment.end,
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              TextApp('درصد',10, Colors.grey,false),
-                                              TextApp(data.numCustomersVisitedPercentWithOutOrder.toInt().toString()+'%',10, Colors.grey,false),
+                                              TextApp('درصد',10, Colors.black54,false),
+                                              TextApp(data.numCustomersVisitedPercentWithOutOrder.toInt().toString()+'%',10, Colors.black87,false),
                                             ],
                                           ),
                                         )),
@@ -258,8 +259,8 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('عدد',10, Colors.grey,false),
-                                            TextApp(data.numCustomersVisitedWithOutOrder.toInt().toString(),10, Colors.grey,false),
+                                            TextApp('عدد',10, Colors.black54,false),
+                                            TextApp(data.numCustomersVisitedWithOutOrder.toInt().toString(),10, Colors.black87,false),
                                           ],
                                         )),
                                   ],
@@ -273,7 +274,7 @@ class ItemReportPath extends StatelessWidget {
                                 flex: 4,
                                 child: TextApp(
                                     'ویزیت بدون سفارش',
-                                    10,Colors.grey,false
+                                    10,Colors.black54,false
                                 ))
                           ],
                         ),
@@ -297,22 +298,22 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('پوشش فروش محصولات',10, Colors.grey,false),
+                                            TextApp('پوشش فروش محصولات',10, Colors.black54,false),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 TextApp('('+data.numAllInventory.toInt().toString()+' کالا '+')'
                                                     // +'از'+'کالا'+data.numAllInventory .toInt().toString()
-                                                    ,10, Colors.grey,false),
+                                                    ,10, Colors.black87,false),
                                                 TextApp('از '
                                                     // +'از'+'کالا'+data.numAllInventory .toInt().toString()
-                                                    ,10, Colors.grey,false),
+                                                    ,10, Colors.black87,false),
                                                 TextApp(' کالا '
                                                     // +'از'+'کالا'+data.numAllInventory .toInt().toString()
-                                                    ,10, Colors.grey,false),
+                                                    ,10, Colors.black87,false),
                                                 TextApp(data.numCoverProduct.toInt().toString()
                                                     // +'از'+'کالا'+data.numAllInventory .toInt().toString()
-                                                    ,10, Colors.grey,false),
+                                                    ,10, Colors.black87,false),
 
 
                                               ],
@@ -329,8 +330,8 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('عدد',10, Colors.grey,false),
-                                            TextApp(data.avgProductOrder.toInt().toString()+'%',10, Colors.grey,false),
+                                            TextApp('عدد',10, Colors.black54,false),
+                                            TextApp(data.avgProductOrder.toInt().toString()+'%',10, Colors.black87,false),
                                           ],
                                         )),
 
@@ -340,7 +341,7 @@ class ItemReportPath extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             // TextApp('عدد',10, Colors.grey,false),
-                                            TextApp('در فاکتور ها',10, Colors.grey,false),
+                                            TextApp('در فاکتور ها',10, Colors.black54,false),
                                           ],
                                         )),
                                   ],
@@ -354,7 +355,7 @@ class ItemReportPath extends StatelessWidget {
                                 flex: 4,
                                 child: TextApp(
                                     'میانگین خط',
-                                    10,Colors.grey,false
+                                    10,Colors.black54,false
                                 ))
                           ],
                         ),
@@ -378,8 +379,8 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('مبلغ',10, Colors.grey,false),
-                                            TextApp(SplitPrice(data.pricePishSaleToSale),10, Colors.grey,false),
+                                            TextApp('مبلغ',10, Colors.black54,false),
+                                            TextApp(SplitPrice(data.pricePishSaleToSale),10, Colors.black87,false),
                                           ],
                                         )),
                                     Container(
@@ -392,8 +393,8 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('درصد',10, Colors.grey,false),
-                                            TextApp(data.percentPishSaleToSale.toInt().toString()+'%',10, Colors.grey,false),
+                                            TextApp('درصد',10, Colors.black54,false),
+                                            TextApp(data.percentPishSaleToSale.toInt().toString()+'%',10, Colors.black87,false),
                                           ],
                                         )),
                                     Container(
@@ -406,8 +407,8 @@ class ItemReportPath extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            TextApp('عدد',10, Colors.grey,false),
-                                            TextApp(data.numPishSaleToSale.toInt().toString(),10, Colors.grey,false),
+                                            TextApp('عدد',10, Colors.black54,false),
+                                            TextApp(data.numPishSaleToSale.toInt().toString(),10, Colors.black87,false),
                                           ],
                                         )),
                                   ],
@@ -421,7 +422,7 @@ class ItemReportPath extends StatelessWidget {
                                 flex: 4,
                                 child: TextApp(
                                     'میزان تبدیل سفارش به فاکتور',
-                                    10,Colors.grey,false
+                                    10,Colors.black54,false
                                 ))
                           ],
                         ),

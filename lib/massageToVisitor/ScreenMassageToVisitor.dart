@@ -66,14 +66,14 @@ class _ScreenMassageToVisitorState extends State<ScreenMassageToVisitor> {
   TextEditingController txtsearch=TextEditingController();
   Future ShowModall_() async
   {
-    var Sizewid=MediaQuery.of(context).size.width;
     bool b=await   showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         builder: (ctx){
+          double Widdd=MediaQuery.of(context).size.width;
           return Center(
             child: Container(
-              width: Sizewid>600?600:Sizewid,
+              width: Widdd>600?600:Widdd,
               child: Padding(
                 padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                 child: StatefulBuilder(
@@ -406,6 +406,9 @@ class _ScreenMassageToVisitorState extends State<ScreenMassageToVisitor> {
         return;
       }
 
+
+
+
     if(Controler_Text.text.isEmpty)
     {
       ApiService.ShowSnackbar('متن پیام را وارد کنید');
@@ -484,12 +487,13 @@ class _ScreenMassageToVisitorState extends State<ScreenMassageToVisitor> {
   var Controler_Title=TextEditingController();
   var Controler_Text=TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
-    var Sizewid=MediaQuery.of(context).size.width;
+    double Widdd=MediaQuery.of(context).size.width;
     return Center(
       child: Container(
-        width: Sizewid>600?600:Sizewid,
+        width: Widdd>600?600:Widdd,
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(

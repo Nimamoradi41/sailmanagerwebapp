@@ -112,6 +112,7 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
 
 
   }
+
   List<Re_VisitorsAll>  main=[];
   bool FlagFilter=true;
   bool IsAllVisitors=false;
@@ -214,6 +215,10 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
   }
 
 
+
+
+
+
   Future<Null> _refresh() {
     mainItems.clear();
     return GetData().then((_user) {
@@ -243,18 +248,20 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
 
   }
 
+
+
+
   TextEditingController txtsearch=TextEditingController();
   Future ShowModall_() async
   {
-    var Sizewid=MediaQuery.of(context).size.width;
     bool b=await   showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         builder: (ctx){
-
+          double Widdd=MediaQuery.of(context).size.width;
           return Center(
             child: Container(
-              width: Sizewid>600?600:Sizewid,
+              width: Widdd>600?600:Widdd,
               child: Padding(
                 padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                 child: StatefulBuilder(
@@ -517,8 +524,22 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
                                   bottom: 0,
                                   child: InkWell(
                                     onTap: (){
-                                      FocusManager.instance.primaryFocus?.unfocus();
-                                      Navigator.pop(context);
+
+                                      print('CCCC');
+                                      if(mainItems.length>0)
+                                        {
+                                          print('AA');
+                                          setState(() {
+                                            FlagFilter=!FlagFilter;
+                                          });
+                                        }
+                                      else{
+                                        print('BB');
+                                        FocusManager.instance.primaryFocus?.unfocus();
+                                        Navigator.pop(context);
+                                      }
+
+
 
 
 
@@ -572,16 +593,16 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
     //   }
 
 
-    print(b.toString());
+
   }
   @override
   Widget build(BuildContext context) {
-    var Sizewid=MediaQuery.of(context).size.width;
-    return Center(
-      child: Container(
-        width: Sizewid>600?600:Sizewid,
-        child: WillPopScope(
-          onWillPop:_onWillPop2,
+    double Widdd=MediaQuery.of(context).size.width;
+    return WillPopScope(
+      onWillPop:_onWillPop2,
+      child: Center(
+        child: Container(
+          width: Widdd>600?600:Widdd,
           child: Scaffold(
             appBar: AppBar(
               centerTitle: true,
@@ -750,10 +771,13 @@ class _ReportPathVisitorState extends State<ReportPathVisitor> {
                        margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
                        width: double.maxFinite,
                        child: ElevatedButton(onPressed: (){
-                         if(main.length==0)
+                         print('VV');
+                         if(mainItems.length==0)
                          {
+                           print('EE');
                            Navigator.pop(context);
                          }else{
+                           print('TT');
                            setState(() {
                              FlagFilter=!FlagFilter;
                            });

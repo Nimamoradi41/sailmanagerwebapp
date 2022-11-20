@@ -165,11 +165,11 @@ class _mainpageState extends State<mainpage> {
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child:  Text('نه',style: TextStyle(fontSize: 16)),
+            child: Text('نه',style: TextStyle(fontSize: 16)),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child:  Text('بله',style: TextStyle(fontSize: 16),),
+            child: Text('بله',style: TextStyle(fontSize: 16)),
           ),
         ],
       ),

@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
       ),
       // home:ReportPathVisitor()
       // home:ScreenMassageToVisitor()
-      home:   Flag ? mainpage():  MainMap()
+      home:   Flag ? mainpage():MainMap()
       // home:MainMap()
     );
   }
