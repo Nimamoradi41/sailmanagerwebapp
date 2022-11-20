@@ -229,7 +229,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('نسخه 2.0.2',style: TextStyle(
+                  Text('نسخه 2.0.3',style: TextStyle(
                     color: BaseColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 12
@@ -706,8 +706,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text('بله',style: TextStyle(fontSize: 16),
-            )
+            child: Text('بله',style: TextStyle(fontSize: 16),)
           ),
         ],
       ),
@@ -850,7 +849,8 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
           // Mcontrol=sd;
 
           Mcontrol.addImage('marker', markerImage);
-          Mcontrol.addSymbol(SymbolOptions(
+          Mcontrol.addSymbol(
+              SymbolOptions(
             iconSize: 0.2,
             iconImage: "marker",
             textAnchor:myperson.name,
@@ -1149,13 +1149,16 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                 ):Container(),
                 Row(
                   children: [
-                    BtnSmall2('images/list.png',18,Colors.white, (){
-                      ShowModall_MainMenu();
-                    }),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: BtnSmall2('images/list.png',18,Colors.white, (){
+                        ShowModall_MainMenu();
+                      }),
+                    ),
                     Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 6.0),
+                          padding: const EdgeInsets.only(left: 6.0,bottom: 24),
                           child:  BtnSmall2('images/menu1.png',18,Colors.white,(){
                             ShowModall_MainMenu2();
                           }),
@@ -1182,7 +1185,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                         children: [
                           Container(
                             width: Sizewid>796?Sizewid/4:Sizewid<=450?Sizewid/2:Sizewid/2,
-                            margin: EdgeInsets.only(left: 6),
+                            margin: EdgeInsets.only(left: 6,bottom: 24),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 boxShadow: [

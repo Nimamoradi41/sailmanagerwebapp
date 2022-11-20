@@ -282,7 +282,7 @@ class _mainpageState extends State<mainpage> {
                  Positioned(
                    right: 8,
                    bottom: 8,
-                   child: Text('نسخه 2.0.2',
+                   child: Text('نسخه 2.0.3',
                    style: TextStyle(
                      fontWeight: FontWeight.bold,
                      color: Colors.white,
