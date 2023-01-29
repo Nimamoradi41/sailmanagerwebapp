@@ -185,6 +185,10 @@ class _mainpageState extends State<mainpage> {
 
     GetUser();
   }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final SizeApp=MediaQuery.of(context).size;
@@ -225,8 +229,8 @@ class _mainpageState extends State<mainpage> {
                                  fontSize: SizeApp.height>=600 ? 16:12 ,
                                  fontWeight: FontWeight.bold),),
                            // BoxInput('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1,SizeApp.height),
-                           BoxInput('images/admin2.svg','نام کاربری خود را وارد کنید','نام کاربری',txt_2,SizeApp.height),
-                           BoxInput('images/ghofl.svg','کلمه عبور خود را وارد کنید','کلمه عبور',txt_3,SizeApp.height),
+                           BoxInput('images/admin2.svg','نام کاربری خود را وارد کنید','نام کاربری',txt_2,SizeApp.height,false),
+                           BoxInput('images/ghofl.svg','کلمه عبور خود را وارد کنید','کلمه عبور',txt_3,SizeApp.height,true),
                            Container(
                              margin: EdgeInsets.symmetric(horizontal: 16),
                              width: double.infinity,
@@ -282,7 +286,7 @@ class _mainpageState extends State<mainpage> {
                  Positioned(
                    right: 8,
                    bottom: 8,
-                   child: Text('نسخه 2.0.3',
+                   child: Text('نسخه 2.0.4',
                    style: TextStyle(
                      fontWeight: FontWeight.bold,
                      color: Colors.white,
@@ -290,7 +294,6 @@ class _mainpageState extends State<mainpage> {
                    ),),
                  )
                ],
-
              ),
            )
 
@@ -315,9 +318,10 @@ class BoxInput extends StatelessWidget {
 
    TextEditingController txtc;
    double SizeApp;
+   bool Flagc;
 
 
-   BoxInput(this.Icone, this.Hint, this.Title,this.txtc,this.SizeApp);
+   BoxInput(this.Icone, this.Hint, this.Title,this.txtc,this.SizeApp,this.Flagc);
 
   @override
   Widget build(BuildContext context) {
@@ -350,6 +354,7 @@ class BoxInput extends StatelessWidget {
               children: [
                 Expanded(child: TextField(
                   controller: txtc,
+                  obscureText: Flagc,
                   textAlign: TextAlign.end,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(8),

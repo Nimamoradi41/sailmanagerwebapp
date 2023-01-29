@@ -58,9 +58,16 @@ class _ScreenScreenState extends State<ScreenState> {
     GetLogins();
   }
 
+
+  var ControllerText=TextEditingController();
+
+
+
+
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
           backgroundColor: ColorBack,
@@ -73,9 +80,14 @@ class _ScreenScreenState extends State<ScreenState> {
                     children: [
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.arrow_back,color: BaseColor,),
+                          InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.arrow_back,color: BaseColor,),
+                            ),
                           ),
                           Expanded(
                             child: Card(
@@ -83,6 +95,14 @@ class _ScreenScreenState extends State<ScreenState> {
                               child: Directionality(
                                 textDirection: TextDirection.rtl,
                                 child: TextField(
+                                  controller: ControllerText,
+                                  onTap: (){
+                                    if(ControllerText.selection == TextSelection.fromPosition(TextPosition(offset: ControllerText.text.length -1))){
+                                      setState(() {
+                                        ControllerText.selection = TextSelection.fromPosition(TextPosition(offset: ControllerText.text.length));
+                                      });
+                                    }
+                                  },
                                   onChanged: (val) async {
                                     if(val.isNotEmpty)
                                     {
@@ -96,9 +116,7 @@ class _ScreenScreenState extends State<ScreenState> {
                                         }
                                       });
                                     }else{
-                                      setState(() {
-                                        datamian.clear();
-                                      });
+                                      Run();
                                     }
 
                                   },

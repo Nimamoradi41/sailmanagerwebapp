@@ -59,7 +59,7 @@ class _ScreenWayState extends State<ScreenWay> {
     super.initState();
     GetLogins();
   }
-
+  var ControllerText=TextEditingController();
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
@@ -85,7 +85,16 @@ class _ScreenWayState extends State<ScreenWay> {
                               child: Directionality(
                                 textDirection: TextDirection.rtl,
                                 child: TextField(
+                                  controller: ControllerText,
+                                  onTap: (){
+                                    if(ControllerText.selection == TextSelection.fromPosition(TextPosition(offset: ControllerText.text.length -1))){
+                                      setState(() {
+                                        ControllerText.selection = TextSelection.fromPosition(TextPosition(offset: ControllerText.text.length));
+                                      });
+                                    }
+                                  },
                                   onChanged: (val) async {
+
                                     if(val.isNotEmpty)
                                     {
                                        var ss=await ApiService.GetWay(Baseurl, UserName, Password,widget.IdState,val.toString());
@@ -98,9 +107,7 @@ class _ScreenWayState extends State<ScreenWay> {
                                         }
                                       });
                                     }else{
-                                      setState(() {
-                                        datamian.clear();
-                                      });
+                                      Run();
                                     }
 
                                   },

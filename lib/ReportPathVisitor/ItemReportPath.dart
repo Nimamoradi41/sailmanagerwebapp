@@ -20,7 +20,6 @@ class ItemReportPath extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-
           Container(
             decoration: BoxDecoration(
                 color: BaseColor,
@@ -108,7 +107,6 @@ class ItemReportPath extends StatelessWidget {
                                 flex: 7,
                                 child: Row(
                                   children: [
-
                                     Expanded(
                                         flex: 4,
                                         child: Padding(
@@ -118,8 +116,10 @@ class ItemReportPath extends StatelessWidget {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               TextApp('درصد',10, Colors.black87,false),
-                                              TextApp(data.numCustomersVisitedPercent.toInt()
-                                                  .toString()+' % ',10, Colors.grey,false),
+                                              TextApp(
+                                                  data.numCustomersVisitedPercent.round()==data.numCustomersVisitedPercent?
+                                                  data.numCustomersVisitedPercent.toInt().toString():data.numCustomersVisitedPercent.toString()
+                                                      +' % ',10, Colors.grey,false),
                                             ],
                                           ),
                                         )),
@@ -188,7 +188,11 @@ class ItemReportPath extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             TextApp('درصد',10, Colors.black54,false),
-                                            TextApp(data.numCustomersVisitedPercentWithOrder.toInt().toString()+'%',10, Colors.black87,false),
+                                            TextApp(
+                                                data.numCustomersVisitedPercentWithOrder.round()==data.numCustomersVisitedPercentWithOrder?
+                                                data.numCustomersVisitedPercentWithOrder.toInt().toString()+'%':
+                                                data.numCustomersVisitedPercentWithOrder.toString()+'%'
+                                                    +'%',10, Colors.black87,false),
                                           ],
                                         )),
                                     Container(
@@ -245,7 +249,11 @@ class ItemReportPath extends StatelessWidget {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               TextApp('درصد',10, Colors.black54,false),
-                                              TextApp(data.numCustomersVisitedPercentWithOutOrder.toInt().toString()+'%',10, Colors.black87,false),
+                                              TextApp(
+                                                  data.numCustomersVisitedPercentWithOutOrder.round()==data.numCustomersVisitedPercentWithOutOrder?
+                                                  data.numCustomersVisitedPercentWithOutOrder.toInt().toString()+'%':
+                                                  data.numCustomersVisitedPercentWithOutOrder.toString()+'%'
+                                                  ,10, Colors.black87,false),
                                             ],
                                           ),
                                         )),
@@ -394,7 +402,11 @@ class ItemReportPath extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             TextApp('درصد',10, Colors.black54,false),
-                                            TextApp(data.percentPishSaleToSale.toInt().toString()+'%',10, Colors.black87,false),
+                                            TextApp(
+                                                data.percentPishSaleToSale.round()==data.percentPishSaleToSale?
+                                                data.percentPishSaleToSale.toInt().toString()+'%':
+                                                data.percentPishSaleToSale.toString()+'%'
+                                                    +'%',10, Colors.black87,false),
                                           ],
                                         )),
                                     Container(

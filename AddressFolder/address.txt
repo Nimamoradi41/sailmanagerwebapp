@@ -1,1 +1,1 @@
-http://172.10.10.3:9595/nimasalemanager
+http://172.10.10.3:9595/atiransalemanagerservice

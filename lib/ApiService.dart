@@ -1100,7 +1100,7 @@ class ApiService{
 
   static Future<ListCustomer> GetCustomer(String Baseurl,String User,String Pass,
       String groupId,String provinceId,String cityId,
-      String regeinId,String masirId,String name,String flagAccount,bool flagg,ProgressDialog pr) async{
+      String regeinId,String masirId,String name,String flagAccount,bool flagg,ProgressDialog pr,bool falgc) async{
     var login;
 
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Customer/List');
@@ -1117,7 +1117,10 @@ class ApiService{
             fontSize: 14,
             color: Colors.black87),
       );
-      await  pr.show();
+      if (falgc)
+      {
+        await  pr.show();
+      }
     }
 
     var map = new Map<String, dynamic>();

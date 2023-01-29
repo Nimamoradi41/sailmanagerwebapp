@@ -75,7 +75,7 @@ class _ReportPathVisitorState extends State<ReportSumPathVisitor> {
 
     var Data=await ApiService.GetVisitorsPathSum(pr, base!, UserName!, Password!,
        // widget. Ta_Data,widget.Az_Data,widget.visid
-       widget. Ta_Data,widget.Az_Data,'4'
+       widget. Ta_Data,widget.Az_Data,widget.visid
         );
     pr.hide();
     if(Data!=null)

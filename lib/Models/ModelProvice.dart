@@ -38,10 +38,12 @@ class Re_Provice {
   Re_Provice({
     required  this.id,
     required  this.name,
+       this.IsCheck=false,
   });
 
   String id;
   String name;
+  bool IsCheck;
 
   factory Re_Provice.fromJson(Map<String, dynamic> json) => Re_Provice(
     id: json["id"],

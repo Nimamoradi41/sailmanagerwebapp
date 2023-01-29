@@ -229,7 +229,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('نسخه 2.0.3',style: TextStyle(
+                  Text('نسخه 2.0.4',style: TextStyle(
                     color: BaseColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 12
@@ -795,7 +795,6 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
     var Password =prefs.getString('Password');
     var data=    await   ApiService.GetPerson( base.toString(), UserName!, Password!);
     // var data=    await   ApiService.GetPerson( 'http://91.108.148.38:9595/manager', 'نیما', '1');
-    debugPrint(data.toJson().toString());
     if(data.code==200)
       {
         FlagCheckPishFactor=data.pishFactorNotConfirmed;

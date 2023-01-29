@@ -43,11 +43,14 @@ class _CustomersState extends State<Customers> {
    var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
    var Data=await ApiService.CustGroup(pr, base!, UserName!, Password!);
 
+
    pr.hide();
    if(Data!=null)
    {
      if(Data.code==200)
      {
+       spinnerItems.clear();
+       spinnerItems.add('همه');
        ReCustGroup.addAll(Data.res);
        ReCustGroup.forEach((element) {
          spinnerItems.add(element.name);
@@ -83,26 +86,32 @@ class _CustomersState extends State<Customers> {
     var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
    var Data=await ApiService.GetProvice(pr, base, UserName, Password);
 
+
+
    pr.hide();
    if(Data!=null)
    {
      if(Data.code==200)
      {
+       spinnerItems_Provice.clear();
+       ReRe_Provice.clear();
+       ReRe_Provice.add(Re_Provice(id: '0',name: 'همه',IsCheck: false));
        ReRe_Provice.addAll(Data.res);
        ReRe_Provice.forEach((element) {
          spinnerItems_Provice.add(element.name);
        });
 
-       if(ReRe_Provice.length>0)
-         {
-           dropdownProvice=ReRe_Provice[0].name;
-           IdProvine=ReRe_Provice[0].id;
-         }
 
 
-       setState(() {
 
-       });
+       if(ReRe_Provice.isNotEmpty)
+       {
+         dropdownProvice='همه';
+         IdProvine='0';
+       }
+
+
+       setState((){});
        ShowModall_CusGroups(ReCustGroup,s);
      }
    }
@@ -154,6 +163,8 @@ class _CustomersState extends State<Customers> {
 
   ShowModall_CusGroups(List<ReCustGroup_2> data,double Sizewid)
   {
+    print(data.toString());
+    print('data.toString()'+spinnerItems.length.toString());
     showModalBottomSheet(context: context, builder: (ctx){
       return  StatefulBuilder(
           builder: (BuildContext context, setState)=> Container(
@@ -257,8 +268,8 @@ class _CustomersState extends State<Customers> {
                           underline:  Container(color: Colors.transparent),
                           items: spinnerItems.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
+                              value: value.toString(),
+                              child: Text(value.toString()),
                             );
                           }).toList(),
                         ),
@@ -295,10 +306,31 @@ class _CustomersState extends State<Customers> {
                           onChanged: (s){
                             setState(() {
                               var ds=ReRe_Provice.where((element) => element.name==s.toString()).toList();
-                              if(ds.length>0)
+                              if(ds.isNotEmpty)
+                              {
+                                if(ds[0].name=='همه')
                                 {
-                                  IdProvine=ds[0].id;
+                                  IdProvine='0';
+                                  IdCity='-1';
+                                  IdState='-1';
+                                  IdWay='-1';
+                                  NameCity='شهر را انتخاب کنید';
+                                  NameState='منطقه را انتخاب کنید';
+                                  NameWay='مسیر را انتخاب کنید';
+                                }else{
+                                  if(IdProvine!=ds[0].id)
+                                  {
+                                    IdProvine='0';
+                                    IdCity='-1';
+                                    IdState='-1';
+                                    IdWay='-1';
+                                    NameCity='شهر را انتخاب کنید';
+                                    NameState='منطقه را انتخاب کنید';
+                                    NameWay='مسیر را انتخاب کنید';
+                                    IdProvine=ds[0].id;
+                                  }
                                 }
+                              }
                               dropdownProvice = s.toString();
                             });
                           },
@@ -322,7 +354,7 @@ class _CustomersState extends State<Customers> {
                     flex: 8,
                     child: GestureDetector(
                       onTap: () async{
-                        if(IdProvine.isNotEmpty)
+                        if(IdProvine!='0')
                           {
                             var resuilt= await    Navigator.of(context).push(
                                 MaterialPageRoute(builder: (context) => ScreenCity(IdProvine,dropdownProvice) ));
@@ -382,7 +414,7 @@ class _CustomersState extends State<Customers> {
                     flex: 8,
                     child: GestureDetector(
                       onTap: () async{
-                        if(IdCity.isNotEmpty)
+                        if(IdCity!='-1')
                         {
                           var resuilt= await    Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) => ScreenState(IdCity,NameCity) ));
@@ -442,7 +474,7 @@ class _CustomersState extends State<Customers> {
                     flex: 8,
                     child: GestureDetector(
                       onTap: () async{
-                        if(IdState.isNotEmpty)
+                        if(IdState!='-1')
                         {
                           var resuilt= await    Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) => ScreenWay(IdState,NameState) ));
@@ -454,7 +486,6 @@ class _CustomersState extends State<Customers> {
                                 IdWay=model.id;
                                 NameWay=model.name;
                               });
-
                             }
                           }
                         }else{
@@ -498,7 +529,7 @@ class _CustomersState extends State<Customers> {
             ],
           ),
         ),
-      ) ;
+      );
     });
   }
 
@@ -626,10 +657,12 @@ class _CustomersState extends State<Customers> {
     base =prefs.getString('Baseurl')!;
     UserName =prefs.getString('UserName')!;
     Password =prefs.getString('Password')!;
-    Run22();
+    Run22(true);
   }
 
   late ProgressDialog pr;
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -649,9 +682,9 @@ class _CustomersState extends State<Customers> {
   }
 
 
-  Future Run22()async{
+  Future Run22(bool flag)async{
     var MyDataCustomer = await ApiService.GetCustomer( base, UserName, Password, groupId,
-        IdProvine, IdCity, IdState, IdWay,'',flagAccount.toString(),true,pr);
+        IdProvine, IdCity, IdState, IdWay,'',flagAccount.toString(),true,pr,flag);
     if(MyDataCustomer!=null)
     {
       if(MyDataCustomer.res.length==0)
@@ -685,7 +718,7 @@ class _CustomersState extends State<Customers> {
 
 
 
-
+ var ControllerText=TextEditingController();
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
@@ -718,13 +751,21 @@ class _CustomersState extends State<Customers> {
                                 child: Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: TextField(
+                                    onTap: (){
+                                      if(ControllerText.selection == TextSelection.fromPosition(TextPosition(offset: ControllerText.text.length -1))){
+                                        setState(() {
+                                          ControllerText.selection = TextSelection.fromPosition(TextPosition(offset: ControllerText.text.length));
+                                        });
+                                      }
+                                    },
+                                    controller: ControllerText,
                                     onChanged: (val) async{
                                       if(val.isNotEmpty)
                                       {
-                                        // val=val.replaceAll('ی','ي');
-                                        // val=val.replaceAll('ک','ك');
+                                        val=val.replaceAll('ی','ي');
+                                        val=val.replaceAll('ک','ك');
                                         var MyDataCustomer = await ApiService.GetCustomer( base, UserName, Password, groupId,
-                                            IdProvine, IdCity, IdState, IdWay,val.toString(),flagAccount.toString(),false,pr);
+                                            IdProvine, IdCity, IdState, IdWay,val.toString(),flagAccount.toString(),false,pr,false);
                                         if(MyDataCustomer!=null)
                                           {
                                             if(MyDataCustomer.res.length==0)
@@ -749,11 +790,7 @@ class _CustomersState extends State<Customers> {
 
                                         });
                                       }else{
-                                        MyDataSourch.clear();
-                                        // print(Customer.length.toString());
-                                        setState(() {
-
-                                        });
+                                        Run22(false);
 
                                       }
                                     },
@@ -827,7 +864,7 @@ class _CustomersState extends State<Customers> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: (){
-                                    Run22();
+                                    Run22(true);
                                   },
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
