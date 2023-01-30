@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 
+
 ListCustomer listCustomerFromJson(String str) => ListCustomer.fromJson(json.decode(str));
 
 String listCustomerToJson(ListCustomer data) => json.encode(data.toJson());
@@ -49,7 +50,7 @@ class Re_Customer {
     required  this.cityId,
     required  this.masirId,
     required this.reginId,
-    required this.mande,
+    required this.man,
     required this.lat,
     required this.lng,
   });
@@ -64,7 +65,7 @@ class Re_Customer {
   String cityId;
   String masirId;
   String reginId;
-  String mande;
+  String man;
   double lat;
   double lng;
 
@@ -79,7 +80,7 @@ class Re_Customer {
     cityId: json["cityId"],
     masirId: json["masirId"],
     reginId: json["reginId"],
-    mande: json["mande"],
+    man: json["man"],
     lat: json["lat"],
     lng: json["lng"],
   );
@@ -95,7 +96,7 @@ class Re_Customer {
     "cityId": cityId,
     "masirId": masirId,
     "reginId": reginId,
-    "mande": mande,
+    "man": man,
     "lat": lat,
     "lng": lng,
   };

@@ -954,7 +954,7 @@ class _ScreenReportVisitorsState extends State<ScreenReportVisitors> {
 
 
 
-                              }),
+                              },11),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: TextApp('حالت ویزیتور', 12, Colors.grey,  true),

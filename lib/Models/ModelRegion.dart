@@ -36,19 +36,26 @@ class ModelRegion {
   };
 }
 
+
+
 class ReRegion {
   ReRegion({
     required this.id,
     required this.name,
+    this.IsCheck=false,
   });
 
   String id;
   String name;
+  bool IsCheck;
+
 
   factory ReRegion.fromJson(Map<String, dynamic> json) => ReRegion(
     id: json["id"],
     name: json["name"],
   );
+
+
 
   Map<String, dynamic> toJson() => {
     "id": id,

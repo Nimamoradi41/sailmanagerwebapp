@@ -44,7 +44,7 @@ class Re_VisitorsAll {
     required this.tell1,
     required this.tell2,
     required    this.cell,
-     this.IsCheck=false,
+    this.IsCheck=false,
   });
 
   int visRdf;

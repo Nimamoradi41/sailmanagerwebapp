@@ -341,7 +341,7 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                                            , id:   MyDate[item].id,
                                            tedKol: MyDate[item].tedKol
                                           , tedVah: MyDate[item].tedVah
-                                          , payment: MyDate[item].payment);
+                                          , payment: MyDate[item].payment, explain: '');
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context)

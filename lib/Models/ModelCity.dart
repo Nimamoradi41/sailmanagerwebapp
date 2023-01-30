@@ -49,11 +49,13 @@ class ModelCity {
       required this.id,
       required  this.provinceId,
       required this.name,
+      this.IsCheck=false,
     });
 
     String id;
     String provinceId;
     String name;
+    bool IsCheck;
 
     factory ReC_City.fromJson(Map<dynamic, dynamic> json) => ReC_City(
       id: json["id"],

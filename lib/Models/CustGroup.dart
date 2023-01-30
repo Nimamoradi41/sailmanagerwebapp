@@ -40,10 +40,12 @@ class ReCustGroup_2 {
   ReCustGroup_2({
     required this.id,
     required this.name,
+      this.IsCheck=false,
   });
 
   int id;
   String name;
+  bool IsCheck;
 
   factory ReCustGroup_2.fromJson(Map<String, dynamic> json) => ReCustGroup_2(
     id: json["id"],

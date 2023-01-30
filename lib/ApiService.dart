@@ -12,16 +12,31 @@ import 'package:sailmanagerwebapp/Models/CustGroup.dart';
 import 'package:sailmanagerwebapp/Models/LoginModel.dart';
 
 import 'Models/CustGroup.dart';
+import 'Models/CustomerGroupModel.dart';
 import 'Models/ListCustomer.dart';
 import 'Models/ListPersonel.dart';
+import 'Models/ModelAddPath.dart';
 import 'Models/ModelCity.dart';
+import 'Models/ModelCitys.dart';
 import 'Models/ModelConfirm.dart';
+import 'Models/ModelCopyDayPath.dart';
+import 'Models/ModelCustomerNew.dart';
+import 'Models/ModelDayPathCalendar.dart';
+import 'Models/ModelDayWeek.dart';
 import 'Models/ModelDetailFactor.dart';
 import 'Models/ModelFactorsAll.dart';
+import 'Models/ModelGroupProduct.dart';
+import 'Models/ModelKalaNotSale.dart';
+import 'Models/ModelNotSaleCustomer.dart';
 import 'Models/ModelPIshfactorsNotAccept.dart';
 import 'Models/ModelPathSumVis.dart';
+import 'Models/ModelPaths.dart';
+import 'Models/ModelProductSearch.dart';
 import 'Models/ModelProvice.dart';
+import 'Models/ModelProvinces.dart';
 import 'Models/ModelRegion.dart';
+import 'Models/ModelRegions.dart';
+import 'Models/ModelReportVisitordaypath.dart';
 import 'Models/ModelVisitorsAll.dart';
 import 'Models/ModelVisitorsReport.dart';
 import 'Models/ModelWay.dart';
@@ -1093,11 +1108,1084 @@ class ApiService{
 
     return login;
   }
+  static Future<ModelNotSaleCustomer> GetCustomerNotSale(ProgressDialog pr,String Baseurl,String User,String Pass,
+      String toDate,String fromDate,List<int> productGroup,List<int> path,
+      List<int> product,List<int> customerGroup,List<int> visitor) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/CustomerNotSale');
+
+
+
+    // ignore: unrelated_type_equality_checks
+
+    pr.style(
+      textAlign: TextAlign.center,
+      message: ' درحال ارتباط با سرور',
+      messageTextStyle: TextStyle(
+          fontFamily:  'iransans',
+          fontSize: 14,
+          color: Colors.black87),
+    );
+    await  pr.show();
 
 
 
 
 
+
+
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "userName":User,
+      "password":Pass}) ;
+
+
+
+    map['fromDate'] =
+        jsonEncode(fromDate) ;
+
+
+    map['toDate'] =
+        jsonEncode(toDate) ;
+
+    map['productGroup'] =
+        jsonEncode(productGroup) ;
+
+    map['visitor'] =
+        jsonEncode(visitor) ;
+
+
+    map['customerGroup'] =
+        jsonEncode(customerGroup) ;
+
+
+    map['product'] =
+        jsonEncode(product) ;
+
+
+    map['customerGroup'] =
+        jsonEncode(customerGroup) ;
+
+    map['path'] =
+        jsonEncode(path) ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    try{
+      Response response = await post(url,  body:map
+        ,).timeout(
+        Duration(seconds: 50),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+        debugPrint("!!444");
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        throw("some arbitrary error");
+      });;
+      if(response.statusCode==200)
+      {
+
+        String data=response.body;
+
+        print(data);
+
+        var DATA=modelNotSaleCustomerFromJson(data);
+
+        // ignore: unnecessary_null_comparison
+
+        if(DATA.result!=null)
+        {
+          // pr.hide();
+          login= DATA;
+        }else{
+          // pr.hide();
+          login= DATA;
+        }
+      }else{
+
+        String data=response.body;
+
+        pr.hide();
+      }
+    }catch (e)
+    {
+
+      debugPrint("!!");
+      debugPrint(e.toString());
+      ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      login= null;
+      pr.hide();
+
+    }
+    return login;
+  }
+  static Future<ModelRegions> GetRegionsAll(String Baseurl,String User,String Pass,List<int> cityId) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/Api/Atiran/Regions');
+    // final url = Uri.parse('http://172.10.10.186/AtiranKing/Cities');
+    var request = http.MultipartRequest('POST', url);
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'cityId': cityId.length==0?'': cityId.toString()
+    });
+
+
+    try{
+      http.StreamedResponse response = await request.send().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          // pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        return   ShowSnackbar(error.toString());
+      }) ;
+      if(response.statusCode==200)
+      {
+
+        String data=await response.stream.bytesToString();
+        var DATA=modelRegionsFromJson(data);
+
+
+        if(DATA.result==true)
+        {
+          login= DATA;
+        }else{
+
+          login= DATA;
+        }
+      }else{
+        ShowSnackbar(response.reasonPhrase!!);
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    }catch(E)
+    {
+      return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // pr.hide();
+    return login;
+  }
+  static Future<ModelCustomerNew> GetCustomerNew(ProgressDialog pr,String Baseurl,
+      String User,String Pass,List<int> productGroup,String text) async{
+    var login;
+
+
+
+
+
+
+
+
+    var request = http.MultipartRequest('POST', Uri.parse('http://172.10.10.186/managersale/Api/Atiran/Customers'));
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'customerGroup': '$productGroup',
+      'text': '$text'
+    });
+
+
+    print(request.fields.toString());
+
+    http.StreamedResponse response = await request.send().timeout(
+      const Duration(seconds: 30),
+      onTimeout: () {
+
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      },
+    );
+
+    if (response.statusCode == 200) {
+      String data=await response.stream.bytesToString();
+      var DATA=modelCustomerNewFromJson(data);
+      login=DATA;
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+
+    return login;
+  }
+  static Future<ModelProductSearch> GetProductNew(ProgressDialog pr,String Baseurl,
+      String User,String Pass,List<int> productGroup,String text) async{
+    var login;
+
+
+
+
+
+
+
+
+    var request = http.MultipartRequest('POST', Uri.parse('http://172.10.10.186/managersale/Api/Atiran/Products'));
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'kaGroup': '$productGroup',
+      'text': '$text'
+    });
+
+
+    print(request.fields.toString());
+
+    http.StreamedResponse response = await request.send().timeout(
+      const Duration(seconds: 30),
+      onTimeout: () {
+
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      },
+    );
+
+    if (response.statusCode == 200) {
+      String data=await response.stream.bytesToString();
+      var DATA=modelProductSearchFromJson(data);
+      login=DATA;
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+
+    return login;
+  }
+  static Future<ModelGroupProduct> GetGroupProduct(ProgressDialog pr,String Baseurl,String User,String Pass) async{
+    var login;
+
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/ProductGroups');
+
+
+
+    // ignore: unrelated_type_equality_checks
+
+    pr.style(
+      textAlign: TextAlign.center,
+      message: ' درحال ارتباط با سرور',
+      messageTextStyle: TextStyle(
+          fontFamily:  'iransans',
+          fontSize: 14,
+          color: Colors.black87),
+    );
+    await  pr.show();
+
+
+
+
+
+
+
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "userName":User, "password":Pass}) ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    try{
+      Response response = await post(url,  body:map
+        ,).timeout(
+        Duration(seconds: 20),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+        debugPrint("!!444");
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        throw("some arbitrary error");
+      });;
+      if(response.statusCode==200)
+      {
+        debugPrint("!!22");
+        String data=response.body;
+
+        print(data);
+        var DATA=modelGroupProductFromJson(data);
+
+        // ignore: unnecessary_null_comparison
+
+        if(DATA.result!=null)
+        {
+          // pr.hide();
+          login= DATA;
+        }else{
+          // pr.hide();
+          login= DATA;
+        }
+      }else{
+        debugPrint("878787");
+        debugPrint(response.statusCode.toString());
+        String data=response.body;
+        debugPrint(data.toString());
+        pr.hide();
+      }
+    }catch (e)
+    {
+      debugPrint(e.toString());
+      debugPrint("!!");
+      ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      login= null;
+      pr.hide();
+
+    }
+    return login;
+  }
+  static Future<CustomerGroupModel> CustomerGroup(ProgressDialog pr,String Baseurl,String User,String Pass) async{
+    var login;
+    // String Base= await  Getbaseurl();
+
+    // final url = Uri.parse(Base+'/Sales');
+
+
+
+
+    if(!pr.isShowing())
+    {
+      pr.style(
+        textAlign: TextAlign.center,
+        message: 'درحال دریافت گروه مشتری..',
+        messageTextStyle: TextStyle(
+            fontFamily:  'iransans',
+            fontSize: 14,
+            color: Colors.black87),
+      );
+      await  pr.show();
+    }
+
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "username":User,
+      "password":Pass}) ;
+
+
+
+
+    // final url = Uri.parse('http://172.10.10.3:9595/king/Sales');
+    // print(url.toString());
+    // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/CustomerGroup');
+    try{
+      Response response = await http.post(url,  body:map,
+      ).timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+
+        // return   ShowSnackbar(error.toString());
+        // throw("some arbitrary error");
+      }) ;
+
+
+      if(response.statusCode==200)
+      {
+
+        String data=response.body;
+        var DATA=customerGroupModelFromJson(data);
+
+        if(DATA.result!=null)
+        {
+
+          login= DATA;
+        }else{
+
+          login= DATA;
+        }
+      }else{
+
+        pr.hide();
+
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+
+      }
+    } on SocketException catch (e)
+    {
+
+      pr.hide();
+      login= null;
+    }
+    on TimeoutException catch (e) {
+
+
+    } on Error catch (e) {
+
+    }
+
+    pr.hide();
+    return login;
+  }
+  static Future<ModelCopyDayPath> CopyDayPath(String Baseurl,String User,String Pass,String oldDate,String newDate) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/Api/Atiran/CopyDayPath');
+    var request = http.MultipartRequest('POST', url);
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'oldDate': oldDate.toString(),
+      'newDate': newDate.toString(),
+    });
+
+
+
+    debugPrint(request.fields.toString());
+
+    try{
+      http.StreamedResponse response = await request.send().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          // pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        return   ShowSnackbar(error.toString());
+      }) ;
+      if(response.statusCode==200)
+      {
+        String data=await response.stream.bytesToString();
+        var DATA=modelCopyDayPathFromJson(data);
+        login=DATA;
+      }else{
+        ShowSnackbar(response.reasonPhrase!!);
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    }catch(E)
+    {
+      return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // pr.hide();
+    return login;
+  }
+  static Future<ModelKalaNotSale> GetProductNotSale(ProgressDialog pr,String Baseurl,String User,String Pass,
+      String toDate,String fromDate,List<int> customerGroup,
+      List<int> customers,List<int> path,List<int> visitor) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/NotSoldProducts');
+
+
+
+    // ignore: unrelated_type_equality_checks
+
+    pr.style(
+      textAlign: TextAlign.center,
+      message: ' درحال ارتباط با سرور',
+      messageTextStyle: TextStyle(
+          fontFamily:  'iransans',
+          fontSize: 14,
+          color: Colors.black87),
+    );
+    await  pr.show();
+
+
+
+
+
+
+
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "userName":User,
+      "password":Pass}) ;
+
+
+
+    map['fromDate'] =
+        jsonEncode(fromDate) ;
+
+
+    map['toDate'] =
+        jsonEncode(toDate) ;
+
+    map['customerGroup'] =
+        jsonEncode(customerGroup) ;
+
+    map['visitor'] =
+        jsonEncode(visitor) ;
+
+
+    map['path'] =
+        jsonEncode(path) ;
+
+
+    map['customers'] =
+        jsonEncode(customers) ;
+
+
+    map['customerGroup'] =
+        jsonEncode(customerGroup) ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    try{
+      Response response = await post(url,  body:map
+        ,).timeout(
+        Duration(seconds: 50),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+        debugPrint("!!444");
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        throw("some arbitrary error");
+      });;
+      if(response.statusCode==200)
+      {
+
+        String data=response.body;
+
+        print(data);
+
+        var DATA=modelKalaNotSaleFromJson(data);
+
+        // ignore: unnecessary_null_comparison
+
+        if(DATA.result!=null)
+        {
+          // pr.hide();
+          login= DATA;
+        }else{
+          // pr.hide();
+          login= DATA;
+        }
+      }else{
+
+        String data=response.body;
+
+        pr.hide();
+      }
+    }catch (e)
+    {
+
+      debugPrint("!!");
+      debugPrint(e.toString());
+      ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      login= null;
+      pr.hide();
+
+    }
+    return login;
+  }
+  static Future<ModelDayWeek> DayWeek(String Baseurl,String User,String Pass,String fromDate,String toDate) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/Api/Atiran/DayWeek');
+    var request = http.MultipartRequest('POST', url);
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'fromDate': fromDate.toString(),
+      'toDate': toDate.toString(),
+    });
+
+
+    try{
+      http.StreamedResponse response = await request.send().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          // pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        return   ShowSnackbar(error.toString());
+      }) ;
+      if(response.statusCode==200)
+      {
+        String data=await response.stream.bytesToString();
+        var DATA=modelDayWeekFromJson(data);
+        login=DATA;
+      }else{
+        ShowSnackbar(response.reasonPhrase!!);
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    }catch(E)
+    {
+      return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // pr.hide();
+    return login;
+  }
+  static Future<ModelReportVisitordaypath> VisitorDayPath(String Baseurl,String User,String Pass,String date) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/Api/Atiran/VisitorDayPath');
+    var request = http.MultipartRequest('POST', url);
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'date': date.toString(),
+    });
+
+
+    try{
+      http.StreamedResponse response = await request.send().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          // pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        return   ShowSnackbar(error.toString());
+      }) ;
+      if(response.statusCode==200)
+      {
+        String data=await response.stream.bytesToString();
+        var DATA=modelReportVisitordaypathFromJson(data);
+
+        login=DATA;
+
+      }else{
+
+        ShowSnackbar(response.reasonPhrase!!);
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    }catch(E)
+    {
+      return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // pr.hide();
+    return login;
+  }
+  static Future<ModelAddPath> AddPath(String Baseurl,String User,String Pass,List<int> visitorId,String date,List<int> pathId) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/Api/Atiran/AddPath');
+    // final url = Uri.parse('http://172.10.10.186/AtiranKing/Cities');
+    var request = http.MultipartRequest('POST', url);
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'pathId': pathId.length==0?'': pathId.toString(),
+      'date': date.toString(),
+      'visitorId': visitorId.toString(),
+    });
+
+
+    print(request.fields.toString());
+    try{
+      http.StreamedResponse response = await request.send().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          // pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        return   ShowSnackbar(error.toString());
+      }) ;
+      if(response.statusCode==200)
+      {
+        String data=await response.stream.bytesToString();
+        var DATA=modelAddPathFromJson(data);
+
+        login=DATA;
+
+      }else{
+
+        ShowSnackbar(response.reasonPhrase!!);
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    }catch(E)
+    {
+      return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // pr.hide();
+    return login;
+  }
+  static Future<ModelPaths> GetPathsAll(String Baseurl,String User,String Pass,List<int> regionId) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/Api/Atiran/Path');
+    // final url = Uri.parse('http://172.10.10.186/AtiranKing/Cities');
+    var request = http.MultipartRequest('POST', url);
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'regionId': regionId.length==0?'': regionId.toString()
+    });
+
+
+    try{
+      http.StreamedResponse response = await request.send().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          // pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        return   ShowSnackbar(error.toString());
+      }) ;
+      if(response.statusCode==200)
+      {
+
+        String data=await response.stream.bytesToString();
+        var DATA=modelPathsFromJson(data);
+
+
+        if(DATA.result==true)
+        {
+          login= DATA;
+        }else{
+
+          login= DATA;
+        }
+      }else{
+        ShowSnackbar(response.reasonPhrase!!);
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    }catch(E)
+    {
+      return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // pr.hide();
+    return login;
+  }
+  static Future<ModelProvinces> GetProvices(ProgressDialog pr,String Baseurl,String User,String Pass) async{
+    var login;
+    // String Base= await  Getbaseurl();
+
+    // final url = Uri.parse(Base+'/Sales');
+
+
+
+
+    if(!pr.isShowing())
+    {
+      pr.style(
+        textAlign: TextAlign.center,
+        message: 'درحال دریافت استان ها..',
+        messageTextStyle: TextStyle(
+            fontFamily:  'iransans',
+            fontSize: 14,
+            color: Colors.black87),
+      );
+      await  pr.show();
+    }
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "username":User,
+      "password":Pass}) ;
+
+
+
+
+
+    debugPrint(map.toString());
+    // final url = Uri.parse('http://172.10.10.3:9595/king/Sales');
+    // print(url.toString());
+    // final url = Uri.parse('http://91.108.148.127:33224/manager'+'/'+'Api/Atiran/Provice/List');
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Provinces');
+
+    try{
+      Response response = await http.post(url,  body:map,
+      ).timeout(
+        Duration(seconds: 30),
+        onTimeout: () {
+          pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        pr.hide();
+
+        // return   ShowSnackbar(error.toString());
+        // throw("some arbitrary error");
+      }) ;
+
+
+      if(response.statusCode==200)
+      {
+
+        String data=response.body;
+        var DATA=modelProvincesFromJson(data);
+
+        if(DATA.result==true)
+        {
+
+          login= DATA;
+        }else{
+
+          login= DATA;
+        }
+      }else{
+
+        pr.hide();
+
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+
+      }
+    } on SocketException catch (e)
+    {
+
+      pr.hide();
+      login= null;
+    }
+    on TimeoutException catch (e) {
+
+
+    } on Error catch (e) {
+
+    }
+
+    pr.hide();
+    return login;
+  }
+  static Future<ModelCitys> GetCityAll(String Baseurl,String User,String Pass,List<int> Provice) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/Api/Atiran/Cities');
+    // final url = Uri.parse('http://172.10.10.186/AtiranKing/Cities');
+    var request = http.MultipartRequest('POST', url);
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'provinceId': Provice.length==0?'': Provice.toString()
+    });
+
+
+    try{
+      http.StreamedResponse response = await request.send().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          // pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        return   ShowSnackbar(error.toString());
+      }) ;
+      if(response.statusCode==200)
+      {
+
+        String data=await response.stream.bytesToString();
+        var DATA=modelCitysFromJson(data);
+
+
+        if(DATA.result==true)
+        {
+          login= DATA;
+        }else{
+
+          login= DATA;
+        }
+      }else{
+        ShowSnackbar(response.reasonPhrase!!);
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    }catch(E)
+    {
+      return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // pr.hide();
+    return login;
+  }
+  static Future<ModelDayPathCalendar> DayPathCalendar(String Baseurl,String User,String Pass,String year,String month) async{
+    var login;
+
+
+    final url = Uri.parse(Baseurl+'/Api/Atiran/DayPathCalendar');
+    var request = http.MultipartRequest('POST', url);
+    request.fields.addAll({
+      'login': '{"username" : "$User", "password": $Pass}',
+      'year': year.toString(),
+      'month': month.toString(),
+    });
+
+
+
+    print(request.fields.toString());
+
+    try{
+      http.StreamedResponse response = await request.send().timeout(
+        Duration(seconds: 15),
+        onTimeout: () {
+          // pr.hide();
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+        return   ShowSnackbar(error.toString());
+      }) ;
+      if(response.statusCode==200)
+      {
+        String data=await response.stream.bytesToString();
+        var DATA=modelDayPathCalendarFromJson(data);
+        login=DATA;
+      }else{
+        ShowSnackbar(response.reasonPhrase!!);
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    }catch(E)
+    {
+      return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // pr.hide();
+    return login;
+  }
   static Future<ListCustomer> GetCustomer(String Baseurl,String User,String Pass,
       String groupId,String provinceId,String cityId,
       String regeinId,String masirId,String name,String flagAccount,bool flagg,ProgressDialog pr,bool falgc) async{

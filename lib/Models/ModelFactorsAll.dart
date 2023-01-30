@@ -46,6 +46,7 @@ class Re_FactorsAlls {
     required  this.flag,
     required  this.customerName,
     required  this.id,
+    required  this.explain,
   });
 
   String tedJoz;
@@ -56,6 +57,7 @@ class Re_FactorsAlls {
   int flag;
   String customerName;
   int id;
+  String explain;
 
   factory Re_FactorsAlls.fromJson(Map<String, dynamic> json) => Re_FactorsAlls(
     tedJoz: json["tedJoz"],
@@ -66,6 +68,7 @@ class Re_FactorsAlls {
     flag: json["flag"],
     customerName: json["customerName"],
     id: json["id"],
+    explain: json["explain"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -77,5 +80,6 @@ class Re_FactorsAlls {
     "flag": flag,
     "customerName": customerName,
     "id": id,
+    "explain": explain,
   };
 }

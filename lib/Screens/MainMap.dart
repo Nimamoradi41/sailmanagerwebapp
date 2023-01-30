@@ -34,6 +34,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 
+import '../Calender/CalenderRecivePayment.dart';
+import '../NoSupportCustomer/ScreenNoSupportCustomer.dart';
+import '../NotSaleProduct/ScreenNotSaleProductMain.dart';
 import '../ReportPathVisitor/ReportPathVisitor.dart';
 import '../ReportVisitors/ScreenReportVisitors.dart';
 import '../massageToVisitor/ScreenMassageToVisitor.dart';
@@ -229,7 +232,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('نسخه 2.0.4',style: TextStyle(
+                  Text('نسخه 3.0.4',style: TextStyle(
                     color: BaseColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 12
@@ -551,6 +554,118 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                   ),
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Divider(height: 10,color: ColorLine,),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                      child:
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context)
+                                  => ScreenNotSaleProductMain()));
+                        },
+                        child: Container(
+                          child:  Text('گزارش کالا های فروش نرفته',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(color:
+                            BaseColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w100),),
+                        ),
+                      )),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset('images/list_4.svg',width: 15,height: 15,color: Color(0xff1F3C84),),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Divider(height: 10,color: ColorLine,),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                      child:
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context)
+                                  => ScreenNoSupportCustomer()));
+                        },
+                        child: Container(
+                          child:  Text('گزارش مشتریان خرید نکرده',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(color:
+                            BaseColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w100),),
+                        ),
+                      )),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset('images/list_4.svg',width: 15,height: 15,color: Color(0xff1F3C84),),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Divider(height: 10,color: ColorLine,),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                      child:
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context)
+                                  => CalenderRecivePayment()));
+                        },
+                        child: Container(
+                          child:  Text('گزارش مسیر های پوشش داده نشده',
+                            textAlign: TextAlign.end,
+                            style: TextStyle(color:
+                            BaseColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w100),),
+                        ),
+                      )),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset('images/list_4.svg',width: 15,height: 15,color: Color(0xff1F3C84),),
+                    ),
+                  ),
+                ],
+              ),
+
 
             ],
           ),
@@ -1266,7 +1381,7 @@ class _MainMapState extends State<MainMap>   with WidgetsBindingObserver  {
                                            setState(() {
 
                                            });
-                                           List<Latlng1> d=resuilt ;
+                                           List<Latlng> d=resuilt ;
 
                                            if(d!=null)
                                            {

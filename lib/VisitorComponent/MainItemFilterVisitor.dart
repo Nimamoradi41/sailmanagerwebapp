@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../ColumItem.dart';
 import '../Constants.dart';
 import '../Models/ModelVisitorsAll.dart';
-import '../Models/Visitors.dart';
+
 import 'ItemGridVisitor.dart';
 
 
@@ -20,9 +20,9 @@ class MainItemFilterVistor extends StatefulWidget {
 
 
 
+  double sizetext;
 
-
-  MainItemFilterVistor(this.IsAllProvice,this.City, this.Func,this.Func2);
+  MainItemFilterVistor(this.IsAllProvice,this.City, this.Func,this.Func2,this.sizetext);
 
   @override
   State<MainItemFilterVistor> createState() => _MainItemFilterState();
@@ -30,7 +30,7 @@ class MainItemFilterVistor extends StatefulWidget {
 
 class _MainItemFilterState extends State<MainItemFilterVistor> {
 
-  List<Visitors> Temp=[];
+  List<Re_VisitorsAll> Temp=[];
   @override
   void initState() {
 

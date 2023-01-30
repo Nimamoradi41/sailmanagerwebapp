@@ -675,7 +675,7 @@ class _CustomersState extends State<Customers> {
     Re_Customer ss=Re_Customer(id: 'id', name: 'name', tell1: 'tell1',
         tell2: 'tell2', groupId: 'groupId', address: 'address', provinceId:
         'provinceId', cityId: 'cityId', masirId: 'masirId', reginId: 'reginId',
-        mande: 'mande', lat: 2967, lng: 757575);
+          lat: 2967, lng: 757575, man: '');
 
     MyDataSourch.add(ss);
 
@@ -831,7 +831,7 @@ class _CustomersState extends State<Customers> {
                                     openMap(MyDataSourch[Item].lat, MyDataSourch[Item].lng);
                                   }
 
-                                  },MyDataSourch[Item].id,MyDataSourch[Item].mande,MyDataSourch[Item].lat,MyDataSourch[Item].lng);
+                                  },MyDataSourch[Item].id,MyDataSourch[Item].man,MyDataSourch[Item].lat,MyDataSourch[Item].lng);
                             },
                           ):Center(
                             child:  Center(

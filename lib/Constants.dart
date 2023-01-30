@@ -1,10 +1,29 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 
+final Color Color_ListCustomerLight=const   Color(0xff7B7B7B);
+final Color Color_ListCustomerDark=const   Color(0xff211F1F);
+final Color Color_ListCustomerLine=const   Color(0xffEFEFEF);
+
+final BoxDecoration AutoBox=BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.only(bottomRight: Radius.circular(8),bottomLeft: Radius.circular(8)),
+    boxShadow: [
+        BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            offset: Offset(0,0),
+            blurRadius: 2,
+            spreadRadius: 2
+        )
+    ]
+);
 final Color Color_Mosbat=const Color(0xff2ccb10);
 final Color Color_Manfi=const   Color(0xffc60000);
-
+final Color Color_Calender_Text=const   Color(0xff494949);
+final Color Color_Calender_Red=const   Color(0xffFF0505);
+final Color Color_Calender_Blue=const   Color(0xff0ead69);
     final Color BaseColor=const Color(0xff3D4785);
     final Color ColorLine=const Color(0xffEFEFEF);
     final Color ColorBack=const Color(0xffF1F7FE);

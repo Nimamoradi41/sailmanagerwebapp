@@ -102,7 +102,7 @@ class _PersonelsState extends State<Personels> {
 
 
 
-  List<Latlng1> datatransfe=[];
+  List<Latlng> datatransfe=[];
 
   int pageCounter1=0;
   Future Run77(ProgressDialog pr,String Baseurl,String UserName,String Password,String visRdf,

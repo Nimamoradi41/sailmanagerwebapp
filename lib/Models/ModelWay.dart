@@ -40,10 +40,12 @@ class ReWay {
   ReWay({
     required this.id,
     required  this.name,
+       this.IsCheck=false,
   });
 
   String id;
   String name;
+  bool IsCheck;
 
   factory ReWay.fromJson(Map<String, dynamic> json) => ReWay(
     id: json["id"],
